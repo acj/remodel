@@ -1,0 +1,22 @@
+Notes on building a refactoring GA with ECJ
+-------------------------------------------
+
+Using ECJ within Eclipse was rather painless.  I used the instructions linked
+off of the main ECJ page [1].  I set up a simple git repository to track my
+additions to the stock ECJ distribution.
+
+I didn't need to implement my own Evaluator or Fitness subclass.  These are
+essentially worker classes that handle common tasks such as declaring the
+*type* for the fitness value (e.g. float) of an individual or tying together
+various classes in the framework in order to do evaluation.  Unless you're
+doing something novel or unusual, these can be left alone.
+
+- ECJ Compared to Avida -
+
+The javadoc comments that are *everywhere* in ECJ are incredibly helpful.  They
+give very little insight into how things fit together, but there are other
+documents that give high-level views of the class framework.  The javadoc
+comments give very relevant information when one is dealing with the guts of
+a specific function or class.
+
+[1] http://userweb.port.ac.uk/~khourym/tutorials.html
