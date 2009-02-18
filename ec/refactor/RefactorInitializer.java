@@ -26,9 +26,7 @@ public class RefactorInitializer extends Initializer
     {
     public void setup(final EvolutionState state, final Parameter base)
         { 
-    	// create a graph based on URL objects
-        DirectedGraph<String, DefaultEdge> directedGraph =
-            new DefaultDirectedGraph<String, DefaultEdge>(DefaultEdge.class);
+
         }
 
     /** Creates, populates, and returns a new population by making a new

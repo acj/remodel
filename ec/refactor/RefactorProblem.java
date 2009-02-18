@@ -16,6 +16,8 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 
 	public void evaluate(EvolutionState state, Individual ind,
 			int subpopulation, int threadnum) {
+		SourceGraph sg = SourceGraph.GetInstance();
+		System.out.println("Generated graph has " + sg.NumVertices() + " vertices");
 		SimpleFitness fit = new SimpleFitness();
 		fit.setFitness(state, (float)1.0, false);
 		ind.fitness = fit;
