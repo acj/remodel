@@ -26,7 +26,7 @@ public class RefactorInitializer extends Initializer
     {
     public void setup(final EvolutionState state, final Parameter base)
         { 
-
+    		
         }
 
     /** Creates, populates, and returns a new population by making a new

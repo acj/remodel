@@ -19,8 +19,8 @@ pop.subpop.0.species.pipe.source.0.source.1 	= ec.select.TournamentSelection
 
 select.tournament.size = 3
 
-pop.subpop.0.species.max-gene = 100
-# pop.subpop.0.species.min-gene = 0
+pop.subpop.0.species.max-gene = 19
+pop.subpop.0.species.min-gene = 0
 
 generations = 		1000
 quit-on-run-complete =	false
