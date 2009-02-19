@@ -19,9 +19,9 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			int subpopulation, int threadnum) {
 		final int[] genome = (int[])((IntegerVectorIndividual)ind).getGenome();
 		RefactorCPU cpu = new RefactorCPU();
+		SourceGraph sg = SourceGraph.GetInstance();
 		cpu.SetGenome(genome);
 		cpu.SimulateGenome(sg.GetCopy());
-		SourceGraph sg = SourceGraph.GetInstance();		
 		SimpleFitness fit = new SimpleFitness();
 		fit.setFitness(state, (float)1.0, false);
 		ind.fitness = fit;

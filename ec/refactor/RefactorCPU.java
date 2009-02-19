@@ -318,7 +318,6 @@ public class RefactorCPU {
 				case 17:
 				{					
 					if (g.vertexSet().toArray()[graphSrcPtr] != g.vertexSet().toArray()[graphSnkPtr]) {
-						System.out.println(g.vertexSet().toArray()[graphSrcPtr] + " -- " + g.vertexSet().toArray()[graphSnkPtr]);
 						break;
 					} else {
 						// Skip to the next non-conditional instruction
@@ -336,9 +335,9 @@ public class RefactorCPU {
 				case 18:
 				{
 					if (GetNextInstruction() == 1 && regBx >= 0) {
-						graphSrcPtr = regBx;
+						graphSrcPtr = regBx % g.vertexSet().size();
 					} else if (regAx >= 0) {
-						graphSrcPtr = regAx;
+						graphSrcPtr = regAx % g.vertexSet().size();
 					}
 					++instPtr;
 					break;
@@ -352,9 +351,9 @@ public class RefactorCPU {
 				case 19:
 				{
 					if (GetNextInstruction() == 1 && regBx >= 0) {
-						graphSnkPtr = regBx;
+						graphSnkPtr = regBx % g.vertexSet().size();
 					} else if (regAx >= 0) {
-						graphSnkPtr = regAx;
+						graphSnkPtr = regAx % g.vertexSet().size();
 					}
 					++instPtr;
 					break;
