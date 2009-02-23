@@ -21,7 +21,7 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		RefactorCPU cpu = new RefactorCPU();
 		SourceGraph sg = SourceGraph.GetInstance();
 		cpu.SetGenome(genome);
-		cpu.SimulateGenome(sg.GetCopy());
+		cpu.SimulateGenome(sg.clone());
 		SimpleFitness fit = new SimpleFitness();
 		fit.setFitness(state, (float)1.0, false);
 		ind.fitness = fit;

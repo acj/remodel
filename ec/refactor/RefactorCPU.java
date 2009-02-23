@@ -83,7 +83,7 @@ public class RefactorCPU {
 		}
 		return nextInstPos;
 	}
-	public void SimulateGenome(DefaultDirectedGraph<String, DefaultEdge> g) {
+	public void SimulateGenome(AnnotatedGraph<SourceVertex, SourceEdge> g) {
 		while (instCount < MAX_INST) {
 			switch (genome[instPtr]) {
 				// nopA
@@ -359,8 +359,51 @@ public class RefactorCPU {
 					break;
 				}
 				// new-class
+				// Adds a new class (vertex) to the graph and makes it the
+				// currently selected sink class.  If followed by a nop-B,
+				// then the new class will be the currently selected source
+				// class.
+				case 20:
+				{
+					// FIXME: Need to pull the class name from somewhere.
+					final int new_index = g.vertexSet().size();
+					g.addVertex(new SourceVertex("NewClass" + new_index, SourceVertex.VertexType.CLASS));
+					if (GetNextInstruction() == 1) {
+						graphSrcPtr = new_index;
+					} else {
+						graphSnkPtr = new_index;
+					}
+					break;
+				}
 				// new-oper
+				// Adds a new operation and creates an ownership association
+				// between the new operation and the currently selected source
+				// class.  If followed by a nop-B, then an association is created
+				// with the sink class instead.
+				case 21:
+				{
+					// FIXME: Need to pull the operation name from somewhere.
+					final int new_index = g.vertexSet().size();
+					final String owning_class; 
+					if (GetNextInstruction() == 1) {
+						owning_class = (String)g.vertexSet().toArray()[graphSnkPtr];
+					} else {
+						owning_class = (String)g.vertexSet().toArray()[graphSrcPtr]; 
+					}
+					final String new_oper = owning_class + "__NewOper" + new_index;
+					g.addVertex(new SourceVertex(new_oper, SourceVertex.VertexType.OPERATION));
+					SourceEdge e = new SourceEdge(SourceEdge.Label.OWN);
+					g.addEdge(g.getVertex(owning_class), g.getVertex(new_oper), e);
+					break;
+				}
 				// move-oper (source class to sink class)
+				// If the source vertex is an operation and the sink vertex
+				// is a class, then move the operation to the class.
+				case 22:
+				{
+					// FIXME: Need typed vertices
+					break;
+				}
 				// add-aggregates
 				// add-inherits
 				// add-owns
