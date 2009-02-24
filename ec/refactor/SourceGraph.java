@@ -60,8 +60,13 @@ public class SourceGraph implements Prototype, Singleton {
 	        d.addVertex(new SourceVertex("Printer", SourceVertex.VertexType.CLASS));
 	        d.addVertex(new SourceVertex("Printer__print", SourceVertex.VertexType.OPERATION));
 	        d.addEdge(d.getVertex("Printer"), d.getVertex("Printer__print"), new SourceEdge(SourceEdge.Label.OWN));
-	        // FIXME: Need to add the inheritance (etc) edges
-	        System.out.println("New graph has " + d.vertexSet().size() + " vertices");
+	        
+	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.INHERIT));
+	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.INHERIT));
+	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.INHERIT));
+	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.ASSOCIATE));
+	        d.addEdge(d.getVertex("Printer"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.ASSOCIATE));
+	        //System.out.println("New graph has " + d.vertexSet().size() + " vertices");
 	        sourceGraph.annotatedGraph = d;
 		}
 		return sourceGraph;

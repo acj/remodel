@@ -11,6 +11,10 @@ essentially worker classes that handle common tasks such as declaring the
 various classes in the framework in order to do evaluation.  Unless you're
 doing something novel or unusual, these can be left alone.
 
+To get the GUI to build, I had to modify my classpath to include
+/usr/share/java/jfreechart.jar, /usr/share/java/itext.jar, and
+/usr/share/java/jcommon.jar.  Annoying but not terribly so.
+
 - ECJ Compared to Avida -
 
 The javadoc comments that are *everywhere* in ECJ are incredibly helpful.  They
@@ -18,5 +22,7 @@ give very little insight into how things fit together, but there are other
 documents that give high-level views of the class framework.  The javadoc
 comments give very relevant information when one is dealing with the guts of
 a specific function or class.
+
+The viewing facilities of ECJ are more difficult to get running.
 
 [1] http://userweb.port.ac.uk/~khourym/tutorials.html

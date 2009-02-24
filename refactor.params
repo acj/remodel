@@ -3,9 +3,10 @@ parent.0		= ec/simple/simple.params
 init =			ec.refactor.RefactorInitializer
 #eval =			ec.refactor.RefactorEvaluator
 eval.problem = 		ec.refactor.RefactorProblem
+#stat =			ec.refactor.RefactorStatistics
 
 pop.subpop.0.species 			= ec.vector.IntegerVectorSpecies
-pop.subpop.0.species.ind 		= ec.vector.IntegerVectorIndividual
+pop.subpop.0.species.ind 		= ec.refactor.RefactorIndividual
 pop.subpop.0.species.fitness 		= ec.simple.SimpleFitness
 pop.subpop.0.species.genome-size	= 100
 pop.subpop.0.species.chunk-size		= 10
@@ -19,9 +20,8 @@ pop.subpop.0.species.pipe.source.0.source.1 	= ec.select.TournamentSelection
 
 select.tournament.size = 3
 
-pop.subpop.0.species.max-gene = 19
+pop.subpop.0.species.max-gene = 22
 pop.subpop.0.species.min-gene = 0
 
 generations = 		1000
 quit-on-run-complete =	false
-

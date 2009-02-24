@@ -15,7 +15,34 @@ public class RefactorCPU {
 	private int graphSnkPtr;	// graph representation of the source code.
 	private int[] genome;
 	
-	// FIXME: Set up an enum for instructions
+	public enum Instruction {
+		NOPA,
+		NOPB,
+		STORE0,
+		PUSHS,
+		PUSHT,
+		POPS,
+		POPT,
+		INCR,
+		DECR,
+		ADD,
+		SUB,
+		MULT,
+		DIV,
+		IFEQU,
+		IFLESS,
+		IFGTR,
+		IFNAMESEQU,
+		IFNAMESNEQU,
+		SELSRCVTX,
+		SELSNKVTX,
+		NEWCLASS,
+		NEWOPER,
+		MOVEOPER,
+		ADDINHERIT,
+		ADDIMPLEMENT,
+		ADDOWN,
+	}
 	
 	private final static int MAX_INST = 256; // Max. instructions executed per run
 	
@@ -83,6 +110,7 @@ public class RefactorCPU {
 		}
 		return nextInstPos;
 	}
+
 	public void SimulateGenome(AnnotatedGraph<SourceVertex, SourceEdge> g) {
 		while (instCount < MAX_INST) {
 			switch (genome[instPtr]) {
@@ -386,9 +414,9 @@ public class RefactorCPU {
 					final int new_index = g.vertexSet().size();
 					final String owning_class; 
 					if (GetNextInstruction() == 1) {
-						owning_class = (String)g.vertexSet().toArray()[graphSnkPtr];
+						owning_class = g.getVertex(graphSnkPtr).toString();
 					} else {
-						owning_class = (String)g.vertexSet().toArray()[graphSrcPtr]; 
+						owning_class = g.getVertex(graphSrcPtr).toString(); 
 					}
 					final String new_oper = owning_class + "__NewOper" + new_index;
 					g.addVertex(new SourceVertex(new_oper, SourceVertex.VertexType.OPERATION));
@@ -401,12 +429,31 @@ public class RefactorCPU {
 				// is a class, then move the operation to the class.
 				case 22:
 				{
-					// FIXME: Need typed vertices
-					break;
+					SourceVertex src = g.getVertex(graphSrcPtr);
+					SourceVertex snk = g.getVertex(graphSnkPtr); 
+					if (src.getType() == SourceVertex.VertexType.OPERATION &&
+							snk.getType() == SourceVertex.VertexType.CLASS) {
+						// Find the old operation-to-class ownership edge and
+						// replace it with an edge to the new owning class.
+						Set<SourceEdge> edges = g.edgesOf(src);
+						Iterator<SourceEdge> it = edges.iterator();
+						while (it.hasNext()) {
+							SourceEdge edge = it.next();
+							if (edge.getLabel() == SourceEdge.Label.OWN) {
+								g.removeEdge(edge);
+								g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.OWN));
+								break;
+							}
+						}
+						break;
+					} else {
+						// Type mismatch - fall back to nop behavior.
+						break;
+					}
 				}
-				// add-aggregates
-				// add-inherits
-				// add-owns
+				// add-inherit
+				// add-implement
+				// add-own
 				default:
 				{
 					System.err.println("Invalid instruction!");
