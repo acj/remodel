@@ -23,9 +23,12 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		cpu.SetGenome(genome);
 		cpu.SimulateGenome(g);
 		SimpleFitness fit = new SimpleFitness();
-		fit.setFitness(state, (float)g.vertexSet().size(), false);
+		Float fitness_value = 0F;
+		fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
+		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
+		//g.clear();
 		g = null;
 		cpu = null;
 	}

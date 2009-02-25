@@ -23,4 +23,10 @@ public class SourceEdge extends DefaultEdge {
     public void setLabel(Label l) {
     	label = l;
     }
+    public SourceVertex getSourceVertex() {
+    	return (SourceVertex)getSource();
+    }
+    public SourceVertex getSinkVertex() {
+    	return (SourceVertex)getTarget();
+    }
 }

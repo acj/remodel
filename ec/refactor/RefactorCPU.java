@@ -394,7 +394,7 @@ public class RefactorCPU {
 				case 20:
 				{
 					// FIXME: Need to pull the class name from somewhere.
-					final int new_index = g.vertexSet().size();
+					final int new_index = g.getSize();
 					g.addVertex(new SourceVertex("NewClass" + new_index, SourceVertex.VertexType.CLASS));
 					if (GetNextInstruction() == 1) {
 						graphSrcPtr = new_index;

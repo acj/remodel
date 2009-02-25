@@ -1,6 +1,8 @@
 package ec.refactor;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.*;
@@ -21,6 +23,17 @@ public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
     public AnnotatedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+    }
+    /**
+     * Removes all objects associated with the graph instance.
+     */
+    public void clear() {
+    	vertexHash.clear();
+    	vertexList.clear();
+    }
+
+    public int getSize() {
+    	return vertexList.size();
     }
     /*
 	public boolean addEdge(V arg0, V arg1, E arg2) {
