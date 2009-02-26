@@ -10,9 +10,8 @@ import org.jgrapht.graph.*;
 
 public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
     private static final long serialVersionUID = 4984872244526792365L;
-    
-    HashMap<String, V> vertexHash;
-    Vector<V> vertexList;
+    private HashMap<String, V> vertexHash;
+    private Vector<V> vertexList;
     
     public AnnotatedGraph(EdgeFactory<V, E> ef)
     {

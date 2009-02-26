@@ -8,7 +8,7 @@ eval.problem = 		ec.refactor.RefactorProblem
 pop.subpop.0.species 			= ec.vector.IntegerVectorSpecies
 pop.subpop.0.species.ind 		= ec.refactor.RefactorIndividual
 pop.subpop.0.species.fitness 		= ec.simple.SimpleFitness
-pop.subpop.0.species.genome-size	= 100
+pop.subpop.0.species.genome-size	= 50
 pop.subpop.0.species.chunk-size		= 10
 pop.subpop.0.species.crossover-type     = two
 pop.subpop.0.species.crossover-prob     = 0.95
@@ -20,7 +20,7 @@ pop.subpop.0.species.pipe.source.0.source.1 	= ec.select.TournamentSelection
 
 select.tournament.size = 3
 
-pop.subpop.0.species.max-gene = 22
+pop.subpop.0.species.max-gene = 26
 pop.subpop.0.species.min-gene = 0
 
 generations = 		1000

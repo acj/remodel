@@ -42,6 +42,10 @@ public class RefactorCPU {
 		ADDINHERIT,
 		ADDIMPLEMENT,
 		ADDOWN,
+		INHERIT,
+		OWN,
+		IMPLEMENT,
+		ASSOCIATE
 	}
 	
 	private final static int MAX_INST = 256; // Max. instructions executed per run
@@ -452,8 +456,49 @@ public class RefactorCPU {
 					}
 				}
 				// add-inherit
+				case 23:
+				{
+					SourceVertex src = g.getVertex(graphSrcPtr);
+					SourceVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == SourceVertex.VertexType.CLASS &&
+							snk.getType() == SourceVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.INHERIT));
+					}
+					break;
+				}
 				// add-implement
+				case 24:
+				{
+					SourceVertex src = g.getVertex(graphSrcPtr);
+					SourceVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == SourceVertex.VertexType.CLASS &&
+							snk.getType() == SourceVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.IMPLEMENT));
+					}
+					break;
+				}
 				// add-own
+				case 25:
+				{
+					SourceVertex src = g.getVertex(graphSrcPtr);
+					SourceVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == SourceVertex.VertexType.CLASS &&
+							snk.getType() == SourceVertex.VertexType.OPERATION) {
+						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.OWN));
+					}
+					break;
+				}
+				// add-associate
+				case 26:
+				{
+					SourceVertex src = g.getVertex(graphSrcPtr);
+					SourceVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == SourceVertex.VertexType.CLASS &&
+							snk.getType() == SourceVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.ASSOCIATE));
+					}
+					break;
+				}
 				default:
 				{
 					System.err.println("Invalid instruction!");

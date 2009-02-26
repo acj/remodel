@@ -10,6 +10,7 @@ public class SourceEdge extends DefaultEdge {
     	ASSOCIATE,
     	CALL,
     	COMPOSE,
+    	IMPLEMENT,
     	INHERIT,
     	OWN,
     	REFERENCE,

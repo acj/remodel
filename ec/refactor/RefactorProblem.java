@@ -1,5 +1,8 @@
 package ec.refactor;
 
+import java.util.Iterator;
+import java.util.Set;
+
 import ec.EvolutionState;
 import ec.Individual;
 import ec.vector.IntegerVectorIndividual;
@@ -33,4 +36,44 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		cpu = null;
 	}
 
+	private float DesignSizeInClasses(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		Set<SourceVertex> vertices = g.vertexSet();
+		Iterator<SourceVertex> it = vertices.iterator();
+		int class_count = 0;
+		SourceVertex v;
+		while (it.hasNext()) {
+			v = it.next();
+			if (v.getType() == SourceVertex.VertexType.CLASS) {
+				++class_count;
+			}
+		}
+		return (float)class_count;
+	}
+	private float NumberOfHierarchies(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float DataAccessMetric(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float DirectClassCoupling(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float CohesionAmongClassMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float MeasureOfAggregation(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float MeasureOfFunctionalAbstraction(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float NumberOfPolymorphicMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float ClassInterfaceSize(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
+	private float NumberOfMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+		return 0.0F;
+	}
 }
