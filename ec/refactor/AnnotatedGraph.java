@@ -1,5 +1,6 @@
 package ec.refactor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -55,5 +56,18 @@ public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
 		vertexHash.remove(arg0);
 		vertexList.remove(v);
 		return super.removeVertex(v);
+	}
+	public ArrayList<E> GetEdges(V v, SourceEdge.Label l) {
+		ArrayList<E> edges = new ArrayList<E>();
+		Set<E> candidates = edgesOf(v);
+		Iterator<E> it = candidates.iterator();
+		E e;
+		while (it.hasNext()) {
+			e = it.next();
+			if (((SourceEdge)e).getLabel().equals(l)) {
+				edges.add(e);
+			}
+		}
+		return edges;
 	}
 }
