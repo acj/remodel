@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 import ec.EvolutionState;
 import ec.Individual;
@@ -30,7 +31,7 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 		//fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
-		fitness_value = 100 - AvgNumberOfAncestors(g);//g.edgeSet().size() - (float)g.getSize();
+		fitness_value = 100 - AvgNumberOfAncestors(g) + DataAccessMetric(g);
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
@@ -88,7 +89,43 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		return num_ancestors / vertices.size();
 	}
 	private float DataAccessMetric(AnnotatedGraph<SourceVertex, SourceEdge> g) {
-		return 0.0F;
+		Set<SourceVertex> vertices = g.vertexSet();
+		Iterator<SourceVertex> it = vertices.iterator();
+		Vector<Float> dam_ratios = new Vector<Float>();
+		float num_private_vars, num_total_vars;
+		SourceVertex v;
+		while (it.hasNext()) {
+			num_private_vars = 0.0F;
+			num_total_vars = 0.0F;
+			v = it.next();
+			if (v.getType() != SourceVertex.VertexType.CLASS ||
+					v.getAttributes().isEmpty()) {
+				continue;
+			}
+			ArrayList<SourceAttribute> attribs = v.getAttributes();
+			Iterator<SourceAttribute> it_attribs = attribs.iterator();
+			while (it_attribs.hasNext()) {
+				if (it_attribs.next().getVisibility() == SourceAttribute.Visibility.PRIVATE) {
+					++num_private_vars;
+					++num_total_vars;
+				} else {
+					++num_total_vars;
+				}
+			}
+
+			dam_ratios.add(num_private_vars / num_total_vars);
+		}
+		// Compute the simple average of the ratios
+		float data_access_metric = 0.0F;
+		Iterator<Float> ratio_it = dam_ratios.iterator();
+		while (ratio_it.hasNext()) {
+			data_access_metric += ratio_it.next();
+		}
+		if (dam_ratios.isEmpty()) {
+			return 0.0F;
+		} else {
+			return data_access_metric / (float)dam_ratios.size();
+		}
 	}
 	private float DirectClassCoupling(AnnotatedGraph<SourceVertex, SourceEdge> g) {
 		return 0.0F;
@@ -102,6 +139,7 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 	private float MeasureOfFunctionalAbstraction(AnnotatedGraph<SourceVertex, SourceEdge> g) {
 		return 0.0F;
 	}
+	// TODO: These three are next:
 	private float NumberOfPolymorphicMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
 		return 0.0F;
 	}

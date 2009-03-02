@@ -1,7 +1,7 @@
 package ec.refactor;
 
 public class SourceAttribute {
-	private enum Visibility {
+	public enum Visibility {
 		PUBLIC,
 		PROTECTED,
 		PRIVATE,

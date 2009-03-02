@@ -8,7 +8,7 @@ public class SourceVertex {
 		CLASS,
 		OPERATION,
 	}
-	private enum Visibility {
+	public enum Visibility {
 		PUBLIC,
 		PROTECTED,
 		PRIVATE,
@@ -23,9 +23,11 @@ public class SourceVertex {
 	 * @param The name of the vertex.
 	 * @param The type of the vertex.
 	 */
-	public SourceVertex(String n, VertexType t) {
+	public SourceVertex(String n, VertexType t, Visibility v) {
 		name = n;
 		type = t;
+		visibility = v;
+		attributes = new ArrayList<SourceAttribute>();
 	}
 	/**
 	 * Get the type (class, operation, etc.) of the vertex.

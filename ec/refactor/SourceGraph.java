@@ -23,7 +23,7 @@ public class SourceGraph implements Prototype, Singleton {
 	public Parameter defaultBase() {
 		return SimpleDefaults.base().push("SourceGraph");
 	}
-	protected void SourceGraph() {
+	protected SourceGraph() {
 	}
 	public AnnotatedGraph<SourceVertex, SourceEdge> clone() {
 		AnnotatedGraph<SourceVertex, SourceEdge> graph_clone = 
@@ -32,7 +32,7 @@ public class SourceGraph implements Prototype, Singleton {
 		Iterator<SourceVertex> it = vertices.iterator();
 		while (it.hasNext()) {
 			SourceVertex v_old = it.next();
-			SourceVertex v = new SourceVertex(v_old.toString(), v_old.getType());
+			SourceVertex v = new SourceVertex(v_old.toString(), v_old.getType(), v_old.getVisibility());
 			graph_clone.addVertex(v);
 		}
 		Set<SourceEdge> edges = annotatedGraph.edgeSet();
@@ -58,31 +58,31 @@ public class SourceGraph implements Prototype, Singleton {
 			AnnotatedGraph<SourceVertex, SourceEdge> d = 
 				new AnnotatedGraph<SourceVertex, SourceEdge>(SourceEdge.class);
 
-	        d.addVertex(new SourceVertex("Document", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("Document__print", SourceVertex.VertexType.OPERATION));
-	        d.addVertex(new SourceVertex("Document__preview", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("Document", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("Document__print", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("Document__preview", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("Document"), d.getVertex("Document__print"), new SourceEdge(SourceEdge.Label.OWN));
 	        d.addEdge(d.getVertex("Document"), d.getVertex("Document__preview"), new SourceEdge(SourceEdge.Label.OWN));
-	        d.addVertex(new SourceVertex("AsciiDoc", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("AsciiDoc__print", SourceVertex.VertexType.OPERATION));
-	        d.addVertex(new SourceVertex("AsciiDoc__preview", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("AsciiDoc", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("AsciiDoc__print", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("AsciiDoc__preview", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("AsciiDoc__print"), new SourceEdge(SourceEdge.Label.OWN));
 	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("AsciiDoc__preview"), new SourceEdge(SourceEdge.Label.OWN));
-	        d.addVertex(new SourceVertex("PSDoc", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("PSDoc__print", SourceVertex.VertexType.OPERATION));
-	        d.addVertex(new SourceVertex("PSDoc__preview", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("PSDoc", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("PSDoc__print", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("PSDoc__preview", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("PSDoc__print"), new SourceEdge(SourceEdge.Label.OWN));
 	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("PSDoc__preview"), new SourceEdge(SourceEdge.Label.OWN));
-	        d.addVertex(new SourceVertex("PDFDoc", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("PDFDoc__print", SourceVertex.VertexType.OPERATION));
-	        d.addVertex(new SourceVertex("PDFDoc__preview", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("PDFDoc", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("PDFDoc__print", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("PDFDoc__preview", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("PDFDoc__print"), new SourceEdge(SourceEdge.Label.OWN));
 	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("PDFDoc__preview"), new SourceEdge(SourceEdge.Label.OWN));
-	        d.addVertex(new SourceVertex("Previewer", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("Previewer__preview", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("Previewer", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("Previewer__preview", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Previewer__preview"), new SourceEdge(SourceEdge.Label.OWN));
-	        d.addVertex(new SourceVertex("Printer", SourceVertex.VertexType.CLASS));
-	        d.addVertex(new SourceVertex("Printer__print", SourceVertex.VertexType.OPERATION));
+	        d.addVertex(new SourceVertex("Printer", SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+	        d.addVertex(new SourceVertex("Printer__print", SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 	        d.addEdge(d.getVertex("Printer"), d.getVertex("Printer__print"), new SourceEdge(SourceEdge.Label.OWN));
 	        
 	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("Document"), new SourceEdge(SourceEdge.Label.INHERIT));

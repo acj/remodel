@@ -399,7 +399,7 @@ public class RefactorCPU {
 				{
 					// FIXME: Need to pull the class name from somewhere.
 					final int new_index = g.getSize();
-					g.addVertex(new SourceVertex("NewClass" + new_index, SourceVertex.VertexType.CLASS));
+					g.addVertex(new SourceVertex("NewClass" + new_index, SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
 					if (GetNextInstruction() == 1) {
 						graphSrcPtr = new_index;
 					} else {
@@ -423,7 +423,7 @@ public class RefactorCPU {
 						owning_class = g.getVertex(graphSrcPtr).toString(); 
 					}
 					final String new_oper = owning_class + "__NewOper" + new_index;
-					g.addVertex(new SourceVertex(new_oper, SourceVertex.VertexType.OPERATION));
+					g.addVertex(new SourceVertex(new_oper, SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
 					SourceEdge e = new SourceEdge(SourceEdge.Label.OWN);
 					g.addEdge(g.getVertex(owning_class), g.getVertex(new_oper), e);
 					break;
