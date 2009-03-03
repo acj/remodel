@@ -57,14 +57,14 @@ public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
 		vertexList.remove(v);
 		return super.removeVertex(v);
 	}
-	public ArrayList<E> GetEdges(V v, SourceEdge.Label l) {
+	public ArrayList<E> GetEdges(V v, AnnotatedEdge.Label l) {
 		ArrayList<E> edges = new ArrayList<E>();
 		Set<E> candidates = edgesOf(v);
 		Iterator<E> it = candidates.iterator();
 		E e;
 		while (it.hasNext()) {
 			e = it.next();
-			if (((SourceEdge)e).getLabel().equals(l)) {
+			if (((AnnotatedEdge)e).getLabel().equals(l)) {
 				edges.add(e);
 			}
 		}

@@ -1,6 +1,7 @@
 package ec.refactor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -25,13 +26,13 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			int subpopulation, int threadnum) {
 		final int[] genome = (int[])((IntegerVectorIndividual)ind).getGenome();
 		RefactorCPU cpu = new RefactorCPU();
-		AnnotatedGraph<SourceVertex, SourceEdge> g = SourceGraph.GetInstance().clone();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = SourceGraph.GetInstance().clone();
 		cpu.SetGenome(genome);
 		cpu.SimulateGenome(g);
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 		//fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
-		fitness_value = 100 - AvgNumberOfAncestors(g) + DataAccessMetric(g);
+		fitness_value = 100 - AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) - ClassInterfaceSize(g);
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
@@ -40,20 +41,20 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		cpu = null;
 	}
 
-	private float DesignSizeInClasses(AnnotatedGraph<SourceVertex, SourceEdge> g) {
-		Set<SourceVertex> vertices = g.vertexSet();
-		Iterator<SourceVertex> it = vertices.iterator();
+	private float DesignSizeInClasses(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it = vertices.iterator();
 		int class_count = 0;
-		SourceVertex v;
+		AnnotatedVertex v;
 		while (it.hasNext()) {
 			v = it.next();
-			if (v.getType() == SourceVertex.VertexType.CLASS) {
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
 				++class_count;
 			}
 		}
 		return (float)class_count;
 	}
-	private float NumberOfHierarchies(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float NumberOfHierarchies(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;
 	}
 	/**
@@ -62,16 +63,16 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 	 * @param g A graph.
 	 * @return Average number of ancestors.
 	 */
-	private float AvgNumberOfAncestors(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float AvgNumberOfAncestors(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		// Does not account for multiple inheritance.  A path to the "root" will be
 		// arbitrarily chosen in such cases.
-		Set<SourceVertex> vertices = g.vertexSet();
+		Set<AnnotatedVertex> vertices = g.vertexSet();
 		HashMap<String, Integer> vertexmap = new HashMap<String, Integer>();
-		Iterator<SourceVertex> it = vertices.iterator();
-		SourceVertex v;
+		Iterator<AnnotatedVertex> it = vertices.iterator();
+		AnnotatedVertex v;
 		while (it.hasNext()) {
 			v = it.next();
-			if (v.getType() != SourceVertex.VertexType.CLASS) {
+			if (v.getType() != AnnotatedVertex.VertexType.CLASS) {
 				continue;
 			}
 			ComputeAncestors(g, v, vertexmap);
@@ -81,31 +82,31 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		it = vertices.iterator();
 		while (it.hasNext()) {
 			v = it.next();
-			if (v.getType() != SourceVertex.VertexType.CLASS) {
+			if (v.getType() != AnnotatedVertex.VertexType.CLASS) {
 				continue;
 			}
 			num_ancestors += vertexmap.get(v.toString()).floatValue();
 		}
 		return num_ancestors / vertices.size();
 	}
-	private float DataAccessMetric(AnnotatedGraph<SourceVertex, SourceEdge> g) {
-		Set<SourceVertex> vertices = g.vertexSet();
-		Iterator<SourceVertex> it = vertices.iterator();
+	private float DataAccessMetric(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it = vertices.iterator();
 		Vector<Float> dam_ratios = new Vector<Float>();
 		float num_private_vars, num_total_vars;
-		SourceVertex v;
+		AnnotatedVertex v;
 		while (it.hasNext()) {
 			num_private_vars = 0.0F;
 			num_total_vars = 0.0F;
 			v = it.next();
-			if (v.getType() != SourceVertex.VertexType.CLASS ||
+			if (v.getType() != AnnotatedVertex.VertexType.CLASS ||
 					v.getAttributes().isEmpty()) {
 				continue;
 			}
-			ArrayList<SourceAttribute> attribs = v.getAttributes();
-			Iterator<SourceAttribute> it_attribs = attribs.iterator();
+			ArrayList<AnnotatedAttribute> attribs = v.getAttributes();
+			Iterator<AnnotatedAttribute> it_attribs = attribs.iterator();
 			while (it_attribs.hasNext()) {
-				if (it_attribs.next().getVisibility() == SourceAttribute.Visibility.PRIVATE) {
+				if (it_attribs.next().getVisibility() == AnnotatedAttribute.Visibility.PRIVATE) {
 					++num_private_vars;
 					++num_total_vars;
 				} else {
@@ -127,36 +128,97 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			return data_access_metric / (float)dam_ratios.size();
 		}
 	}
-	private float DirectClassCoupling(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float DirectClassCoupling(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;
 	}
-	private float CohesionAmongClassMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float CohesionAmongClassMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;
 	}
-	private float MeasureOfAggregation(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float MeasureOfAggregation(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;
 	}
-	private float MeasureOfFunctionalAbstraction(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float MeasureOfFunctionalAbstraction(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;
 	}
-	// TODO: These three are next:
-	private float NumberOfPolymorphicMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	private float NumberOfPolymorphicMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
+		// Look for methods in the same class that have the same name.  Could do this with a hash
+		// to make it O(n) in the number of vertices (if you see a collision, it's polymorphic).
 		return 0.0F;
 	}
-	private float ClassInterfaceSize(AnnotatedGraph<SourceVertex, SourceEdge> g) {
-		return 0.0F;
+	private float ClassInterfaceSize(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
+		ArrayList<Integer> vertexMethodCounts = new ArrayList<Integer>();
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			int vertexCount = 0;
+			v = it_v.next();
+			Set<AnnotatedEdge> edges = g.edgesOf(v);
+			AnnotatedEdge e;
+			Iterator<AnnotatedEdge> it_e = edges.iterator();
+			while (it_e.hasNext()) {
+				e = it_e.next();
+				// We don't know whether this vertex is the source or the sink
+				// (or neither).
+				if (e.getSourceVertex().equals(v) &&
+						e.getSinkVertex().getType() == AnnotatedVertex.VertexType.OPERATION &&
+						e.getSinkVertex().getVisibility() == AnnotatedVertex.Visibility.PUBLIC) {
+					++vertexCount;
+				} else if (e.getSinkVertex().equals(v) &&
+						e.getSourceVertex().getType() == AnnotatedVertex.VertexType.OPERATION &&
+						e.getSourceVertex().getVisibility() == AnnotatedVertex.Visibility.PUBLIC) {
+					++vertexCount;
+				}
+				vertexMethodCounts.add(vertexCount);
+			}
+		}
+		Iterator<Integer> it_count = vertexMethodCounts.iterator();
+		float average_num_methods = 0.0F;
+		while (it_count.hasNext()) {
+			average_num_methods += it_count.next();
+		}
+		return average_num_methods / (float)vertexMethodCounts.size();
 	}
-	private float NumberOfMethods(AnnotatedGraph<SourceVertex, SourceEdge> g) {
-		return 0.0F;
+	private float NumberOfMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
+		ArrayList<Integer> vertexMethodCounts = new ArrayList<Integer>();
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			int vertexCount = 0;
+			v = it_v.next();
+			Set<AnnotatedEdge> edges = g.edgesOf(v);
+			AnnotatedEdge e;
+			Iterator<AnnotatedEdge> it_e = edges.iterator();
+			while (it_e.hasNext()) {
+				e = it_e.next();
+				// We don't know whether this vertex is the source or the sink
+				// (or neither).
+				if (e.getSourceVertex().equals(v) &&
+						e.getSinkVertex().getType() == AnnotatedVertex.VertexType.OPERATION) {
+					++vertexCount;
+				} else if (e.getSinkVertex().equals(v) &&
+						e.getSourceVertex().getType() == AnnotatedVertex.VertexType.OPERATION) {
+					++vertexCount;
+				}
+				vertexMethodCounts.add(vertexCount);
+			}
+		}
+		Iterator<Integer> it_count = vertexMethodCounts.iterator();
+		float average_num_methods = 0.0F;
+		while (it_count.hasNext()) {
+			average_num_methods += it_count.next();
+		}
+		return average_num_methods/((float)vertexMethodCounts.size());
 	}
 	
-	private Integer ComputeAncestors(AnnotatedGraph<SourceVertex, SourceEdge> g, 
-								  SourceVertex v,
+	private Integer ComputeAncestors(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g, 
+								  AnnotatedVertex v,
 								  HashMap<String, Integer> hash) {
-		ArrayList<SourceEdge> edges = g.GetEdges(v, SourceEdge.Label.INHERIT);
-		SourceEdge out_edge = null;
-		SourceEdge temp_edge;
-		Iterator<SourceEdge> it = edges.iterator();
+		ArrayList<AnnotatedEdge> edges = g.GetEdges(v, AnnotatedEdge.Label.INHERIT);
+		AnnotatedEdge out_edge = null;
+		AnnotatedEdge temp_edge;
+		Iterator<AnnotatedEdge> it = edges.iterator();
 		while (it.hasNext()) {
 			temp_edge = it.next();
 			// This vertex must be the edge's "source" vertex since we
@@ -181,6 +243,5 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			}
 			return hash.get(v.toString());
 		}
-		
 	}
 }

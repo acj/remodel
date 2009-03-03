@@ -3,7 +3,7 @@ package ec.refactor;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class SourceVertex {
+public class AnnotatedVertex {
 	public enum VertexType {
 		CLASS,
 		OPERATION,
@@ -13,7 +13,7 @@ public class SourceVertex {
 		PROTECTED,
 		PRIVATE,
 	}
-	private ArrayList<SourceAttribute> attributes;
+	private ArrayList<AnnotatedAttribute> attributes;
 	private String name;
 	private VertexType type;
 	private Visibility visibility;
@@ -23,11 +23,11 @@ public class SourceVertex {
 	 * @param The name of the vertex.
 	 * @param The type of the vertex.
 	 */
-	public SourceVertex(String n, VertexType t, Visibility v) {
+	public AnnotatedVertex(String n, VertexType t, Visibility v) {
 		name = n;
 		type = t;
 		visibility = v;
-		attributes = new ArrayList<SourceAttribute>();
+		attributes = new ArrayList<AnnotatedAttribute>();
 	}
 	/**
 	 * Get the type (class, operation, etc.) of the vertex.
@@ -43,21 +43,21 @@ public class SourceVertex {
 	public String toString() {
 		return name;
 	}
-	public void addAttribute(SourceAttribute sa) {
+	public void addAttribute(AnnotatedAttribute sa) {
 		attributes.add(sa);
 	}
 	/**
 	 * Get the attributes associated with this vertex.
 	 * @return An array of attributes.
 	 */
-	public ArrayList<SourceAttribute> getAttributes() {
+	public ArrayList<AnnotatedAttribute> getAttributes() {
 		return attributes;
 	}
 	/**
 	 * Replace the current set of attributes.
 	 * @param attributes A new set of attributes that will replace the old set.
 	 */
-	public void setAttributes(ArrayList<SourceAttribute> attributes) {
+	public void setAttributes(ArrayList<AnnotatedAttribute> attributes) {
 		this.attributes = attributes;
 	}
 	/**

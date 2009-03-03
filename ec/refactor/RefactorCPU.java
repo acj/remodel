@@ -115,7 +115,7 @@ public class RefactorCPU {
 		return nextInstPos;
 	}
 
-	public void SimulateGenome(AnnotatedGraph<SourceVertex, SourceEdge> g) {
+	public void SimulateGenome(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		while (instCount < MAX_INST) {
 			switch (genome[instPtr]) {
 				// nopA
@@ -399,7 +399,7 @@ public class RefactorCPU {
 				{
 					// FIXME: Need to pull the class name from somewhere.
 					final int new_index = g.getSize();
-					g.addVertex(new SourceVertex("NewClass" + new_index, SourceVertex.VertexType.CLASS, SourceVertex.Visibility.PUBLIC));
+					g.addVertex(new AnnotatedVertex("NewClass" + new_index, AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
 					if (GetNextInstruction() == 1) {
 						graphSrcPtr = new_index;
 					} else {
@@ -423,8 +423,8 @@ public class RefactorCPU {
 						owning_class = g.getVertex(graphSrcPtr).toString(); 
 					}
 					final String new_oper = owning_class + "__NewOper" + new_index;
-					g.addVertex(new SourceVertex(new_oper, SourceVertex.VertexType.OPERATION, SourceVertex.Visibility.PUBLIC));
-					SourceEdge e = new SourceEdge(SourceEdge.Label.OWN);
+					g.addVertex(new AnnotatedVertex(new_oper, AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
+					AnnotatedEdge e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
 					g.addEdge(g.getVertex(owning_class), g.getVertex(new_oper), e);
 					break;
 				}
@@ -433,19 +433,19 @@ public class RefactorCPU {
 				// is a class, then move the operation to the class.
 				case 22:
 				{
-					SourceVertex src = g.getVertex(graphSrcPtr);
-					SourceVertex snk = g.getVertex(graphSnkPtr); 
-					if (src.getType() == SourceVertex.VertexType.OPERATION &&
-							snk.getType() == SourceVertex.VertexType.CLASS) {
+					AnnotatedVertex src = g.getVertex(graphSrcPtr);
+					AnnotatedVertex snk = g.getVertex(graphSnkPtr); 
+					if (src.getType() == AnnotatedVertex.VertexType.OPERATION &&
+							snk.getType() == AnnotatedVertex.VertexType.CLASS) {
 						// Find the old operation-to-class ownership edge and
 						// replace it with an edge to the new owning class.
-						Set<SourceEdge> edges = g.edgesOf(src);
-						Iterator<SourceEdge> it = edges.iterator();
+						Set<AnnotatedEdge> edges = g.edgesOf(src);
+						Iterator<AnnotatedEdge> it = edges.iterator();
 						while (it.hasNext()) {
-							SourceEdge edge = it.next();
-							if (edge.getLabel() == SourceEdge.Label.OWN) {
+							AnnotatedEdge edge = it.next();
+							if (edge.getLabel() == AnnotatedEdge.Label.OWN) {
 								g.removeEdge(edge);
-								g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.OWN));
+								g.addEdge(src, snk, new AnnotatedEdge(AnnotatedEdge.Label.OWN));
 								break;
 							}
 						}
@@ -458,44 +458,44 @@ public class RefactorCPU {
 				// add-inherit
 				case 23:
 				{
-					SourceVertex src = g.getVertex(graphSrcPtr);
-					SourceVertex snk = g.getVertex(graphSnkPtr);
-					if (src.getType() == SourceVertex.VertexType.CLASS &&
-							snk.getType() == SourceVertex.VertexType.CLASS) {
-						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.INHERIT));
+					AnnotatedVertex src = g.getVertex(graphSrcPtr);
+					AnnotatedVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == AnnotatedVertex.VertexType.CLASS &&
+							snk.getType() == AnnotatedVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
 					}
 					break;
 				}
 				// add-implement
 				case 24:
 				{
-					SourceVertex src = g.getVertex(graphSrcPtr);
-					SourceVertex snk = g.getVertex(graphSnkPtr);
-					if (src.getType() == SourceVertex.VertexType.CLASS &&
-							snk.getType() == SourceVertex.VertexType.CLASS) {
-						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.IMPLEMENT));
+					AnnotatedVertex src = g.getVertex(graphSrcPtr);
+					AnnotatedVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == AnnotatedVertex.VertexType.CLASS &&
+							snk.getType() == AnnotatedVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new AnnotatedEdge(AnnotatedEdge.Label.IMPLEMENT));
 					}
 					break;
 				}
 				// add-own
 				case 25:
 				{
-					SourceVertex src = g.getVertex(graphSrcPtr);
-					SourceVertex snk = g.getVertex(graphSnkPtr);
-					if (src.getType() == SourceVertex.VertexType.CLASS &&
-							snk.getType() == SourceVertex.VertexType.OPERATION) {
-						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.OWN));
+					AnnotatedVertex src = g.getVertex(graphSrcPtr);
+					AnnotatedVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == AnnotatedVertex.VertexType.CLASS &&
+							snk.getType() == AnnotatedVertex.VertexType.OPERATION) {
+						g.addEdge(src, snk, new AnnotatedEdge(AnnotatedEdge.Label.OWN));
 					}
 					break;
 				}
 				// add-associate
 				case 26:
 				{
-					SourceVertex src = g.getVertex(graphSrcPtr);
-					SourceVertex snk = g.getVertex(graphSnkPtr);
-					if (src.getType() == SourceVertex.VertexType.CLASS &&
-							snk.getType() == SourceVertex.VertexType.CLASS) {
-						g.addEdge(src, snk, new SourceEdge(SourceEdge.Label.ASSOCIATE));
+					AnnotatedVertex src = g.getVertex(graphSrcPtr);
+					AnnotatedVertex snk = g.getVertex(graphSnkPtr);
+					if (src.getType() == AnnotatedVertex.VertexType.CLASS &&
+							snk.getType() == AnnotatedVertex.VertexType.CLASS) {
+						g.addEdge(src, snk, new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
 					}
 					break;
 				}

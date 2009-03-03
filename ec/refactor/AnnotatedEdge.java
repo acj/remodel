@@ -2,7 +2,7 @@ package ec.refactor;
 
 import org.jgrapht.graph.DefaultEdge;
 
-public class SourceEdge extends DefaultEdge {
+public class AnnotatedEdge extends DefaultEdge {
     private static final long serialVersionUID = 765973795445L;
     private Label label;
     public static enum Label {
@@ -15,7 +15,7 @@ public class SourceEdge extends DefaultEdge {
     	OWN,
     	REFERENCE,
     }
-    public SourceEdge(Label l) {
+    public AnnotatedEdge(Label l) {
     	label = l;
     }
     public Label getLabel() {
@@ -24,10 +24,10 @@ public class SourceEdge extends DefaultEdge {
     public void setLabel(Label l) {
     	label = l;
     }
-    public SourceVertex getSourceVertex() {
-    	return (SourceVertex)getSource();
+    public AnnotatedVertex getSourceVertex() {
+    	return (AnnotatedVertex)getSource();
     }
-    public SourceVertex getSinkVertex() {
-    	return (SourceVertex)getTarget();
+    public AnnotatedVertex getSinkVertex() {
+    	return (AnnotatedVertex)getTarget();
     }
 }

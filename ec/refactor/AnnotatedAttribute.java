@@ -1,6 +1,6 @@
 package ec.refactor;
 
-public class SourceAttribute {
+public class AnnotatedAttribute {
 	public enum Visibility {
 		PUBLIC,
 		PROTECTED,
