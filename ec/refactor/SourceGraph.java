@@ -58,6 +58,7 @@ public class SourceGraph implements Prototype, Singleton {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> d = 
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 
+			// Based on Mens et al. (2004)
 	        d.addVertex(new AnnotatedVertex("Document", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
 	        d.addVertex(new AnnotatedVertex("Document__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
 	        d.addVertex(new AnnotatedVertex("Document__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));

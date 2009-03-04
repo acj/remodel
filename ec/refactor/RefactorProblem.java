@@ -3,8 +3,10 @@ package ec.refactor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Stack;
 import java.util.Vector;
 
 import ec.EvolutionState;
@@ -32,7 +34,7 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 		//fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
-		fitness_value = 100 - AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) - ClassInterfaceSize(g);
+		fitness_value = 100 - DesignSizeInClasses(g) + AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) + NumberOfPolymorphicMethods(g) - ClassInterfaceSize(g) + MeasureOfAggregation(g) + MeasureOfFunctionalAbstraction(g);
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
@@ -135,15 +137,85 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		return 0.0F;
 	}
 	private float MeasureOfAggregation(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		return 0.0F;
+		// First, get a list of user-defined types (class names)
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Set<AnnotatedVertex> class_vertices = new HashSet<AnnotatedVertex>();
+		Set<String> class_names = new HashSet<String>();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			v = it_v.next();
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				class_vertices.add(v);
+				class_names.add(v.toString());
+			}
+		}
+		// Look through the classes' attributes to find these user-defined
+		// data types.
+		int aggregate_count = 0; // Num. of attribs with user-defined type
+		it_v = class_vertices.iterator();
+		while (it_v.hasNext()) { 
+			v = it_v.next();
+			ArrayList<AnnotatedAttribute> attribs = v.getAttributes();
+			Iterator<AnnotatedAttribute> it_a = attribs.iterator();
+			AnnotatedAttribute a;
+			while (it_a.hasNext()) {
+				a = it_a.next();
+				if (class_vertices.contains(a.getDataType())) {
+					++aggregate_count;
+				}
+			}
+		}
+		return (float)aggregate_count / (float)class_vertices.size();
 	}
 	private float MeasureOfFunctionalAbstraction(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		return 0.0F;
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		float abstraction_tally = 0.0F;
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			v = it_v.next();
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				abstraction_tally += CountInheritedMethods(g, v);
+			}
+		}
+		return abstraction_tally / (float)vertices.size();
 	}
 	private float NumberOfPolymorphicMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		// Look for methods in the same class that have the same name.  Could do this with a hash
-		// to make it O(n) in the number of vertices (if you see a collision, it's polymorphic).
-		return 0.0F;
+		// For each class, look through its methods and determine how many
+		// of them are polymorphic.
+		ArrayList<AnnotatedVertex> polymorphic_methods = new ArrayList<AnnotatedVertex>();
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		int class_count = 0;
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			v = it_v.next();
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				++class_count;
+				// TODO: Is there a constant-lookup structure that we could
+				// use without needing to store the object reference?  We
+				// only look at the string name here.
+				HashMap<String,AnnotatedVertex> vertex_hash = new HashMap<String,AnnotatedVertex>();
+				Set<AnnotatedEdge> edges = g.edgesOf(v);
+				AnnotatedEdge e;
+				Iterator<AnnotatedEdge> it_e = edges.iterator();
+				// Look for ownership edges
+				while (it_e.hasNext()) {
+					e = it_e.next();
+					if (e.getSourceVertex().equals(v) &&
+							e.getLabel() == AnnotatedEdge.Label.OWN) {
+						if (vertex_hash.containsKey(v.toString())) {
+							polymorphic_methods.add(v); // Polymorphic!
+						} else {
+							vertex_hash.put(v.toString(), v);
+						}
+					}
+				}
+			}
+		}
+		
+		return (float)polymorphic_methods.size() / (float)class_count;
 	}
 	private float ClassInterfaceSize(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		ArrayList<Integer> vertexMethodCounts = new ArrayList<Integer>();
@@ -211,7 +283,57 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		}
 		return average_num_methods/((float)vertexMethodCounts.size());
 	}
-	
+	/**
+	 * Computes the number of inherited methods in a class.
+	 * graph.
+	 * @param g A graph.
+	 * @param v A vertex representing a class.
+	 * @return The number of inherited methods accessible by the class.
+	 */
+	private float CountInheritedMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g,
+									AnnotatedVertex v)
+	{
+		// FIXME: This could be made recursive and use memoization so that
+		// we don't duplicate a bunch of work.  Currently implemented
+		// the simple way for readability.  We probably don't even need to
+		// use a stack.
+		Set<AnnotatedVertex> visited_vertices = new HashSet<AnnotatedVertex>();
+		Stack<AnnotatedVertex> inherited_vertices = new Stack<AnnotatedVertex>();
+		ArrayList<AnnotatedEdge> inherit_edges;
+		ArrayList<AnnotatedEdge> own_edges;
+		AnnotatedEdge temp_edge;
+		AnnotatedVertex temp_vert;
+		int inherited_methods = 0;
+		int start_vertex_methods = 0;
+		inherited_vertices.push(v);
+		while (!inherited_vertices.empty()) {
+			temp_vert = inherited_vertices.pop();
+			visited_vertices.add(temp_vert);
+			inherit_edges = g.GetEdges(temp_vert, AnnotatedEdge.Label.INHERIT);
+			own_edges = g.GetEdges(temp_vert, AnnotatedEdge.Label.OWN);
+			// Push the next inherited class onto the stack
+			if (!inherit_edges.isEmpty()) {
+				// Assumption: single inheritance
+				temp_edge = inherit_edges.get(0);
+				if (temp_edge.getSourceVertex() == v &&
+						!visited_vertices.contains(temp_edge.getSinkVertex())) {
+					inherited_vertices.push(temp_edge.getSinkVertex());
+				}
+			}
+			// Don't double-count the methods attached to the starting class
+			if (temp_vert == v) {
+				start_vertex_methods = own_edges.size();
+			} else {
+				inherited_methods += own_edges.size();
+			}
+		}
+		if (start_vertex_methods == 0 && inherited_methods == 0) {
+			return 0.0F;
+		} else {
+			return (float)inherited_methods / (float)(start_vertex_methods + inherited_methods);
+		}
+	}
+
 	private Integer ComputeAncestors(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g, 
 								  AnnotatedVertex v,
 								  HashMap<String, Integer> hash) {
@@ -236,6 +358,7 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			// Has this vertex been processed already?
 			if (!hash.containsKey(v.toString())) {
 				// Mark this vertex as "visited" to break cycles
+				// FIXME
 				hash.put(v.toString(), -1);
 				// Update the hash
 				hash.put(v.toString(), 1 + ComputeAncestors(g, out_edge.getSinkVertex(), hash));
@@ -244,4 +367,5 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 			return hash.get(v.toString());
 		}
 	}
+	// TODO: Helper method that counts class methods (of optional type/visibility)
 }
