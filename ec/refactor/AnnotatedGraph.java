@@ -70,4 +70,34 @@ public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
 		}
 		return edges;
 	}
+	/**
+	 * Export the graph into the dot language used by graphviz.
+	 * @return String representation suitable for graphviz.
+	 */
+	public String ToGraphViz() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("digraph G {\n");
+		// For each vertex, create a node
+		Iterator<V> it_v = vertexSet().iterator();
+		AnnotatedVertex v;
+		while (it_v.hasNext()) {
+			v = (AnnotatedVertex)it_v.next();
+			sb.append(v.toString());
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				sb.append("[shape=folder]");
+			} else {
+				sb.append("[shape=tab]");
+			}
+			sb.append(";\n");
+		}
+		Iterator<E> it_e = edgeSet().iterator();
+		AnnotatedEdge e;
+		while (it_e.hasNext()) {
+			e = (AnnotatedEdge)it_e.next();
+			sb.append(e.getSourceVertex().toString()).append(" -> ").append(e.getSinkVertex().toString()).append("[label=\"").append(e.getLabel().toString()).append("\"];\n");
+		}
+		// For each edge, create an edge
+		sb.append("}\n");
+		return sb.toString();
+	}
 }

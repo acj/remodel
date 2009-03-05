@@ -1,5 +1,8 @@
 package ec.refactor;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -38,6 +41,15 @@ public class RefactorProblem extends Problem implements SimpleProblemForm {
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter("model.out"));
+			out.write(g.ToGraphViz());
+			out.close();
+			System.exit(0);
+		} catch (IOException e) {
+			System.err.println("Could not export graphviz data!");
+		}
+
 		//g.clear();
 		g = null;
 		cpu = null;
