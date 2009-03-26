@@ -1,0 +1,33 @@
+package ec.refactoring;
+
+import ec.EvolutionState;
+import ec.Problem;
+import ec.gp.ADFStack;
+import ec.gp.GPData;
+import ec.gp.GPIndividual;
+import ec.gp.GPNode;
+
+/**
+ * ClassNode
+ * TODO
+ * 
+ * @author acj
+ *
+ */
+public class ClassNode extends GPNode {
+	private AnnotatedVertex sourceClass;
+	
+	@Override
+	public void eval(EvolutionState state, int thread, GPData input,
+			ADFStack stack, GPIndividual individual, Problem problem) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String toString() {
+		// TODO This should say something about the real class object
+		return "ClassNode";
+	}
+
+}
