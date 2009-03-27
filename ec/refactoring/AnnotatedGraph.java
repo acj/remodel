@@ -1,4 +1,4 @@
-package ec.refactor;
+package ec.refactoring;
 
 import java.util.ArrayList;
 import java.util.HashMap;

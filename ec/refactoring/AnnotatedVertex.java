@@ -1,4 +1,4 @@
-package ec.refactor;
+package ec.refactoring;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -6,6 +6,8 @@ import java.util.Set;
 public class AnnotatedVertex {
 	public enum VertexType {
 		CLASS,
+		FIELD,
+		INTERFACE,
 		OPERATION,
 	}
 	public enum Visibility {

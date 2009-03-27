@@ -1,4 +1,4 @@
-package ec.refactor;
+package ec.refactoring;
 
 import java.util.*;
 import org.jgrapht.graph.Pseudograph;
@@ -9,11 +9,20 @@ import ec.Singleton;
 import ec.Prototype;
 import ec.simple.SimpleDefaults;
 import ec.util.Parameter;
-import ec.refactor.AnnotatedEdge;
-import ec.refactor.AnnotatedVertex;
+import ec.refactoring.AnnotatedEdge;
+import ec.refactoring.AnnotatedVertex;
 
+/*
+ * This is an odd class.  It contains two singleton patterns.  The first manages
+ * the lone instance of SourceGraph that exists.  The next manages the only
+ * "current" clone of that SourceGraph.  The latter is basically a globally
+ * accessible object that is modified by the GP tree as it is executed.
+ * 
+ * TODO: Decide if this is really necessary.  If not, clean it up.
+ */
 public class SourceGraph implements Prototype, Singleton {
 	private static SourceGraph sourceGraph = null;
+	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> currentClone = null;
 
 	private AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 
@@ -24,6 +33,9 @@ public class SourceGraph implements Prototype, Singleton {
 		return SimpleDefaults.base().push("SourceGraph");
 	}
 	protected SourceGraph() {
+	}
+	public static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> GetCurrentClone() {
+		return currentClone;
 	}
 	public AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> clone() {
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
@@ -48,6 +60,7 @@ public class SourceGraph implements Prototype, Singleton {
 								graph_clone.getVertex(old_snk_v),
 								e);
 		}
+		currentClone = graph_clone;
 		return graph_clone;
 	}
 	public static SourceGraph GetInstance() {

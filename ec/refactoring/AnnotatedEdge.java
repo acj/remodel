@@ -1,4 +1,4 @@
-package ec.refactor;
+package ec.refactoring;
 
 import org.jgrapht.graph.DefaultEdge;
 
@@ -12,6 +12,7 @@ public class AnnotatedEdge extends DefaultEdge {
     	COMPOSE,
     	IMPLEMENT,
     	INHERIT,
+    	INSTANTIATE,
     	OWN,
     	REFERENCE,
     }

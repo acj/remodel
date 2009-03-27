@@ -9,13 +9,19 @@ import ec.gp.GPNode;
 
 /**
  * ClassNode
- * TODO
+ * 
+ * This class acts as a place-holder in the GP's syntax tree for classes in the
+ * target software model.
  * 
  * @author acj
  *
  */
-public class ClassNode extends GPNode {
-	private AnnotatedVertex sourceClass;
+public class VertexNode extends GPNode {
+	private AnnotatedVertex annotatedVertex;
+	
+	public VertexNode(AnnotatedVertex v) {
+		annotatedVertex = v;
+	}
 	
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
@@ -29,5 +35,6 @@ public class ClassNode extends GPNode {
 		// TODO This should say something about the real class object
 		return "ClassNode";
 	}
-
+	
+	public AnnotatedVertex GetAnnotatedVertex() { return annotatedVertex; }
 }

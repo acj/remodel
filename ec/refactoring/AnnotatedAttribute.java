@@ -1,4 +1,4 @@
-package ec.refactor;
+package ec.refactoring;
 
 public class AnnotatedAttribute {
 	public enum Visibility {
