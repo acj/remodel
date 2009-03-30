@@ -22,6 +22,7 @@ public class VertexNode extends GPNode {
 	private AnnotatedVertex annotatedVertex;
 	
 	public VertexNode() {
+		System.err.println("VertexNode constructor!");
 		// TODO: Bind to a vertex
 		//annotatedVertex = v;
 	}
