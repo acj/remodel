@@ -24,6 +24,7 @@ import ec.util.Parameter;
  *
  */
 public class PartialAbstraction extends GPNode {
+	private static final long serialVersionUID = -2595216501945664674L;
 
 	public void checkConstraints(final EvolutionState state,
             final int tree,
@@ -44,13 +45,14 @@ public class PartialAbstraction extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
 			SourceGraph.GetCurrentClone();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex concrete_v = input; // TODO
+		AnnotatedVertex concrete_v = rd.vertex;
 		children[1].eval(state, thread, input, stack, individual, problem);
-		String newName = input; // TODO
+		String newName = rd.name;
 		
 		// Class abstract = createEmptyClass(newName);
 		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName);

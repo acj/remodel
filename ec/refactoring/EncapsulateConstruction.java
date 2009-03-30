@@ -20,12 +20,14 @@ import ec.util.Parameter;
  * Child nodes:
  * 	- Class creator
  *  - Class product
- *  - String createProduct
+ *  - String createProduct (currently built automatically)
  * 
  * @author acj
  *
  */
 public class EncapsulateConstruction extends GPNode {
+	private static final long serialVersionUID = 8815017364068871436L;
+
 	public void checkConstraints(final EvolutionState state,
 					            final int tree,
 					            final GPIndividual typicalIndividual,
@@ -45,13 +47,14 @@ public class EncapsulateConstruction extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
 			SourceGraph.GetCurrentClone();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex creator_v = input; // TODO
+		AnnotatedVertex creator_v = rd.vertex;
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex product_v = input; // TODO
+		AnnotatedVertex product_v = rd.vertex;
 		
 		String create_method_name = "create" + product_v.toString();
 		
@@ -66,7 +69,7 @@ public class EncapsulateConstruction extends GPNode {
 			if (e.getSinkVertex() == product_v && e.getLabel() == Label.INSTANTIATE) {
 				ag.removeEdge(e);
 				AnnotatedEdge e_new = new AnnotatedEdge(Label.CALL);
-				ag.addEdge(creator_v, abstract_meth_v);
+				ag.addEdge(creator_v, abstract_meth_v, e_new);
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 package ec.refactoring;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import ec.EvolutionState;
@@ -27,10 +26,10 @@ import ec.util.Parameter;
  * @author acj
  *
  */
-
 public class AbstractAccess extends GPNode {
-
-    public void checkConstraints(final EvolutionState state,
+	private static final long serialVersionUID = 2170224585003394586L;
+	
+	public void checkConstraints(final EvolutionState state,
             final int tree,
             final GPIndividual typicalIndividual,
             final Parameter individualBase)
@@ -56,13 +55,13 @@ public class AbstractAccess extends GPNode {
 		// an interface that mirrors the concrete class.
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
 			SourceGraph.GetCurrentClone();
-		
+		RefactorData rd = (RefactorData)input;
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex context_v = input; // TODO
+		AnnotatedVertex context_v = rd.vertex;
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex concrete_v = input; // TODO
+		AnnotatedVertex concrete_v = rd.vertex;
 		children[2].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex iface_v = input; // TODO
+		AnnotatedVertex iface_v = rd.vertex;
 		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
@@ -71,7 +70,7 @@ public class AbstractAccess extends GPNode {
 			if (e.getSinkVertex() == concrete_v && e.getLabel() == Label.REFERENCE) {
 				ag.removeEdge(e);
 				AnnotatedEdge e_new = new AnnotatedEdge(Label.REFERENCE);
-				ag.addEdge(context_v, iface_v);
+				ag.addEdge(context_v, iface_v, e_new);
 			}
 		}
 	}

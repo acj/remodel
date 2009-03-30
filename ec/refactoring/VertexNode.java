@@ -6,6 +6,7 @@ import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
+import ec.util.Parameter;
 
 /**
  * ClassNode
@@ -17,23 +18,36 @@ import ec.gp.GPNode;
  *
  */
 public class VertexNode extends GPNode {
+	private static final long serialVersionUID = 5121052556529127964L;
 	private AnnotatedVertex annotatedVertex;
 	
-	public VertexNode(AnnotatedVertex v) {
-		annotatedVertex = v;
+	public VertexNode() {
+		// TODO: Bind to a vertex
+		//annotatedVertex = v;
 	}
 	
-	@Override
+	public void checkConstraints(final EvolutionState state,
+            final int tree,
+            final GPIndividual typicalIndividual,
+            final Parameter individualBase)
+	{
+		super.checkConstraints(state,tree,typicalIndividual,individualBase);
+		if (children.length!=0)
+			state.output.error("Incorrect number of children for node " + 
+			  toStringForError() + " at " +
+			  individualBase);
+	}
+	
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
-		// TODO Auto-generated method stub
-		
+		RefactorData rd = (RefactorData)input;
+		rd.name = toString();
+		rd.vertex = annotatedVertex;
 	}
 
-	@Override
 	public String toString() {
 		// TODO This should say something about the real class object
-		return "ClassNode";
+		return "VertexNode";
 	}
 	
 	public AnnotatedVertex GetAnnotatedVertex() { return annotatedVertex; }

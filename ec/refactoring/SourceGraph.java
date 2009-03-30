@@ -1,9 +1,6 @@
 package ec.refactoring;
 
 import java.util.*;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.DefaultEdge;
-
 import ec.EvolutionState;
 import ec.Singleton;
 import ec.Prototype;
@@ -21,6 +18,7 @@ import ec.refactoring.AnnotatedVertex;
  * TODO: Decide if this is really necessary.  If not, clean it up.
  */
 public class SourceGraph implements Prototype, Singleton {
+	private static final long serialVersionUID = -5295342399476105337L;
 	private static SourceGraph sourceGraph = null;
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> currentClone = null;
 
