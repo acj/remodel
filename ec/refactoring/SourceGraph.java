@@ -33,6 +33,12 @@ public class SourceGraph implements Prototype, Singleton {
 	protected SourceGraph() {
 	}
 	public static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> GetCurrentClone() {
+		if (sourceGraph == null) {
+			sourceGraph = GetInstance();
+		}
+		if (currentClone == null) {
+			sourceGraph.clone();
+		}
 		return currentClone;
 	}
 	public AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> clone() {

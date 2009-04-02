@@ -1,9 +1,11 @@
 package ec.refactoring;
 
 import ec.*;
+import ec.app.tutorial4.DoubleData;
 import ec.gp.*;
 import ec.gp.koza.*;
 import ec.simple.*;
+import ec.util.Parameter;
 
 public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	private static final long serialVersionUID = 4425245889654977390L;
@@ -24,5 +26,17 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 					state,threadnum,input,stack,((GPIndividual)ind), this);
 		}
 	}
-
+    public void setup(final EvolutionState state, final Parameter base)
+	{
+    	System.out.println("SETUP!");
+		// very important, remember this
+		super.setup(state,base);
+		
+		StringFactory.Setup();
+		SourceGraph.GetInstance();
+		
+		input = new RefactorData();
+		input.name = "";
+		input.vertex = null;
+	}
 }

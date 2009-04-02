@@ -3,22 +3,25 @@ package ec.refactoring;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
-public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
+public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
     private static final long serialVersionUID = 4984872244526792365L;
     private HashMap<String, V> vertexHash;
     private Vector<V> vertexList;
+    private Random rand;
     
     public AnnotatedGraph(EdgeFactory<V, E> ef)
     {
         super(ef);
         vertexHash = new HashMap<String, V>();
         vertexList = new Vector<V>();
+        rand = new Random();
     }
     public AnnotatedGraph(Class<? extends E> edgeClass)
     {
@@ -99,5 +102,9 @@ public class AnnotatedGraph<V, E> extends Pseudograph<V, E> {
 		// For each edge, create an edge
 		sb.append("}\n");
 		return sb.toString();
+	}
+	
+	public V GetRandomVertex() {
+		return getVertex(rand.nextInt(this.getSize()));
 	}
 }

@@ -23,16 +23,37 @@ public class VertexNode extends GPNode {
 	
 	public VertexNode() {
 		System.err.println("VertexNode constructor!");
-		// TODO: Bind to a vertex
-		//annotatedVertex = v;
+		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
+		System.err.println(annotatedVertex);
 	}
 	
+	@Override
+	public boolean nodeEquals(GPNode node) {
+		// won't work for subclasses; in that case you'll need
+        // to change this to isAssignableTo(...)
+        if (this.getClass() != node.getClass()) { return false; }
+        return (((VertexNode)node).GetAnnotatedVertex() == annotatedVertex);
+	}
+
+	@Override
+	public int nodeHashCode() {
+		return this.getClass().hashCode() + annotatedVertex.hashCode();
+	}
+
+	@Override
+	public void resetNode(EvolutionState state, int thread) {
+		super.resetNode(state, thread);
+		// Fetch a new vertex to represent.
+		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
+	}
+
 	public void checkConstraints(final EvolutionState state,
             final int tree,
             final GPIndividual typicalIndividual,
             final Parameter individualBase)
 	{
 		super.checkConstraints(state,tree,typicalIndividual,individualBase);
+		System.out.println("Number of children: " + children.length);
 		if (children.length!=0)
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
@@ -42,7 +63,7 @@ public class VertexNode extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
-		rd.name = toString();
+		//rd.name = toString();
 		rd.vertex = annotatedVertex;
 	}
 
@@ -51,5 +72,7 @@ public class VertexNode extends GPNode {
 		return "VertexNode";
 	}
 	
-	public AnnotatedVertex GetAnnotatedVertex() { return annotatedVertex; }
+	public AnnotatedVertex GetAnnotatedVertex() {
+		return annotatedVertex;
+	}
 }

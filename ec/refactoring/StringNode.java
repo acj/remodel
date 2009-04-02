@@ -25,6 +25,26 @@ public class StringNode extends GPNode {
 		RefactorData rd = (RefactorData)input;
 		rd.name = stringName;
 	}
+	
+	@Override
+	public boolean nodeEquals(GPNode node) {
+		// won't work for subclasses; in that case you'll need
+        // to change this to isAssignableTo(...)
+        if (this.getClass() != node.getClass()) { return false; }
+        return (((StringNode)node).toString() == stringName);
+	}
+
+	@Override
+	public int nodeHashCode() {
+		return this.getClass().hashCode() + stringName.hashCode();
+	}
+
+	@Override
+	public void resetNode(EvolutionState state, int thread) {
+		super.resetNode(state, thread);
+		// Fetch a new vertex to represent.
+		stringName = StringFactory.GetRandomString();
+	}
 
 	@Override
 	public String toString() {

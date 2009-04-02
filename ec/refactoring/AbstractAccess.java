@@ -35,16 +35,20 @@ public class AbstractAccess extends GPNode {
             final Parameter individualBase)
 	{
 		super.checkConstraints(state,tree,typicalIndividual,individualBase);
+		if (children.length!=3)
+			state.output.error("Incorrect number of children for node " + 
+			          toStringForError() + " at " +
+			          individualBase);
+		/*
+		// This stuff should be checked by the parameters file:
 		if (children[0].toString() != "ClassNode")
 			state.output.error("Invalid child node 0 (should be ClassNode)");
 		else if (children[1].toString() != "ClassNode")
 			state.output.error("Invalid child node 1 (should be ClassNode)");
 		else if (children[2].toString() != "ClassNode")
 			state.output.error("Invalid child node 2 (should be ClassNode)");
-		if (children.length!=3)
-		state.output.error("Incorrect number of children for node " + 
-		          toStringForError() + " at " +
-		          individualBase);
+		*/
+
 	}
     
 	@Override

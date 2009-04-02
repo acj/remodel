@@ -38,6 +38,7 @@ public class Helpers {
 			AnnotatedVertex oper_v  = new AnnotatedVertex(next_v.toString(), 
 										next_v.getType(),
 										AnnotatedVertex.Visibility.PUBLIC);
+			ag.addVertex(iface_v);
 			ag.addVertex(oper_v);
 			AnnotatedEdge oper_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
 			ag.addEdge(iface_v, oper_v, oper_e);
