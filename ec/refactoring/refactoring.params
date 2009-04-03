@@ -156,27 +156,6 @@ gp.koza.ns.terminals = 0.1
 gp.koza.ns.nonterminals = 0.9
 gp.koza.ns.root = 0.0
 
-
-
-
-# You need to create at least one function set, 
-# called "f0", which your first tree will use.  
-# You don't need to include the class declaration here,
-# but it quiets warnings.
-
-gp.fs.size = 1
-gp.fs.0 = ec.gp.GPFunctionSet
-gp.fs.0.name = f0
-#fill the rest of this out on a per-problem basis
-
-
-# Here we define a single atomic type, "nil", which everyone will use.
-# There are no set types defined.
-
-gp.type.a.size = 1
-gp.type.a.0.name = nil
-gp.type.s.size = 0
-
 # Here we define one GPTreeConstraints object, "tc0",
 # which uses ec.gp.koza.HalfBuilder to create nodes,
 # only allows nodes from the GPFunctionSet "fset",
@@ -210,70 +189,6 @@ gp.koza.half.min-depth = 2
 gp.koza.half.max-depth = 6
 gp.koza.half.growp = 0.5
 
-# Here we define 7 GPNodeConstraints, nc0...nc6, which
-# describe nodes with 0...6 children respectively, which only
-# use a single type, "nil", for their argument and return types
-# You don't need to include the class declarations with everything
-# else below, but it quiets warnings
-
-gp.nc.size = 7
-
-gp.nc.0 = ec.gp.GPNodeConstraints
-gp.nc.0.name = nc0
-gp.nc.0.returns = nil
-gp.nc.0.size = 0
-
-gp.nc.1 = ec.gp.GPNodeConstraints
-gp.nc.1.name = nc1
-gp.nc.1.returns = nil
-gp.nc.1.size = 1
-gp.nc.1.child.0 = nil
-
-gp.nc.2 = ec.gp.GPNodeConstraints
-gp.nc.2.name = nc2
-gp.nc.2.returns = nil
-gp.nc.2.size = 2
-gp.nc.2.child.0 = nil
-gp.nc.2.child.1 = nil
-
-gp.nc.3 = ec.gp.GPNodeConstraints
-gp.nc.3.name = nc3
-gp.nc.3.returns = nil
-gp.nc.3.size = 3
-gp.nc.3.child.0 = nil
-gp.nc.3.child.1 = nil
-gp.nc.3.child.2 = nil
-
-gp.nc.4 = ec.gp.GPNodeConstraints
-gp.nc.4.name = nc4
-gp.nc.4.returns = nil
-gp.nc.4.size = 4
-gp.nc.4.child.0 = nil
-gp.nc.4.child.1 = nil
-gp.nc.4.child.2 = nil
-gp.nc.4.child.3 = nil
-
-gp.nc.5 = ec.gp.GPNodeConstraints
-gp.nc.5.name = nc5
-gp.nc.5.returns = nil
-gp.nc.5.size = 5
-gp.nc.5.child.0 = nil
-gp.nc.5.child.1 = nil
-gp.nc.5.child.2 = nil
-gp.nc.5.child.3 = nil
-gp.nc.5.child.4 = nil
-
-gp.nc.6 = ec.gp.GPNodeConstraints
-gp.nc.6.name = nc6
-gp.nc.6.returns = nil
-gp.nc.6.size = 6
-gp.nc.6.child.0 = nil
-gp.nc.6.child.1 = nil
-gp.nc.6.child.2 = nil
-gp.nc.6.child.3 = nil
-gp.nc.6.child.4 = nil
-gp.nc.6.child.5 = nil
-
 # the next four items are already defined in koza.params, but we
 # put them here to be clear.
 
@@ -286,31 +201,31 @@ gp.fs.0.info = ec.gp.GPFuncInfo
 
 # Primitive types
 #   - Atomic -
-gp.type.a.size = 8
+gp.type.a.size = 9
 gp.type.a.0.name = AbstractAccess
 gp.type.a.1.name = Abstraction
 gp.type.a.2.name = EncapsulateConstruction
 gp.type.a.3.name = PartialAbstraction
 gp.type.a.4.name = AnnotatedVertex
-gp.type.a.5.name = nil
-gp.type.a.6.name = StringNode
-gp.type.a.7.name = SetNode
+gp.type.a.5.name = StringNode
+gp.type.a.6.name = RootNode
+gp.type.a.7.name = DummyNode
+gp.type.a.8.name = nil
 #   - Set -
-gp.type.s.size = 2
+gp.type.s.size = 1
 gp.type.s.0.name = MT-S
-gp.type.s.0.size = 4
+gp.type.s.0.size = 5
 gp.type.s.0.member.0 = Abstraction 
 gp.type.s.0.member.1 = AbstractAccess
 gp.type.s.0.member.2 = EncapsulateConstruction
 gp.type.s.0.member.3 = PartialAbstraction
-gp.type.s.1.name = Set-S
-gp.type.s.1.size = 2
-gp.type.s.1.member.0 = SetNode
-gp.type.s.1.member.1 = nil
+gp.type.s.0.member.4 = DummyNode
+
+gp.nc.size = 8
 
 # Node constraints
 gp.nc.0 = ec.gp.GPNodeConstraints
-gp.nc.0.name = AbstractAccess
+gp.nc.0.name = AbstractAccess-nc
 gp.nc.0.returns = MT-S
 gp.nc.0.size = 3
 gp.nc.0.child.0 = AnnotatedVertex
@@ -318,62 +233,78 @@ gp.nc.0.child.1 = AnnotatedVertex
 gp.nc.0.child.2 = AnnotatedVertex
 
 gp.nc.1 = ec.gp.GPNodeConstraints
-gp.nc.1.name = Abstraction
+gp.nc.1.name = Abstraction-nc
 gp.nc.1.returns = MT-S
 gp.nc.1.size = 2
 gp.nc.1.child.0 = AnnotatedVertex
 gp.nc.1.child.1 = StringNode
 
 gp.nc.2 = ec.gp.GPNodeConstraints
-gp.nc.2.name = EncapsulateConstruction
+gp.nc.2.name = EncapsulateConstruction-nc
 gp.nc.2.returns = MT-S
 gp.nc.2.size = 2
 gp.nc.2.child.0 = AnnotatedVertex
 gp.nc.2.child.1 = AnnotatedVertex
 
 gp.nc.3 = ec.gp.GPNodeConstraints
-gp.nc.3.name = PartialAbstraction
+gp.nc.3.name = PartialAbstraction-nc
 gp.nc.3.returns = MT-S
 gp.nc.3.size = 2
 gp.nc.3.child.0 = AnnotatedVertex
 gp.nc.3.child.1 = StringNode
 
 gp.nc.4 = ec.gp.GPNodeConstraints
-gp.nc.4.name = VertexNode
+gp.nc.4.name = VertexNode-nc
 gp.nc.4.returns = AnnotatedVertex
+gp.nc.4.size = 0
 
 gp.nc.5 = ec.gp.GPNodeConstraints
-gp.nc.5.name = StringNode
+gp.nc.5.name = StringNode-nc
 gp.nc.5.returns = StringNode
+gp.nc.5.size = 0
 
 gp.nc.6 = ec.gp.GPNodeConstraints
-gp.nc.6.name = SetNode
-gp.nc.6.returns = Set-S
-gp.nc.6.size = 2
+gp.nc.6.name = RootNode-nc
+gp.nc.6.returns = nil
+gp.nc.6.size = 8
 gp.nc.6.child.0 = MT-S
-gp.nc.6.child.1 = Set-S
+gp.nc.6.child.1 = MT-S
+gp.nc.6.child.2 = MT-S
+gp.nc.6.child.3 = MT-S
+gp.nc.6.child.4 = MT-S
+gp.nc.6.child.5 = MT-S
+gp.nc.6.child.6 = MT-S
+gp.nc.6.child.7 = MT-S
+
+gp.nc.7 = ec.gp.GPNodeConstraints
+gp.nc.7.name = DummyNode-nc
+gp.nc.7.returns = nil
+gp.nc.7.size = 0
 
 gp.tc.0.returns = nil
 
 # Function set
-gp.fs.0.size = 7
+gp.fs.0.size = 8
 gp.fs.0.func.0 = ec.refactoring.AbstractAccess
-gp.fs.0.func.0.nc = AbstractAccess
+gp.fs.0.func.0.nc = AbstractAccess-nc
 gp.fs.0.func.1 = ec.refactoring.Abstraction
-gp.fs.0.func.1.nc = Abstraction
+gp.fs.0.func.1.nc = Abstraction-nc
 gp.fs.0.func.2 = ec.refactoring.EncapsulateConstruction
-gp.fs.0.func.2.nc = EncapsulateConstruction
+gp.fs.0.func.2.nc = EncapsulateConstruction-nc
 gp.fs.0.func.3 = ec.refactoring.PartialAbstraction
-gp.fs.0.func.3.nc = PartialAbstraction
+gp.fs.0.func.3.nc = PartialAbstraction-nc
 gp.fs.0.func.4 = ec.refactoring.VertexNode
-gp.fs.0.func.4.nc = VertexNode
+gp.fs.0.func.4.nc = VertexNode-nc
 gp.fs.0.func.5 = ec.refactoring.StringNode
-gp.fs.0.func.5.nc = StringNode
-gp.fs.0.func.6 = ec.refactoring.SetNode
-gp.fs.0.func.6.nc = SetNode
+gp.fs.0.func.5.nc = StringNode-nc
+gp.fs.0.func.6 = ec.refactoring.DummyNode
+gp.fs.0.func.6.nc = DummyNode-nc
+gp.fs.0.func.7 = ec.refactoring.RootNode
+gp.fs.0.func.7.nc = RootNode-nc
 
 eval.problem = ec.refactoring.RefactorProblem
 eval.problem.data = ec.refactoring.RefactorData
+
 # The following should almost *always* be the same as eval.problem.data
 # For those who are interested, it defines the data object used internally
 # inside ADF stack contexts
