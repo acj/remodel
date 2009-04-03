@@ -10,13 +10,12 @@ import java.util.Random;
  *
  */
 public class StringFactory {
-	private static final int RANDOM_SEED = 0;
 	private static Random rand = null;
 	private static ArrayList<String> strings;
 	
 	public static void Setup() {
 		strings = new ArrayList<String>();
-		rand = new Random(RANDOM_SEED);
+		rand = new Random(SourceGraph.RANDOM_SEED);
 		strings.add("These");
 		strings.add("Are");
 		strings.add("Some");

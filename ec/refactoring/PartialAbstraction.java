@@ -48,9 +48,9 @@ public class PartialAbstraction extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.err.println("PartialAbstraction()");
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
-			SourceGraph.GetCurrentClone();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex concrete_v = rd.vertex;
@@ -58,7 +58,7 @@ public class PartialAbstraction extends GPNode {
 		String newName = rd.name;
 		
 		// Class abstract = createEmptyClass(newName);
-		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName);
+		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName, ag);
 		AnnotatedEdge e = new AnnotatedEdge(Label.INHERIT);
 		ag.addEdge(concrete_v, abstract_v, e);
 		
@@ -67,7 +67,6 @@ public class PartialAbstraction extends GPNode {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "PartialAbstraction";
 	}
 

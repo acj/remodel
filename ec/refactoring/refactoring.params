@@ -92,14 +92,16 @@ stat.file				$out.stat
 # We define the fitness of an individual to use the traditional
 # Koza-style fitness metrics, just to make everyone happy :-)
 #
-pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+#pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+pop.subpop.0.species.fitness = ec.simple.SimpleFitness
 
 #
 # We have a GP-specific initializer and a Koza-specific
 # statistics to go with this fitness 
 #
 init = ec.gp.GPInitializer
-stat = ec.gp.koza.KozaStatistics
+#stat = ec.gp.koza.KozaStatistics
+stat = ec.simple.SimpleStatistics
 
 # We have a single subpopulation containing a GPSpecies,
 # using GPIndividuals as the prototypical individual class.
@@ -142,6 +144,7 @@ breed.reproduce.source.0 = ec.select.TournamentSelection
 # Crossover will use Tournament Selection, try only 1
 # time, have a max depth of 17, and use KozaNodeSelector
 gp.koza.xover.source.0 = ec.select.TournamentSelection
+
 gp.koza.xover.source.1 = same
 gp.koza.xover.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.xover.ns.1 = same

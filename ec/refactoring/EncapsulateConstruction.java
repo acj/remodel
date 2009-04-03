@@ -50,9 +50,9 @@ public class EncapsulateConstruction extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.err.println("EncapsulateConstruction()");
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
-			SourceGraph.GetCurrentClone();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex creator_v = rd.vertex;
@@ -63,7 +63,7 @@ public class EncapsulateConstruction extends GPNode {
 		
 		// Build the "createProduct" method
 		AnnotatedVertex abstract_meth_v =
-			Helpers.makeAbstract(creator_v, create_method_name);
+			Helpers.makeAbstract(creator_v, create_method_name, ag);
 		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(creator_v).iterator();

@@ -19,9 +19,10 @@ public class Helpers {
 	 * @author acj
 	 *
 	 */
-	public static AnnotatedVertex abstractClass(AnnotatedVertex c, String n) {
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
-			SourceGraph.GetCurrentClone();
+	public static AnnotatedVertex abstractClass(
+							AnnotatedVertex c,
+							String n,
+							AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> ag) {
 		// Construct a new "interface" vertex along with a set of operation
 		// vertices to represent the interface methods.
 		AnnotatedVertex iface_v = new AnnotatedVertex("NewInterface", 
@@ -29,6 +30,7 @@ public class Helpers {
 										AnnotatedVertex.Visibility.PUBLIC);
 		ArrayList<AnnotatedEdge> edges = ag.GetEdges(c, AnnotatedEdge.Label.OWN);
 		Iterator<AnnotatedEdge> it = edges.iterator();
+		ag.addVertex(iface_v);
 		while (it.hasNext()) {
 			AnnotatedEdge next_e = it.next();
 			AnnotatedVertex next_v = next_e.getSinkVertex();
@@ -38,7 +40,7 @@ public class Helpers {
 			AnnotatedVertex oper_v  = new AnnotatedVertex(next_v.toString(), 
 										next_v.getType(),
 										AnnotatedVertex.Visibility.PUBLIC);
-			ag.addVertex(iface_v);
+			
 			ag.addVertex(oper_v);
 			AnnotatedEdge oper_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
 			ag.addEdge(iface_v, oper_v, oper_e);
@@ -81,9 +83,8 @@ public class Helpers {
 	 * @param The name of the empty class.
 	 * @return The vertex representing the new, empty class.
 	 */
-	public static AnnotatedVertex createEmptyClass(String newName) {
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
-			SourceGraph.GetCurrentClone();
+	public static AnnotatedVertex createEmptyClass(String newName,
+						AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag) {
 		AnnotatedVertex empty_v = new AnnotatedVertex(newName,
 									AnnotatedVertex.VertexType.CLASS,
 									AnnotatedVertex.Visibility.PUBLIC);
@@ -109,13 +110,13 @@ public class Helpers {
 	 *  
 	 * @author acj
 	 */
-	public static AnnotatedVertex createWrapperClass(AnnotatedVertex iface_v,
-													String wrapperName,
-													String fieldName) {
+	public static AnnotatedVertex createWrapperClass(
+							AnnotatedVertex iface_v,
+							String wrapperName,
+							String fieldName,
+							AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag) {
 		// TODO: Ensure that the child is an interface.
 		
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
-			SourceGraph.GetCurrentClone();
 		// Construct a new "wrapper" vertex along with a set of operation
 		// vertices to represent the wrapped methods.
 		AnnotatedVertex wrapper_v = new AnnotatedVertex("NewWrapper", 
@@ -155,9 +156,10 @@ public class Helpers {
 	 *  
 	 * @author acj
 	 */
-	public static AnnotatedVertex makeAbstract(AnnotatedVertex c, String n) {
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
-			SourceGraph.GetCurrentClone();
+	public static AnnotatedVertex makeAbstract(
+						AnnotatedVertex c,
+						String n,
+						AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag) {
 		
 		// Construct an abstract (TODO: how?) method that has the same name
 		// and signature as the child method (constructor)

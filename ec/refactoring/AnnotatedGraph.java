@@ -21,7 +21,7 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
         super(ef);
         vertexHash = new HashMap<String, V>();
         vertexList = new Vector<V>();
-        rand = new Random();
+        rand = new Random(SourceGraph.RANDOM_SEED);
     }
     public AnnotatedGraph(Class<? extends E> edgeClass)
     {

@@ -12,9 +12,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 import ec.*;
-import ec.app.tutorial4.DoubleData;
 import ec.gp.*;
-import ec.gp.koza.*;
 import ec.simple.*;
 import ec.util.Parameter;
 
@@ -36,11 +34,11 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			((GPIndividual)ind).trees[0].child.eval(
 					state,threadnum,input,stack,((GPIndividual)ind), this);
 		}
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = SourceGraph.GetInstance().clone();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = input.GetGraph();
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 		//fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
-		fitness_value = 100 - DesignSizeInClasses(g) + AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) + NumberOfPolymorphicMethods(g) - ClassInterfaceSize(g) + MeasureOfAggregation(g) + MeasureOfFunctionalAbstraction(g);
+		fitness_value = 100F - DesignSizeInClasses(g) + AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) + NumberOfPolymorphicMethods(g) - ClassInterfaceSize(g) + MeasureOfAggregation(g) + MeasureOfFunctionalAbstraction(g);
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
 		
@@ -48,22 +46,20 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			BufferedWriter out = new BufferedWriter(new FileWriter("model.out"));
 			out.write(g.ToGraphViz());
 			out.close();
-			System.exit(0);
 		} catch (IOException e) {
 			System.err.println("Could not export graphviz data!");
 		}
 	}
     public void setup(final EvolutionState state, final Parameter base)
 	{
-    	System.out.println("SETUP!");
 		// very important, remember this
 		super.setup(state,base);
 		
 		StringFactory.Setup();
-		SourceGraph.GetInstance();
 		
 		input = new RefactorData();
 		input.name = "";
+		input.SetGraph(SourceGraph.GetInstance().clone());
 		input.vertex = null;
 	}
     

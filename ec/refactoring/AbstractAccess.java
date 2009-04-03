@@ -54,12 +54,12 @@ public class AbstractAccess extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.err.println("AbstractAccess()");
 		// For each "uses" relationship between the context and the concrete
 		// class, replace this relationship with an "implements" link to
 		// an interface that mirrors the concrete class.
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
-			SourceGraph.GetCurrentClone();
 		RefactorData rd = (RefactorData)input;
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex context_v = rd.vertex;
 		children[1].eval(state, thread, input, stack, individual, problem);
@@ -81,7 +81,6 @@ public class AbstractAccess extends GPNode {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "AbstractAccess";
 	}
 

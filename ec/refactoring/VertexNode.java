@@ -19,12 +19,9 @@ import ec.util.Parameter;
  */
 public class VertexNode extends GPNode {
 	private static final long serialVersionUID = 5121052556529127964L;
-	private AnnotatedVertex annotatedVertex;
+	private AnnotatedVertex annotatedVertex = null;
 	
 	public VertexNode() {
-		System.err.println("VertexNode constructor!");
-		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
-		System.err.println(annotatedVertex);
 	}
 	
 	@Override
@@ -37,14 +34,19 @@ public class VertexNode extends GPNode {
 
 	@Override
 	public int nodeHashCode() {
-		return this.getClass().hashCode() + annotatedVertex.hashCode();
+		if (annotatedVertex == null) {
+			// FIXME: Ugly, and I don't know if this is causing problems.
+			return this.getClass().hashCode() + 1234567890;
+		} else {
+			return this.getClass().hashCode() + annotatedVertex.hashCode();
+		}
 	}
 
 	@Override
 	public void resetNode(EvolutionState state, int thread) {
 		super.resetNode(state, thread);
-		// Fetch a new vertex to represent.
-		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
+		// Fetch a new vertex to represent (next time eval is called, that is).
+		annotatedVertex = null;
 	}
 
 	public void checkConstraints(final EvolutionState state,
@@ -53,7 +55,6 @@ public class VertexNode extends GPNode {
             final Parameter individualBase)
 	{
 		super.checkConstraints(state,tree,typicalIndividual,individualBase);
-		System.out.println("Number of children: " + children.length);
 		if (children.length!=0)
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
@@ -63,7 +64,10 @@ public class VertexNode extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
-		//rd.name = toString();
+		if (annotatedVertex == null) {
+			annotatedVertex = rd.GetGraph().GetRandomVertex();
+		}
+		rd.name = "";
 		rd.vertex = annotatedVertex;
 	}
 
