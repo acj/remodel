@@ -88,8 +88,4 @@ public class VertexNode extends GPNode {
 	public String GetName() {
 		return vertexName;
 	}
-	
-	public AnnotatedVertex GetAnnotatedVertex() {
-		return ag.getVertex(toString());
-	}
 }

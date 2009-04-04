@@ -38,13 +38,6 @@ public class EncapsulateConstruction extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
 			  individualBase);
-		/*
-		 // This stuff should be checked by the parameters file:
-		 if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[1].toString() != "ClassNode")
-			state.output.error("Invalid child node 1 (should be ClassNode)");
-		 */
 	}
 	
 	@Override
@@ -60,13 +53,7 @@ public class EncapsulateConstruction extends GPNode {
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		
 		String create_method_name = "create" + product_v.toString();
-
-		if (creator_v.hashCode() != ag.getVertex(creator_v.toString()).hashCode()) {
-			System.err.println("EC hashCode mismatch: " + creator_v.hashCode() +
-					" / " + ag.getVertex(creator_v.toString()).hashCode());
-		}// else {
-			//System.err.println("hashCode match");
-		//}
+		
 		// Build the "createProduct" method
 		AnnotatedVertex abstract_meth_v =
 			Helpers.makeAbstract(creator_v, create_method_name, ag);

@@ -36,16 +36,6 @@ public class Abstraction extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			          toStringForError() + " at " +
 			          individualBase);
-		/*
-		// This stuff should be checked by the parameters file:
-		else if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[0].toString() != "StringNode")
-			state.output.error("Invalid child node 1 (should be StringNode)");
-		*/
-		//else if (ag.getVertex() != null)
-		//	state.output.error("Invalid child node 1 (name already exists)");
-
 	}
 	
 	@Override
@@ -60,15 +50,6 @@ public class Abstraction extends GPNode {
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = rd.name;
-		
-		// TODO: Does this work in eval()?  Copied from checkConstraints()
-		/*
-		if (ag.getVertex("newName") != null)
-		{
-			state.output.error("Invalid child node 1 (name already exists)");
-			return;
-		}
-		*/
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);

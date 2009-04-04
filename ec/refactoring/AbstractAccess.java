@@ -39,16 +39,6 @@ public class AbstractAccess extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			          toStringForError() + " at " +
 			          individualBase);
-		/*
-		// This stuff should be checked by the parameters file:
-		if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[1].toString() != "ClassNode")
-			state.output.error("Invalid child node 1 (should be ClassNode)");
-		else if (children[2].toString() != "ClassNode")
-			state.output.error("Invalid child node 2 (should be ClassNode)");
-		*/
-
 	}
     
 	@Override
@@ -67,11 +57,6 @@ public class AbstractAccess extends GPNode {
 		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[2].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex iface_v = ag.getVertex(rd.name);
-		
-		if (!context_v.equals(ag.getVertex(context_v.toString()))) {
-			System.err.println("AA context_v mismatch: " + context_v.hashCode() +
-					" / " + ag.getVertex(context_v.toString()).hashCode());
-		}
 
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();

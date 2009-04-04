@@ -35,14 +35,6 @@ public class PartialAbstraction extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
 			  individualBase);
-		/*
-		// This stuff should be checked by the parameters file:
-		super.checkConstraints(state,tree,typicalIndividual,individualBase);
-		if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[1].toString() != "StringNode")
-			state.output.error("Invalid child node 1 (should be StringNode)");
-		*/
 	}
 	
 	@Override
