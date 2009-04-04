@@ -50,10 +50,11 @@ public class PartialAbstraction extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("PartialAbstraction()");
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
+			((RefactorIndividual)individual).GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex concrete_v = rd.vertex;
+		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = rd.name;
 		

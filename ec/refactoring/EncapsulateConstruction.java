@@ -52,15 +52,21 @@ public class EncapsulateConstruction extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("EncapsulateConstruction()");
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
-		
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
+			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex creator_v = rd.vertex;
+		AnnotatedVertex creator_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex product_v = rd.vertex;
+		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		
 		String create_method_name = "create" + product_v.toString();
-		
+
+		if (creator_v.hashCode() != ag.getVertex(creator_v.toString()).hashCode()) {
+			System.err.println("EC hashCode mismatch: " + creator_v.hashCode() +
+					" / " + ag.getVertex(creator_v.toString()).hashCode());
+		}// else {
+			//System.err.println("hashCode match");
+		//}
 		// Build the "createProduct" method
 		AnnotatedVertex abstract_meth_v =
 			Helpers.makeAbstract(creator_v, create_method_name, ag);

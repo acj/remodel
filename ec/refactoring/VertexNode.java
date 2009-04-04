@@ -19,26 +19,35 @@ import ec.util.Parameter;
  */
 public class VertexNode extends GPNode {
 	private static final long serialVersionUID = 5121052556529127964L;
-	private AnnotatedVertex annotatedVertex = null;
+	private String vertexName = "";
+	private AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> ag;
 	
 	public VertexNode() {
 	}
 	
+	public VertexNode clone() {
+		VertexNode vn = (VertexNode)(super.cloneReplacing());
+		vn.ag = null;
+		vn.vertexName = vertexName;
+		return vn;
+	}
+	
 	@Override
 	public boolean nodeEquals(GPNode node) {
-		// won't work for subclasses; in that case you'll need
-        // to change this to isAssignableTo(...)
-        if (this.getClass() != node.getClass()) { return false; }
-        return (((VertexNode)node).GetAnnotatedVertex() == annotatedVertex);
+        if (((VertexNode)node).ag.GetGraphId() == ag.GetGraphId() &&
+        		((VertexNode)node).GetName() == GetName()) {
+        	return true;
+        } else {
+        	return false;
+        }
 	}
 
 	@Override
 	public int nodeHashCode() {
-		if (annotatedVertex == null) {
-			// FIXME: Ugly, and I don't know if this is causing problems.
-			return this.getClass().hashCode() + 1234567890;
+		if (ag == null) {
+			return this.getClass().hashCode() + 1234567890 + GetName().hashCode();
 		} else {
-			return this.getClass().hashCode() + annotatedVertex.hashCode();
+			return this.getClass().hashCode() + ag.hashCode() + GetName().hashCode();
 		}
 	}
 
@@ -46,7 +55,7 @@ public class VertexNode extends GPNode {
 	public void resetNode(EvolutionState state, int thread) {
 		super.resetNode(state, thread);
 		// Fetch a new vertex to represent (next time eval is called, that is).
-		annotatedVertex = null;
+		ag = null;
 	}
 
 	public void checkConstraints(final EvolutionState state,
@@ -64,19 +73,23 @@ public class VertexNode extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
-		if (annotatedVertex == null) {
-			annotatedVertex = rd.GetGraph().GetRandomVertex();
+		if (ag == null ||
+				ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
+			ag = ((RefactorIndividual)individual).GetGraph();
 		}
-		rd.name = "";
-		rd.vertex = annotatedVertex;
+		vertexName = ag.GetRandomVertex().toString(); 
+		rd.name = vertexName;
 	}
 
 	public String toString() {
-		// TODO This should say something about the real class object
 		return "VertexNode";
 	}
 	
+	public String GetName() {
+		return vertexName;
+	}
+	
 	public AnnotatedVertex GetAnnotatedVertex() {
-		return annotatedVertex;
+		return ag.getVertex(toString());
 	}
 }

@@ -59,14 +59,20 @@ public class AbstractAccess extends GPNode {
 		// class, replace this relationship with an "implements" link to
 		// an interface that mirrors the concrete class.
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
+			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex context_v = rd.vertex;
+		AnnotatedVertex context_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex concrete_v = rd.vertex;
+		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[2].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex iface_v = rd.vertex;
+		AnnotatedVertex iface_v = ag.getVertex(rd.name);
 		
+		if (!context_v.equals(ag.getVertex(context_v.toString()))) {
+			System.err.println("AA context_v mismatch: " + context_v.hashCode() +
+					" / " + ag.getVertex(context_v.toString()).hashCode());
+		}
+
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
 		while (edge_it.hasNext()) {

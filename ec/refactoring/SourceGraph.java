@@ -21,6 +21,7 @@ public class SourceGraph implements Prototype, Singleton {
 	private static final long serialVersionUID = -5295342399476105337L;
 	private static SourceGraph sourceGraph = null;
 	public static final int RANDOM_SEED = 0;
+	private static int nextGraphId = 0;
 
 	private AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 
@@ -55,6 +56,7 @@ public class SourceGraph implements Prototype, Singleton {
 								graph_clone.getVertex(old_snk_v),
 								e);
 		}
+		//System.err.println("New clone: " + graph_clone.getSize() + " vertices");
 		return graph_clone;
 	}
 	public static SourceGraph GetInstance() {
@@ -98,10 +100,14 @@ public class SourceGraph implements Prototype, Singleton {
 	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
 	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
 	        d.addEdge(d.getVertex("Printer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
-	        
+	        	        
 	        System.err.println("Initial graph has " + d.vertexSet().size() + " vertices");
 	        sourceGraph.annotatedGraph = d;
 		}
 		return sourceGraph;
+	}
+	
+	public static int GetNextGraphId() {
+		return nextGraphId++;
 	}
 }

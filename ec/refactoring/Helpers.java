@@ -23,6 +23,8 @@ public class Helpers {
 							AnnotatedVertex c,
 							String n,
 							AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> ag) {
+		int size_start = ag.getSize();
+		int verts_added = 0;
 		// Construct a new "interface" vertex along with a set of operation
 		// vertices to represent the interface methods.
 		AnnotatedVertex iface_v = new AnnotatedVertex("NewInterface", 
@@ -31,6 +33,7 @@ public class Helpers {
 		ArrayList<AnnotatedEdge> edges = ag.GetEdges(c, AnnotatedEdge.Label.OWN);
 		Iterator<AnnotatedEdge> it = edges.iterator();
 		ag.addVertex(iface_v);
+		++verts_added;
 		while (it.hasNext()) {
 			AnnotatedEdge next_e = it.next();
 			AnnotatedVertex next_v = next_e.getSinkVertex();
@@ -42,9 +45,11 @@ public class Helpers {
 										AnnotatedVertex.Visibility.PUBLIC);
 			
 			ag.addVertex(oper_v);
+			++verts_added;
 			AnnotatedEdge oper_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
 			ag.addEdge(iface_v, oper_v, oper_e);
 		}
+		assert (size_start + verts_added) == ag.getSize();
 		return iface_v;
 	}
 	

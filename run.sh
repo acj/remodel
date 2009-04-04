@@ -5,4 +5,4 @@ JAVA=/usr/bin/java
 #JAVA=~/research/java6/bin/java
 
 $JAVAC -g -cp .:ec/refactoring/jgrapht-jdk1.6.jar ec/refactoring/*.java
-$JAVA -cp .:ec/refactoring/jgrapht-jdk1.6.jar ec.Evolve -file ec/refactoring/refactoring.params
+$JAVA -cp .:ec/refactoring/jgrapht-jdk1.6.jar -enableassertions ec.Evolve -file ec/refactoring/refactoring.params

@@ -53,19 +53,22 @@ public class Abstraction extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("Abstraction()");
 		RefactorData rd = (RefactorData)input;
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = rd.GetGraph();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
+			((RefactorIndividual)individual).GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex product_v = rd.vertex;
+		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = rd.name;
 		
 		// TODO: Does this work in eval()?  Copied from checkConstraints()
+		/*
 		if (ag.getVertex("newName") != null)
 		{
 			state.output.error("Invalid child node 1 (name already exists)");
 			return;
 		}
+		*/
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);

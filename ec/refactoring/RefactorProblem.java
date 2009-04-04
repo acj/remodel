@@ -20,7 +20,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	private static final long serialVersionUID = 4425245889654977390L;
 	public RefactorData input;
 	
-	public Object clone() {
+	public RefactorProblem clone() {
 		RefactorProblem rp = (RefactorProblem) (super.clone());
 		rp.input = (RefactorData) (input.clone());
 		return rp;
@@ -28,20 +28,43 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	
 	public void evaluate(EvolutionState state, Individual ind,
 			int subpopulation, int threadnum) {
-		// TODO: Load in the graph
-		// TODO: Evaluate fitness based on QMOOD, DPs, etc...
 		if (!ind.evaluated) {	// Don't reevaluate
 			((GPIndividual)ind).trees[0].child.eval(
 					state,threadnum,input,stack,((GPIndividual)ind), this);
 		}
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = input.GetGraph();
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = 
+			((RefactorIndividual)ind).GetGraph();
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
-		//fitness_value = 100 - g.edgeSet().size() - (float)g.getSize();
-		fitness_value = 100F - DesignSizeInClasses(g) + AvgNumberOfAncestors(g) + DataAccessMetric(g) - NumberOfMethods(g) + NumberOfPolymorphicMethods(g) - ClassInterfaceSize(g) + MeasureOfAggregation(g) + MeasureOfFunctionalAbstraction(g);
+		float designSizeInClasses = -DesignSizeInClasses(g);
+		float avgNumberOfAncestors = AvgNumberOfAncestors(g);
+		float dataAccessMetric = DataAccessMetric(g);
+		float numberOfMethods = -NumberOfMethods(g);
+		float numberOfPolyMethods = NumberOfPolymorphicMethods(g);
+		float classInterfaceSize = ClassInterfaceSize(g);
+		float measureOfAggregation = MeasureOfAggregation(g);
+		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g);
+		
+		System.out.println("DSIC: " + designSizeInClasses);
+		System.out.println("ANOA: " + avgNumberOfAncestors);
+		System.out.println("DAM: " + dataAccessMetric);
+		System.out.println("NOM: " + numberOfMethods);
+		System.out.println("NOPM: " + numberOfPolyMethods);
+		System.out.println("CIF: " + classInterfaceSize);
+		System.out.println("MOA: " + measureOfAggregation);
+		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
+		
+		fitness_value = designSizeInClasses + avgNumberOfAncestors +
+			dataAccessMetric + numberOfMethods + numberOfPolyMethods +
+			classInterfaceSize + measureOfAggregation +
+			measureOfFunctionalAbstraction;
 		fit.setFitness(state, fitness_value, false);
+		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;
 		
+		stack.reset();
+		ind.evaluated = true;
+		/*
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("model.out"));
 			out.write(g.ToGraphViz());
@@ -49,6 +72,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		} catch (IOException e) {
 			System.err.println("Could not export graphviz data!");
 		}
+		*/
 	}
     public void setup(final EvolutionState state, final Parameter base)
 	{
@@ -59,8 +83,6 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		
 		input = new RefactorData();
 		input.name = "";
-		input.SetGraph(SourceGraph.GetInstance().clone());
-		input.vertex = null;
 	}
     
     /**
