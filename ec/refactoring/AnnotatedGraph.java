@@ -15,17 +15,25 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
     private HashMap<String, V> vertexHash;
     private Vector<V> vertexList;
     private Random rand;
+    private int graphId; // Unique identifier for this graph instance
     
     public AnnotatedGraph(EdgeFactory<V, E> ef)
     {
         super(ef);
         vertexHash = new HashMap<String, V>();
         vertexList = new Vector<V>();
-        rand = new Random();
+        // FIXME: Move this to SourceGraph!
+        rand = new Random(SourceGraph.RANDOM_SEED);
+        graphId = SourceGraph.GetNextGraphId();
     }
     public AnnotatedGraph(Class<? extends E> edgeClass)
     {
         this(new ClassBasedEdgeFactory<V, E>(edgeClass));
+        vertexHash = new HashMap<String, V>();
+        vertexList = new Vector<V>();
+        // FIXME: Move this to SourceGraph!
+        rand = new Random(SourceGraph.RANDOM_SEED);
+        graphId = SourceGraph.GetNextGraphId();
     }
     /**
      * Removes all objects associated with the graph instance.
@@ -107,4 +115,6 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 	public V GetRandomVertex() {
 		return getVertex(rand.nextInt(this.getSize()));
 	}
+	
+	public int GetGraphId() { return graphId; }
 }

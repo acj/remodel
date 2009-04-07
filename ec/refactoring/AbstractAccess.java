@@ -39,34 +39,25 @@ public class AbstractAccess extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			          toStringForError() + " at " +
 			          individualBase);
-		/*
-		// This stuff should be checked by the parameters file:
-		if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[1].toString() != "ClassNode")
-			state.output.error("Invalid child node 1 (should be ClassNode)");
-		else if (children[2].toString() != "ClassNode")
-			state.output.error("Invalid child node 2 (should be ClassNode)");
-		*/
-
 	}
     
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.err.println("AbstractAccess()");
 		// For each "uses" relationship between the context and the concrete
 		// class, replace this relationship with an "implements" link to
 		// an interface that mirrors the concrete class.
-		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
-			SourceGraph.GetCurrentClone();
 		RefactorData rd = (RefactorData)input;
+		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
+			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex context_v = rd.vertex;
+		AnnotatedVertex context_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex concrete_v = rd.vertex;
+		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[2].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex iface_v = rd.vertex;
-		
+		AnnotatedVertex iface_v = ag.getVertex(rd.name);
+
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
 		while (edge_it.hasNext()) {
@@ -81,7 +72,6 @@ public class AbstractAccess extends GPNode {
 
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
 		return "AbstractAccess";
 	}
 

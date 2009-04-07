@@ -38,32 +38,25 @@ public class EncapsulateConstruction extends GPNode {
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
 			  individualBase);
-		/*
-		 // This stuff should be checked by the parameters file:
-		 if (children[0].toString() != "ClassNode")
-			state.output.error("Invalid child node 0 (should be ClassNode)");
-		else if (children[1].toString() != "ClassNode")
-			state.output.error("Invalid child node 1 (should be ClassNode)");
-		 */
 	}
 	
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.err.println("EncapsulateConstruction()");
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
-			SourceGraph.GetCurrentClone();
-		
+			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex creator_v = rd.vertex;
+		AnnotatedVertex creator_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		AnnotatedVertex product_v = rd.vertex;
+		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		
 		String create_method_name = "create" + product_v.toString();
 		
 		// Build the "createProduct" method
 		AnnotatedVertex abstract_meth_v =
-			Helpers.makeAbstract(creator_v, create_method_name);
+			Helpers.makeAbstract(creator_v, create_method_name, ag);
 		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(creator_v).iterator();

@@ -19,32 +19,43 @@ import ec.util.Parameter;
  */
 public class VertexNode extends GPNode {
 	private static final long serialVersionUID = 5121052556529127964L;
-	private AnnotatedVertex annotatedVertex;
+	private String vertexName = "";
+	private AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> ag;
 	
 	public VertexNode() {
-		System.err.println("VertexNode constructor!");
-		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
-		System.err.println(annotatedVertex);
+	}
+	
+	public VertexNode clone() {
+		VertexNode vn = (VertexNode)(super.cloneReplacing());
+		vn.ag = null;
+		vn.vertexName = vertexName;
+		return vn;
 	}
 	
 	@Override
 	public boolean nodeEquals(GPNode node) {
-		// won't work for subclasses; in that case you'll need
-        // to change this to isAssignableTo(...)
-        if (this.getClass() != node.getClass()) { return false; }
-        return (((VertexNode)node).GetAnnotatedVertex() == annotatedVertex);
+        if (((VertexNode)node).ag.GetGraphId() == ag.GetGraphId() &&
+        		((VertexNode)node).GetName() == GetName()) {
+        	return true;
+        } else {
+        	return false;
+        }
 	}
 
 	@Override
 	public int nodeHashCode() {
-		return this.getClass().hashCode() + annotatedVertex.hashCode();
+		if (ag == null) {
+			return this.getClass().hashCode() + 1234567890 + GetName().hashCode();
+		} else {
+			return this.getClass().hashCode() + ag.hashCode() + GetName().hashCode();
+		}
 	}
 
 	@Override
 	public void resetNode(EvolutionState state, int thread) {
 		super.resetNode(state, thread);
-		// Fetch a new vertex to represent.
-		annotatedVertex = SourceGraph.GetCurrentClone().GetRandomVertex();
+		// Fetch a new vertex to represent (next time eval is called, that is).
+		ag = null;
 	}
 
 	public void checkConstraints(final EvolutionState state,
@@ -53,7 +64,6 @@ public class VertexNode extends GPNode {
             final Parameter individualBase)
 	{
 		super.checkConstraints(state,tree,typicalIndividual,individualBase);
-		System.out.println("Number of children: " + children.length);
 		if (children.length!=0)
 			state.output.error("Incorrect number of children for node " + 
 			  toStringForError() + " at " +
@@ -63,16 +73,19 @@ public class VertexNode extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
-		//rd.name = toString();
-		rd.vertex = annotatedVertex;
+		if (ag == null ||
+				ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
+			ag = ((RefactorIndividual)individual).GetGraph();
+		}
+		vertexName = ag.GetRandomVertex().toString(); 
+		rd.name = vertexName;
 	}
 
 	public String toString() {
-		// TODO This should say something about the real class object
 		return "VertexNode";
 	}
 	
-	public AnnotatedVertex GetAnnotatedVertex() {
-		return annotatedVertex;
+	public String GetName() {
+		return vertexName;
 	}
 }

@@ -16,6 +16,8 @@
 
 parent.0 = ../ec.params
 
+seed.0 = 				1234
+
 # ec.Evolve
 # ==============================
 
@@ -66,6 +68,7 @@ pop.subpop.0 = 				ec.Subpopulation
 
 # subpop size is 1024 individuals
 pop.subpop.0.size =			1024
+#pop.subpop.0.size =			20
 # don't bother trying to eliminate duplicates from the
 # initial population
 pop.subpop.0.duplicate-retries =	0
@@ -92,19 +95,23 @@ stat.file				$out.stat
 # We define the fitness of an individual to use the traditional
 # Koza-style fitness metrics, just to make everyone happy :-)
 #
-pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+#pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
+pop.subpop.0.species.fitness = ec.simple.SimpleFitness
 
 #
 # We have a GP-specific initializer and a Koza-specific
 # statistics to go with this fitness 
 #
 init = ec.gp.GPInitializer
-stat = ec.gp.koza.KozaStatistics
+#stat = ec.gp.koza.KozaStatistics
+stat = ec.simple.SimpleStatistics
 
 # We have a single subpopulation containing a GPSpecies,
 # using GPIndividuals as the prototypical individual class.
-pop.subpop.0.species = ec.gp.GPSpecies
-pop.subpop.0.species.ind = ec.gp.GPIndividual
+#pop.subpop.0.species = ec.gp.GPSpecies
+pop.subpop.0.species = ec.refactoring.RefactorSpecies
+#pop.subpop.0.species.ind = ec.gp.GPIndividual
+pop.subpop.0.species.ind = ec.refactoring.RefactorIndividual
 
 # We retry 100 times for duplicates (this is the lil-gp default)
 # in our subpopulation 0
@@ -128,43 +135,21 @@ pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
 pop.subpop.0.species.pipe.source.0.prob = 0.9
 pop.subpop.0.species.pipe.source.1 = ec.breed.ReproductionPipeline
 pop.subpop.0.species.pipe.source.1.prob = 0.1
-
-#
-# Here we define the default values for Crossover,
-# Reproduction, Mutation, as well as our selection
-# approaches (Koza I).  These can be overridden on a per-species
-# level of course.
-#
-
-# Reproduction will use Tournament Selection 
+ 
 breed.reproduce.source.0 = ec.select.TournamentSelection
 
-# Crossover will use Tournament Selection, try only 1
-# time, have a max depth of 17, and use KozaNodeSelector
 gp.koza.xover.source.0 = ec.select.TournamentSelection
+
 gp.koza.xover.source.1 = same
 gp.koza.xover.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.xover.ns.1 = same
 gp.koza.xover.maxdepth = 17
-
-# This is the default for Koza and lil-gp, though it's
-# a little wimpy; on the other hand, a higher number can
-# make things really slow
 gp.koza.xover.tries = 5
 
-# Point Mutation will use Tournament Selection, try only 1
-# time, have a max depth of 17, and use KozaNodeSelector
-# and GROW for building.  Also, Point Mutation uses a GrowBuilder
-# by default, with a default of min-depth=max-depth=5
-# as shown a ways below
 gp.koza.mutate.source.0 = ec.select.TournamentSelection
 gp.koza.mutate.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.mutate.build.0 = ec.gp.koza.GrowBuilder
 gp.koza.mutate.maxdepth = 17
-
-# This is the default for Koza and lil-gp, though it's
-# a little wimpy; on the other hand, a higher number can
-# make things really slow
 gp.koza.mutate.tries = 5
 
 #
@@ -180,8 +165,8 @@ select.tournament.size = 7
 # This means that if someone decided to use GROW to generate
 # new individual trees, it's also use the defaults below
 # unless he overrided them locally.
-gp.koza.grow.min-depth = 5
-gp.koza.grow.max-depth = 5
+#gp.koza.grow.min-depth = 5
+#gp.koza.grow.max-depth = 5
 
 #
 # We specify a few things about ADFs  -- what kind 

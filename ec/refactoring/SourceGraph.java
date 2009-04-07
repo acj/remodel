@@ -20,7 +20,8 @@ import ec.refactoring.AnnotatedVertex;
 public class SourceGraph implements Prototype, Singleton {
 	private static final long serialVersionUID = -5295342399476105337L;
 	private static SourceGraph sourceGraph = null;
-	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> currentClone = null;
+	public static final int RANDOM_SEED = 0;
+	private static int nextGraphId = 0;
 
 	private AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 
@@ -31,15 +32,6 @@ public class SourceGraph implements Prototype, Singleton {
 		return SimpleDefaults.base().push("SourceGraph");
 	}
 	protected SourceGraph() {
-	}
-	public static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> GetCurrentClone() {
-		if (sourceGraph == null) {
-			sourceGraph = GetInstance();
-		}
-		if (currentClone == null) {
-			sourceGraph.clone();
-		}
-		return currentClone;
 	}
 	public AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> clone() {
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
@@ -64,13 +56,13 @@ public class SourceGraph implements Prototype, Singleton {
 								graph_clone.getVertex(old_snk_v),
 								e);
 		}
-		currentClone = graph_clone;
+		//System.err.println("New clone: " + graph_clone.getSize() + " vertices");
 		return graph_clone;
 	}
 	public static SourceGraph GetInstance() {
 		// Set up a new instance of SourceGraph if necessary
 		if (sourceGraph == null) {
-			System.out.println("Creating new instance!");
+			System.out.println("Creating new SourceGraph instance!");
 			sourceGraph = new SourceGraph();
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> d = 
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
@@ -108,9 +100,14 @@ public class SourceGraph implements Prototype, Singleton {
 	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
 	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
 	        d.addEdge(d.getVertex("Printer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
-	        //System.out.println("New graph has " + d.vertexSet().size() + " vertices");
+	        	        
+	        System.err.println("Initial graph has " + d.vertexSet().size() + " vertices");
 	        sourceGraph.annotatedGraph = d;
 		}
 		return sourceGraph;
+	}
+	
+	public static int GetNextGraphId() {
+		return nextGraphId++;
 	}
 }
