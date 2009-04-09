@@ -67,7 +67,7 @@ pop.subpop.0 = 				ec.Subpopulation
 # ==============================
 
 # subpop size is 1024 individuals
-pop.subpop.0.size =			1024
+pop.subpop.0.size =			200
 #pop.subpop.0.size =			20
 # don't bother trying to eliminate duplicates from the
 # initial population
@@ -233,61 +233,44 @@ gp.fs.0.info = ec.gp.GPFuncInfo
 
 # Primitive types
 #   - Atomic -
-gp.type.a.size = 9
-gp.type.a.0.name = AbstractAccess
-gp.type.a.1.name = Abstraction
-gp.type.a.2.name = EncapsulateConstruction
-gp.type.a.3.name = PartialAbstraction
-gp.type.a.4.name = AnnotatedVertex
-gp.type.a.5.name = StringNode
-gp.type.a.6.name = RootNode
-gp.type.a.7.name = DummyNode
-gp.type.a.8.name = nil
-#   - Set -
-gp.type.s.size = 1
-gp.type.s.0.name = MT-S
-gp.type.s.0.size = 5
-gp.type.s.0.member.0 = Abstraction 
-gp.type.s.0.member.1 = AbstractAccess
-gp.type.s.0.member.2 = EncapsulateConstruction
-gp.type.s.0.member.3 = PartialAbstraction
-gp.type.s.0.member.4 = DummyNode
+gp.type.a.0.name = VertexNode
+gp.type.a.1.name = StringNode
 
-gp.nc.size = 8
+gp.nc.size = 6
 
 # Node constraints
 gp.nc.0 = ec.gp.GPNodeConstraints
 gp.nc.0.name = AbstractAccess-nc
-gp.nc.0.returns = MT-S
+gp.nc.0.returns = VertexNode
 gp.nc.0.size = 3
-gp.nc.0.child.0 = AnnotatedVertex
-gp.nc.0.child.1 = AnnotatedVertex
-gp.nc.0.child.2 = AnnotatedVertex
+gp.nc.0.child.0 = VertexNode
+gp.nc.0.child.1 = VertexNode
+gp.nc.0.child.2 = VertexNode
 
 gp.nc.1 = ec.gp.GPNodeConstraints
 gp.nc.1.name = Abstraction-nc
-gp.nc.1.returns = MT-S
+gp.nc.1.returns = VertexNode
 gp.nc.1.size = 2
-gp.nc.1.child.0 = AnnotatedVertex
+gp.nc.1.child.0 = VertexNode
 gp.nc.1.child.1 = StringNode
 
 gp.nc.2 = ec.gp.GPNodeConstraints
 gp.nc.2.name = EncapsulateConstruction-nc
-gp.nc.2.returns = MT-S
+gp.nc.2.returns = VertexNode
 gp.nc.2.size = 2
-gp.nc.2.child.0 = AnnotatedVertex
-gp.nc.2.child.1 = AnnotatedVertex
+gp.nc.2.child.0 = VertexNode
+gp.nc.2.child.1 = VertexNode
 
 gp.nc.3 = ec.gp.GPNodeConstraints
 gp.nc.3.name = PartialAbstraction-nc
-gp.nc.3.returns = MT-S
+gp.nc.3.returns = VertexNode
 gp.nc.3.size = 2
-gp.nc.3.child.0 = AnnotatedVertex
+gp.nc.3.child.0 = VertexNode
 gp.nc.3.child.1 = StringNode
 
 gp.nc.4 = ec.gp.GPNodeConstraints
 gp.nc.4.name = VertexNode-nc
-gp.nc.4.returns = AnnotatedVertex
+gp.nc.4.returns = VertexNode
 gp.nc.4.size = 0
 
 gp.nc.5 = ec.gp.GPNodeConstraints
@@ -295,28 +278,10 @@ gp.nc.5.name = StringNode-nc
 gp.nc.5.returns = StringNode
 gp.nc.5.size = 0
 
-gp.nc.6 = ec.gp.GPNodeConstraints
-gp.nc.6.name = RootNode-nc
-gp.nc.6.returns = nil
-gp.nc.6.size = 8
-gp.nc.6.child.0 = MT-S
-gp.nc.6.child.1 = MT-S
-gp.nc.6.child.2 = MT-S
-gp.nc.6.child.3 = MT-S
-gp.nc.6.child.4 = MT-S
-gp.nc.6.child.5 = MT-S
-gp.nc.6.child.6 = MT-S
-gp.nc.6.child.7 = MT-S
-
-gp.nc.7 = ec.gp.GPNodeConstraints
-gp.nc.7.name = DummyNode-nc
-gp.nc.7.returns = nil
-gp.nc.7.size = 0
-
-gp.tc.0.returns = nil
+gp.tc.0.returns = VertexNode
 
 # Function set
-gp.fs.0.size = 8
+gp.fs.0.size = 6
 gp.fs.0.func.0 = ec.refactoring.AbstractAccess
 gp.fs.0.func.0.nc = AbstractAccess-nc
 gp.fs.0.func.1 = ec.refactoring.Abstraction
@@ -329,10 +294,6 @@ gp.fs.0.func.4 = ec.refactoring.VertexNode
 gp.fs.0.func.4.nc = VertexNode-nc
 gp.fs.0.func.5 = ec.refactoring.StringNode
 gp.fs.0.func.5.nc = StringNode-nc
-gp.fs.0.func.6 = ec.refactoring.DummyNode
-gp.fs.0.func.6.nc = DummyNode-nc
-gp.fs.0.func.7 = ec.refactoring.RootNode
-gp.fs.0.func.7.nc = RootNode-nc
 
 eval.problem = ec.refactoring.RefactorProblem
 eval.problem.data = ec.refactoring.RefactorData

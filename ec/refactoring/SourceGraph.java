@@ -1,5 +1,6 @@
 package ec.refactoring;
 
+import java.io.FileNotFoundException;
 import java.util.*;
 import ec.EvolutionState;
 import ec.Singleton;
@@ -10,30 +11,43 @@ import ec.refactoring.AnnotatedEdge;
 import ec.refactoring.AnnotatedVertex;
 
 /*
- * This is an odd class.  It contains two singleton patterns.  The first manages
- * the lone instance of SourceGraph that exists.  The next manages the only
- * "current" clone of that SourceGraph.  The latter is basically a globally
- * accessible object that is modified by the GP tree as it is executed.
  * 
  * TODO: Decide if this is really necessary.  If not, clean it up.
  */
-public class SourceGraph implements Prototype, Singleton {
+public class SourceGraph {
 	private static final long serialVersionUID = -5295342399476105337L;
-	private static SourceGraph sourceGraph = null;
 	public static final int RANDOM_SEED = 0;
 	private static int nextGraphId = 0;
-
-	private AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
-
+	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 	
-	public void setup(EvolutionState state, Parameter param) {
+	/**
+	 * Loads the data for the graph that we wish to manipulate.
+	 */
+	private static void BuildGraph(AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> g,
+									String filename) {
+		IModelImport importer = new FactImport();
+		try {
+			importer.Import(g, filename);
+		} catch (FileNotFoundException e) {
+			System.err.println("Could not open file: " + filename);
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
-	public Parameter defaultBase() {
-		return SimpleDefaults.base().push("SourceGraph");
+	public static int GetNextGraphId() {
+		return nextGraphId++;
 	}
-	protected SourceGraph() {
-	}
-	public AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> clone() {
+	public static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> GetClone() {
+		if (annotatedGraph == null) {
+			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
+				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
+			BuildGraph(g, "beaver-annotated.facts"); // TODO: parameterize this
+			if (g.getSize() == 0) {
+				System.err.println("ERROR: Empty graph after import.");
+				System.exit(-1);
+			}
+			annotatedGraph = g;
+		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 		Set<AnnotatedVertex> vertices = annotatedGraph.vertexSet();
@@ -59,7 +73,8 @@ public class SourceGraph implements Prototype, Singleton {
 		//System.err.println("New clone: " + graph_clone.getSize() + " vertices");
 		return graph_clone;
 	}
-	public static SourceGraph GetInstance() {
+
+	/*
 		// Set up a new instance of SourceGraph if necessary
 		if (sourceGraph == null) {
 			System.out.println("Creating new SourceGraph instance!");
@@ -105,9 +120,6 @@ public class SourceGraph implements Prototype, Singleton {
 	        sourceGraph.annotatedGraph = d;
 		}
 		return sourceGraph;
-	}
 	
-	public static int GetNextGraphId() {
-		return nextGraphId++;
-	}
+	*/
 }

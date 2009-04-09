@@ -45,6 +45,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		float measureOfAggregation = MeasureOfAggregation(g);
 		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g);
 		
+		/*
 		System.out.println("DSIC: " + designSizeInClasses);
 		System.out.println("ANOA: " + avgNumberOfAncestors);
 		System.out.println("DAM: " + dataAccessMetric);
@@ -53,6 +54,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("CIF: " + classInterfaceSize);
 		System.out.println("MOA: " + measureOfAggregation);
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
+		*/
 		
 		fitness_value = designSizeInClasses + avgNumberOfAncestors +
 			dataAccessMetric + numberOfMethods + numberOfPolyMethods +

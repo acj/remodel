@@ -9,7 +9,7 @@ public class RefactorSpecies extends GPSpecies {
 	public RefactorIndividual newIndividual(EvolutionState state, int thread) 
     {
     	RefactorIndividual ind = (RefactorIndividual)(super.newIndividual(state, thread));
-		ind.SetGraph(SourceGraph.GetInstance().clone());
+		ind.SetGraph(SourceGraph.GetClone());
 		return ind;
     }
 }

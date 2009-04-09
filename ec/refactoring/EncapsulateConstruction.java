@@ -1,6 +1,9 @@
 package ec.refactoring;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Stack;
 
 import ec.EvolutionState;
 import ec.Problem;
@@ -60,13 +63,29 @@ public class EncapsulateConstruction extends GPNode {
 		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(creator_v).iterator();
+		HashMap<AnnotatedVertex,AnnotatedVertex> add_edges =
+			new HashMap<AnnotatedVertex,AnnotatedVertex>();
+		Stack<AnnotatedEdge> delete_edges = new Stack<AnnotatedEdge>();
+		// This loop simply does bookkeeping to determine which edges need to
+		// be added or removed.  Since they are added/removed from the list
+		// that is being iterated over, we can't do the add/remove here.
 		while (edge_it.hasNext()) {
 			e = edge_it.next();
-			if (e.getSinkVertex() == product_v && e.getLabel() == Label.INSTANTIATE) {
-				ag.removeEdge(e);
-				AnnotatedEdge e_new = new AnnotatedEdge(Label.CALL);
-				ag.addEdge(creator_v, abstract_meth_v, e_new);
+			if (e.getSinkVertex() == product_v && e.getLabel() == Label.INSTANTIATE) {		
+				delete_edges.add(e);
+				add_edges.put(creator_v, abstract_meth_v);
 			}
+		}
+		// Now process the edges that we marked for deletion.
+		while (!delete_edges.empty()) {
+			ag.removeEdge(delete_edges.pop());
+		}
+		// Now process the edges that we marked for addition.
+		Iterator<AnnotatedVertex> vertex_it = add_edges.keySet().iterator();
+		AnnotatedEdge e_new;
+		while (vertex_it.hasNext()) {
+			e_new = new AnnotatedEdge(Label.CALL);
+			ag.addEdge(creator_v, add_edges.get(creator_v), e_new); //abstract_meth_v
 		}
 	}
 
