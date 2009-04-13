@@ -3,6 +3,7 @@ package ec.refactoring;
 import java.io.FileNotFoundException;
 import java.util.*;
 import ec.EvolutionState;
+import ec.Evolve;
 import ec.Singleton;
 import ec.Prototype;
 import ec.simple.SimpleDefaults;
@@ -16,7 +17,7 @@ import ec.refactoring.AnnotatedVertex;
  */
 public class SourceGraph {
 	private static final long serialVersionUID = -5295342399476105337L;
-	public static final int RANDOM_SEED = 0;
+	public static int RANDOM_SEED = 0;
 	private static int nextGraphId = 0;
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 	

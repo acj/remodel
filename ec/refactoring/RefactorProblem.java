@@ -56,7 +56,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
 		*/
 		
-		fitness_value = designSizeInClasses + avgNumberOfAncestors +
+		fitness_value = 100 + designSizeInClasses + avgNumberOfAncestors +
 			dataAccessMetric + numberOfMethods + numberOfPolyMethods +
 			classInterfaceSize + measureOfAggregation +
 			measureOfFunctionalAbstraction;

@@ -16,7 +16,9 @@
 
 parent.0 = ../ec.params
 
-seed.0 = 				1234
+#seed.0 = 				1234
+#seed.0 =				5678
+seed.0 = 2
 
 # ec.Evolve
 # ==============================
@@ -46,7 +48,7 @@ eval =					ec.simple.SimpleEvaluator
 stat =					ec.simple.SimpleStatistics
 
 # run for 51 generations, quit prematurely if I find something ideal
-generations =				51
+generations =				1000
 quit-on-run-complete =			true
 
 # ec.Initializer
@@ -68,7 +70,7 @@ pop.subpop.0 = 				ec.Subpopulation
 
 # subpop size is 1024 individuals
 #pop.subpop.0.size =			200
-pop.subpop.0.size =			20
+pop.subpop.0.size =			200
 # don't bother trying to eliminate duplicates from the
 # initial population
 pop.subpop.0.duplicate-retries =	0
@@ -81,7 +83,7 @@ pop.subpop.0.duplicate-retries =	0
 # By default elitism isn't done.  If you want to do elitism for, say,
 # the top 10 individuals in subpopulation 0, you'd say:
 
-# breed.elite.0 = 			10
+#breed.elite.0 = 			10
 
 
 # ec.SimpleStatistics
@@ -91,26 +93,12 @@ pop.subpop.0.duplicate-retries =	0
 # the run was started in
 stat.file				$out.stat
 
-#
-# We define the fitness of an individual to use the traditional
-# Koza-style fitness metrics, just to make everyone happy :-)
-#
-#pop.subpop.0.species.fitness = ec.gp.koza.KozaFitness
 pop.subpop.0.species.fitness = ec.simple.SimpleFitness
 
-#
-# We have a GP-specific initializer and a Koza-specific
-# statistics to go with this fitness 
-#
 init = ec.gp.GPInitializer
-#stat = ec.gp.koza.KozaStatistics
 stat = ec.simple.SimpleStatistics
 
-# We have a single subpopulation containing a GPSpecies,
-# using GPIndividuals as the prototypical individual class.
-#pop.subpop.0.species = ec.gp.GPSpecies
 pop.subpop.0.species = ec.refactoring.RefactorSpecies
-#pop.subpop.0.species.ind = ec.gp.GPIndividual
 pop.subpop.0.species.ind = ec.refactoring.RefactorIndividual
 
 # We retry 100 times for duplicates (this is the lil-gp default)
@@ -123,9 +111,6 @@ pop.subpop.0.species.ind.numtrees = 1
 pop.subpop.0.species.ind.tree.0 = ec.gp.GPTree
 pop.subpop.0.species.ind.tree.0.tc = tc0
 
-# The GPSpecies has 2 pipelines, Crossover and Reproduction,
-# chosen with 0.9 and 0.1 likelihood respectively.
-
 pop.subpop.0.species.pipe = ec.breed.MultiBreedingPipeline
 # Koza's decision here was odd...
 pop.subpop.0.species.pipe.generate-max = false
@@ -135,22 +120,21 @@ pop.subpop.0.species.pipe.source.0 = ec.gp.koza.CrossoverPipeline
 pop.subpop.0.species.pipe.source.0.prob = 0.9
 pop.subpop.0.species.pipe.source.1 = ec.breed.ReproductionPipeline
 pop.subpop.0.species.pipe.source.1.prob = 0.1
- 
-breed.reproduce.source.0 = ec.select.TournamentSelection
+pop.subpop.0.species.pipe.source.1.source.0 = ec.select.TournamentSelection
 
+# This information is used by the koza.CrossoverPipeline above
 gp.koza.xover.source.0 = ec.select.TournamentSelection
-
 gp.koza.xover.source.1 = same
 gp.koza.xover.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.xover.ns.1 = same
 gp.koza.xover.maxdepth = 17
-gp.koza.xover.tries = 5
+gp.koza.xover.tries = 1
 
 gp.koza.mutate.source.0 = ec.select.TournamentSelection
 gp.koza.mutate.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.mutate.build.0 = ec.gp.koza.GrowBuilder
 gp.koza.mutate.maxdepth = 17
-gp.koza.mutate.tries = 5
+gp.koza.mutate.tries = 1
 
 #
 # The default tournament size for TournamentSelection is 7
@@ -165,14 +149,12 @@ select.tournament.size = 7
 # This means that if someone decided to use GROW to generate
 # new individual trees, it's also use the defaults below
 # unless he overrided them locally.
-#gp.koza.grow.min-depth = 5
-#gp.koza.grow.max-depth = 5
+gp.koza.grow.min-depth = 1
+gp.koza.grow.max-depth = 5
 
 #
 # We specify a few things about ADFs  -- what kind 
 # of stack they use, and what kind of context
-#
-
 eval.problem.stack = ec.gp.ADFStack
 eval.problem.stack.context = ec.gp.ADFContext
 
@@ -303,4 +285,3 @@ eval.problem.data = ec.refactoring.RefactorData
 # For those who are interested, it defines the data object used internally
 # inside ADF stack contexts
 eval.problem.stack.context.data = ec.refactoring.RefactorData
-
