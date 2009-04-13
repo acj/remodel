@@ -56,6 +56,9 @@ public class PartialAbstraction extends GPNode {
 		ag.addEdge(concrete_v, abstract_v, e);
 		
 		// TODO: Move some methods into the abstract class
+		
+		rd.name = abstract_v.toString();
+		rd.newVertex = abstract_v;
 	}
 
 	@Override

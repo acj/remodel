@@ -53,13 +53,16 @@ public class Abstraction extends GPNode {
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);
-		
+
 		// The next step is handled by abstractClass():
 		// addInterface(inf);
 		
 		// addImplementsLink(c, inf);
 		AnnotatedEdge e = new AnnotatedEdge(Label.IMPLEMENT);
 		ag.addEdge(product_v, inf, e);
+		
+		rd.name = inf.toString();
+		rd.newVertex = inf;
 	}
 
 	@Override

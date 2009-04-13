@@ -1,6 +1,5 @@
 package ec.refactoring;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
@@ -87,6 +86,11 @@ public class EncapsulateConstruction extends GPNode {
 			e_new = new AnnotatedEdge(Label.CALL);
 			ag.addEdge(creator_v, add_edges.get(creator_v), e_new); //abstract_meth_v
 		}
+		
+		// We pass up the "creator" class here since we do not create a new
+		// class with this mini-transformation.
+		rd.name = creator_v.toString();
+		rd.newVertex = creator_v;
 	}
 
 	@Override

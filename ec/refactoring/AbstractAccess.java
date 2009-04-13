@@ -68,6 +68,9 @@ public class AbstractAccess extends GPNode {
 				ag.addEdge(context_v, iface_v, e_new);
 			}
 		}
+		
+		rd.name = iface_v.toString();
+		rd.newVertex = iface_v;
 	}
 
 	@Override
