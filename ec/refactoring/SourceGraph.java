@@ -13,14 +13,20 @@ import ec.refactoring.AnnotatedVertex;
 
 /*
  * 
- * TODO: Decide if this is really necessary.  If not, clean it up.
  */
 public class SourceGraph {
 	private static final long serialVersionUID = -5295342399476105337L;
-	public static int RANDOM_SEED = 0;
+	public static Random rand;
+	public static int RANDOM_SEED = -1;
 	private static int nextGraphId = 0;
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 	
+	public static void SetRandom(Random r) {
+		rand = r;
+	}
+	public static Random GetRandom() {
+		return rand;
+	}
 	/**
 	 * Loads the data for the graph that we wish to manipulate.
 	 */
@@ -42,7 +48,8 @@ public class SourceGraph {
 		if (annotatedGraph == null) {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
-			BuildGraph(g, "beaver-annotated.facts"); // TODO: parameterize this
+			BuildGraph(g, "cse891hw-annotated.facts"); // TODO: parameterize this
+			//BuildGraph(g, "beaver-annotated.facts"); // TODO: parameterize this
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);

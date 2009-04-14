@@ -18,7 +18,7 @@ parent.0 = ../ec.params
 
 #seed.0 = 				1234
 #seed.0 =				5678
-seed.0 = 2
+seed.0 = 1
 
 # ec.Evolve
 # ==============================
@@ -70,7 +70,11 @@ pop.subpop.0 = 				ec.Subpopulation
 
 # subpop size is 1024 individuals
 #pop.subpop.0.size =			200
-pop.subpop.0.size =			200
+pop.subpop.0.size =			100
+
+# Fact file used to build our annotated graph
+ec.refactoring.factfile = "cse891hw-annotated.facts"
+
 # don't bother trying to eliminate duplicates from the
 # initial population
 pop.subpop.0.duplicate-retries =	0
