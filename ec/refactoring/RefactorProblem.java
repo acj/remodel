@@ -1,15 +1,7 @@
 package ec.refactoring;
 
-//import java.io.BufferedWriter;
-//import java.io.FileWriter;
-//import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Stack;
-import java.util.Vector;
+import java.io.*;
+import java.util.*;
 
 import ec.*;
 import ec.gp.*;
@@ -34,6 +26,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = 
 			((RefactorIndividual)ind).GetGraph();
+		
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 		float designSizeInClasses = -DesignSizeInClasses(g);
