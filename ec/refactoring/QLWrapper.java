@@ -44,7 +44,6 @@ public class QLWrapper {
 				System.out.println("ERROR! : " + qlError.readLine());
 				System.exit(-1);
 			}
-			//System.out.println("1");
 			qlWriter.write("getdb(\"graph.facts\")\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
@@ -52,7 +51,7 @@ public class QLWrapper {
 			//	System.out.println("STUFF: " + (char)qlReader.read());
 			//}
 			qlReader.skip(3);
-			qlWriter.write("DP[c,conC,conP,p,methC] = {inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
+			qlWriter.write("DP[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
 			qlReader.skip(3);
@@ -60,14 +59,12 @@ public class QLWrapper {
 			qlWriter.flush();
 			Thread.sleep(30,0);
 			
-			String buf = "";
-			while (qlReader.ready()) {
-				buf += (char)qlReader.read();
-			}
+			String buf = readAvailableData();
+			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (!buf.equals("")) {
+				// TODO: Need to count the number of instances here
 				++patternsFound;
-				//System.out.println("Candidate: \"" + buf + "\"");
 			}
 			
 			if (qlError.ready()) {
@@ -91,5 +88,28 @@ public class QLWrapper {
 			e.printStackTrace();
 		}
 		return patternsFound;
+	}
+	
+	/**
+	 * Convenience function that retrieves all available data in the
+	 * process's output buffer.
+	 * @return
+	 */
+	private static String readAvailableData() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			while (qlReader.ready()) {
+				char[] buf = new char[16384];
+				qlReader.read(buf, 0, buf.length);
+				sb.append(buf);
+				Thread.sleep(50); // Let the buffer have a chance to update
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return sb.toString();
 	}
 }

@@ -54,9 +54,9 @@ public class SourceGraph {
 		if (annotatedGraph == null) {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
-			BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
-			//BuildGraph(g, "cse891hw-annotated.facts"); // TODO: parameterize this
-			//BuildGraph(g, "beaver-annotated.facts");
+			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
+			//BuildGraph(g, "cse891hw-annotated.facts");
+			BuildGraph(g, "beaver-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
