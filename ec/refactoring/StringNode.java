@@ -22,6 +22,7 @@ public class StringNode extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		//System.out.println("StringNode");
 		RefactorData rd = (RefactorData)input;
 		rd.name = stringName;
 	}

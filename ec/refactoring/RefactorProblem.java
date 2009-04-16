@@ -29,6 +29,8 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
+		
+		// QMOOD evaluation
 		float designSizeInClasses = -DesignSizeInClasses(g);
 		float avgNumberOfAncestors = AvgNumberOfAncestors(g);
 		float dataAccessMetric = DataAccessMetric(g);
@@ -48,11 +50,15 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("MOA: " + measureOfAggregation);
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
 		*/
+
+		// Design pattern detection
+		int patternsFound = QLWrapper.EvaluateGraph(g.ToFacts());
 		
 		fitness_value = 100 + designSizeInClasses + avgNumberOfAncestors +
 			dataAccessMetric + numberOfMethods + numberOfPolyMethods +
 			classInterfaceSize + measureOfAggregation +
-			measureOfFunctionalAbstraction;
+			measureOfFunctionalAbstraction + 100*patternsFound;
+		
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;

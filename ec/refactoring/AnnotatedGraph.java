@@ -107,6 +107,62 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		return sb.toString();
 	}
 	
+	/**
+	 * Exports the graph instance as a collection of facts.
+	 * @return Fact representation of the graph.
+	 */
+	public String ToFacts() {
+		StringBuilder sb = new StringBuilder();
+		
+		Iterator<V> it_v = vertexSet().iterator();
+		while (it_v.hasNext()) {
+			AnnotatedVertex v = (AnnotatedVertex)it_v.next();
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				sb.append("classes " + v.toString() + "\n");
+			} else if (v.getType() == AnnotatedVertex.VertexType.FIELD) {
+				sb.append("fields " + v.toString() + "\n");
+			} else if (v.getType() == AnnotatedVertex.VertexType.INTERFACE) {
+				sb.append("interfaces " + v.toString() + "\n");
+			} else if (v.getType() == AnnotatedVertex.VertexType.OPERATION) {
+				sb.append("opers " + v.toString() + "\n");
+			}
+		}
+		Iterator<E> it_e = edgeSet().iterator();
+		while (it_e.hasNext()) {
+			AnnotatedEdge e = (AnnotatedEdge)it_e.next();
+			if (e.getLabel() == AnnotatedEdge.Label.AGGREGATE) {
+				sb.append("aggregates " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.ASSOCIATE) {
+				sb.append("associates " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.CALL) {
+				sb.append("calls " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.COMPOSE) {
+				sb.append("composes " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.IMPLEMENT) {
+				sb.append("implements " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.INHERIT) {
+				sb.append("inherits " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.INSTANTIATE) {
+				sb.append("instantiates " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.OWN) {
+				sb.append("owns " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			} else if (e.getLabel() == AnnotatedEdge.Label.REFERENCE) {
+				sb.append("references " + e.getSourceVertex().toString() +
+						" " + e.getSinkVertex().toString() + "\n");
+			}
+		}
+		
+		return sb.toString();
+	}
+	
 	public V GetRandomVertex() {
 		return getVertex(SourceGraph.GetRandom().nextInt(this.getSize()));
 	}

@@ -73,6 +73,7 @@ public class VertexNode extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
+		//System.out.println("VertexNode");
 		if (ag == null ||
 				ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
 			ag = ((RefactorIndividual)individual).GetGraph();
@@ -82,7 +83,7 @@ public class VertexNode extends GPNode {
 	}
 
 	public String toString() {
-		return "VertexNode";
+		return "VertexNode (" + vertexName + ")";
 	}
 	
 	public String GetName() {

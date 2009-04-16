@@ -84,7 +84,7 @@ public class EncapsulateConstruction extends GPNode {
 		AnnotatedEdge e_new;
 		while (vertex_it.hasNext()) {
 			e_new = new AnnotatedEdge(Label.CALL);
-			ag.addEdge(creator_v, add_edges.get(creator_v), e_new); //abstract_meth_v
+			ag.addEdge(creator_v, add_edges.get(vertex_it.next()), e_new); //abstract_meth_v
 		}
 		
 		// We pass up the "creator" class here since we do not create a new

@@ -1,2 +1,0 @@
-#!/usr/bin/env bash
-~/research/java6/bin/java -Xms128M -Xmx128M -Dql.info=/Users/acj/research/sbrefactoring/QLDX/doc/ql/info -classpath /Users/acj/research/sbrefactoring/QLDX/lib/jar/ql.jar:/Users/acj/research/sbrefactoring/QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main

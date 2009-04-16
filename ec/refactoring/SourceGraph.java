@@ -1,7 +1,9 @@
 package ec.refactoring;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
@@ -44,20 +46,6 @@ public class SourceGraph {
 			e.printStackTrace();
 			System.exit(-1);
 		}
-		// Set up a QL instance for pattern detection
-		// FIXME: Must be a better place for this.
-		try {
-			qlProcess = Runtime.getRuntime().exec("./ql.sh");
-			final BufferedReader qlReader = new BufferedReader(new
-					InputStreamReader(qlProcess.getInputStream()));
-			
-			while (qlReader.ready()) {
-				qlReader.readLine();
-			}
-		} catch (IOException e) {
-			System.err.println("Couldn't execute QL");
-			e.printStackTrace();
-		}
 	}
 	public static int GetNextGraphId() {
 		return nextGraphId++;
@@ -66,12 +54,24 @@ public class SourceGraph {
 		if (annotatedGraph == null) {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
+			BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
 			//BuildGraph(g, "cse891hw-annotated.facts"); // TODO: parameterize this
-			BuildGraph(g, "beaver-annotated.facts"); // TODO: parameterize this
+			//BuildGraph(g, "beaver-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
 			}
+			try {
+				BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts.orig"));
+				out.write(g.ToFacts());
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				System.err.println("Could not export graph facts!");
+			}
+			// Set up a QL instance to do pattern detection
+			QLWrapper.SetupQL();
+			
 			annotatedGraph = g;
 		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
