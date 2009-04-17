@@ -53,6 +53,9 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 
 		// Design pattern detection
 		int patternsFound = QLWrapper.EvaluateGraph(g.ToFacts());
+		if (patternsFound > 0) {
+			System.out.println("Patterns found: " + patternsFound);
+		}
 		
 		fitness_value = 100 + designSizeInClasses + avgNumberOfAncestors +
 			dataAccessMetric + numberOfMethods + numberOfPolyMethods +

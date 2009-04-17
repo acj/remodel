@@ -26,10 +26,15 @@ public class FactImport implements IModelImport {
 	        // Read fact file line by line
 	        String strLine;
 	        while ((strLine = br.readLine()) != null) {
-	        	if (strLine.contains("$")) {
+	        	// We ignore the following:
+	        	// 	* global fields ('$' in the java name)
+	        	// 	* java.lang.Object instances
+	        	if (strLine.contains("$") || strLine.contains("java.lang.Object")) {
 	        		continue;
 	        	}
+
 	        	String[] tokens = strLine.split(" ");
+
 	        	if (tokens[0].equals("classes")) {
 	        		classes.add(tokens[1]);
 	        	} else if (tokens[0].equals("opers")) {

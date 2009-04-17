@@ -49,7 +49,7 @@ public class StringNode extends GPNode {
 
 	@Override
 	public String toString() {
-		return "StringNode";
+		return "StringNode<" + stringName + ">";
 	}
 
 }

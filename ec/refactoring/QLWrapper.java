@@ -62,8 +62,10 @@ public class QLWrapper {
 			String buf = readAvailableData();
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
-			if (!buf.equals("")) {
+			if (buf.length() > 0 && !buf.contains("unresolvable")) {
 				// TODO: Need to count the number of instances here
+				System.out.println("Stuff: \"" + buf + "\"");
+				
 				++patternsFound;
 			}
 			
@@ -110,6 +112,6 @@ public class QLWrapper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return sb.toString();
+		return sb.substring(0, sb.indexOf("\0"));
 	}
 }

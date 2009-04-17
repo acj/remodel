@@ -45,6 +45,7 @@ public class AbstractAccess extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("AbstractAccess()");
+		
 		// For each "uses" relationship between the context and the concrete
 		// class, replace this relationship with an "implements" link to
 		// an interface that mirrors the concrete class.
@@ -57,7 +58,7 @@ public class AbstractAccess extends GPNode {
 		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[2].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex iface_v = ag.getVertex(rd.name);
-
+		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
 		while (edge_it.hasNext()) {

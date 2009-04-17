@@ -74,16 +74,17 @@ public class VertexNode extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		RefactorData rd = (RefactorData)input;
 		//System.out.println("VertexNode");
-		if (ag == null ||
-				ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
+		// If we don't have a graph or have been assigned to a new tree that
+		// has a different graph, then get a new graph pointer.
+		if (ag == null || ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
 			ag = ((RefactorIndividual)individual).GetGraph();
 		}
-		vertexName = ag.GetRandomVertex().toString(); 
+		vertexName = ag.GetRandomVertex().toString();
 		rd.name = vertexName;
 	}
 
 	public String toString() {
-		return "VertexNode (" + vertexName + ")";
+		return "VertexNode<" + vertexName + ">";
 	}
 	
 	public String GetName() {

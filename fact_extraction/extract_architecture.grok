@@ -116,7 +116,7 @@ end if
 %end if
 
 
-%Invoke special
+% Invoke special
 if # E183 ~= 0 then
 	uses := inv @_label o E183 o @_label
 	appendRelToFile calls outputRsf
@@ -153,8 +153,8 @@ end if
 
 % Interface method
 if # E257 ~= 0 then
-	operation := inv @_label o E257 o @_label
-	appendRelToFile operation outputRsf
+	opers := inv @_label o E257 o @_label
+	appendRelToFile opers outputRsf
 end if
 
 

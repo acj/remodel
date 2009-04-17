@@ -99,7 +99,7 @@ stat.file				$out.stat
 pop.subpop.0.species.fitness = ec.simple.SimpleFitness
 
 init = ec.gp.GPInitializer
-stat = ec.simple.SimpleStatistics
+stat = ec.refactoring.RefactorStatistics
 
 pop.subpop.0.species = ec.refactoring.RefactorSpecies
 pop.subpop.0.species.ind = ec.refactoring.RefactorIndividual
