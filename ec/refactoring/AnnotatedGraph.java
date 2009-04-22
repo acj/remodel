@@ -88,11 +88,11 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		AnnotatedVertex v;
 		while (it_v.hasNext()) {
 			v = (AnnotatedVertex)it_v.next();
-			sb.append(v.toString());
+			sb.append("\"" + v.toString() + "\"");
 			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
-				sb.append("[shape=folder]");
+				sb.append(" [shape=folder]");
 			} else {
-				sb.append("[shape=tab]");
+				sb.append(" [shape=tab]");
 			}
 			sb.append(";\n");
 		}
@@ -100,7 +100,10 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		AnnotatedEdge e;
 		while (it_e.hasNext()) {
 			e = (AnnotatedEdge)it_e.next();
-			sb.append(e.getSourceVertex().toString()).append(" -> ").append(e.getSinkVertex().toString()).append("[label=\"").append(e.getLabel().toString()).append("\"];\n");
+			sb.append("\"" + e.getSourceVertex().toString() + "\"");
+			sb.append(" -> ").append(e.getSinkVertex().toString());
+			sb.append("[label=\"").append(e.getLabel().toString());
+			sb.append("\"];\n");
 		}
 		// For each edge, create an edge
 		sb.append("}\n");
@@ -163,8 +166,19 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		return sb.toString();
 	}
 	
-	public V GetRandomVertex() {
-		return getVertex(SourceGraph.GetRandom().nextInt(this.getSize()));
+	public V GetRandomVertex(AnnotatedVertex.VertexType t) {
+		// This is expensive, but it guarantees that we choose among vertices
+		// of the correct type.  This is important for proper tree growing.
+		Iterator<V> it = vertexSet().iterator();
+		ArrayList<AnnotatedVertex> vertices = new ArrayList<AnnotatedVertex>();
+		while (it.hasNext()) {
+			AnnotatedVertex v = (AnnotatedVertex)it.next();
+			if (v.getType() == t) {
+				vertices.add(v);
+			}
+		}
+		assert vertices.size() > 0;
+		return getVertex(SourceGraph.GetRandom().nextInt(vertices.size()));
 	}
 	
 	public int GetGraphId() { return graphId; }
