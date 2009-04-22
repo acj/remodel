@@ -3,6 +3,14 @@ package ec.refactoring;
 import java.io.*;
 import java.nio.CharBuffer;
 
+/**
+ * This class provides a convenient wrapper around a QL process that is
+ * used to query sets of facts for patterns (in the general sense of
+ * the word).  It currently looks for patterns of facts that seem
+ * to represent design pattern instances.
+ * @author acj
+ *
+ */
 public class QLWrapper {
 	private static Process qlProcess;
 	private static BufferedReader qlError;
@@ -31,8 +39,16 @@ public class QLWrapper {
 	
 	public static int EvaluateGraph(String facts) {
 		int patternsFound = 0;
+		
+		// TODO: This "write to disk and then read it back in" thing is very
+		// inefficient.  A ramdisk might be useful here to cut down on disk
+		// delay.
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts"));
+			/*
+			System.out.println("============ Writing facts ================\n" + facts + 
+					"\n============= Done ============\n\n");
+			*/
 			out.write(facts);
 			out.flush();
 			out.close();

@@ -31,15 +31,16 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		Float fitness_value = 0F;
 		
 		// QMOOD evaluation
-		float designSizeInClasses = -DesignSizeInClasses(g);
+		float designSizeInClasses = DesignSizeInClasses(g);
 		float avgNumberOfAncestors = AvgNumberOfAncestors(g);
 		float dataAccessMetric = DataAccessMetric(g);
-		float numberOfMethods = -NumberOfMethods(g);
+		float directClassCoupling = DirectClassCoupling(g);
+		float numberOfMethods = NumberOfMethods(g);
 		float numberOfPolyMethods = NumberOfPolymorphicMethods(g);
 		float classInterfaceSize = ClassInterfaceSize(g);
 		float measureOfAggregation = MeasureOfAggregation(g);
-		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g);
-		
+		//float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g);
+
 		/*
 		System.out.println("DSIC: " + designSizeInClasses);
 		System.out.println("ANOA: " + avgNumberOfAncestors);
@@ -50,6 +51,27 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("MOA: " + measureOfAggregation);
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
 		*/
+		
+		// TODO: Implement the rest of the measure from the Bansiya paper
+		float flexibility = 0.25F*dataAccessMetric - 
+							0.25F*directClassCoupling + 
+							0.5F*measureOfAggregation + 
+							0.5F*numberOfPolyMethods;
+		float reusability = 0.5F*designSizeInClasses -
+							0.25F*directClassCoupling + 
+							0.5F*classInterfaceSize;
+		float understandability = -0.33F*designSizeInClasses -
+								0.33F*avgNumberOfAncestors +
+								0.33F*dataAccessMetric -
+								0.33F*directClassCoupling -
+								0.33F*numberOfPolyMethods -
+								0.33F*numberOfMethods;
+		
+		// In order: flexibility, reusability, understandability
+		//
+		// These coefficients determine the relative importance of each
+		// non-functional property.
+		float[] preferenceMatrix = new float[] { 0.0F, 0.0F, 0.0F };
 
 		// Design pattern detection
 		int patternsFound = QLWrapper.EvaluateGraph(g.ToFacts());
@@ -57,10 +79,10 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			System.out.println("Patterns found: " + patternsFound);
 		}
 		
-		fitness_value = 100 + designSizeInClasses + avgNumberOfAncestors +
-			dataAccessMetric + numberOfMethods + numberOfPolyMethods +
-			classInterfaceSize + measureOfAggregation +
-			measureOfFunctionalAbstraction + 100*patternsFound;
+		fitness_value = flexibility * preferenceMatrix[0] +
+						reusability * preferenceMatrix[1] +
+						understandability * preferenceMatrix[2] +
+						100*patternsFound;
 		
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
@@ -141,15 +163,14 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		return num_ancestors / vertices.size();
 	}
 	private float DataAccessMetric(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		Set<AnnotatedVertex> vertices = g.vertexSet();
-		Iterator<AnnotatedVertex> it = vertices.iterator();
 		Vector<Float> dam_ratios = new Vector<Float>();
 		float num_private_vars, num_total_vars;
-		AnnotatedVertex v;
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it = vertices.iterator();
 		while (it.hasNext()) {
 			num_private_vars = 0.0F;
 			num_total_vars = 0.0F;
-			v = it.next();
+			AnnotatedVertex v = it.next();
 			if (v.getType() != AnnotatedVertex.VertexType.CLASS ||
 					v.getAttributes().isEmpty()) {
 				continue;
@@ -176,11 +197,43 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		if (dam_ratios.isEmpty()) {
 			return 0.0F;
 		} else {
+			System.out.println(data_access_metric / (float)dam_ratios.size());
 			return data_access_metric / (float)dam_ratios.size();
 		}
 	}
 	private float DirectClassCoupling(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		return 0.0F;
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it_v = vertices.iterator();
+		AnnotatedVertex v;
+		int classCount = 0; // Number of classes in the system
+		int vertexClassCount = 0; // Number of classes the vertex is related to
+		float dacTotal = 0.0F;
+		while(it_v.hasNext()) {
+			v = it_v.next();
+			if (v.getType() != AnnotatedVertex.VertexType.CLASS) {
+				continue;
+			}
+			
+			++classCount;
+			vertexClassCount = 0;
+			Set<AnnotatedEdge> edges = g.edgesOf(v);
+			Iterator<AnnotatedEdge> it_e = edges.iterator();
+			AnnotatedEdge e;
+			while (it_e.hasNext()) {
+				e = it_e.next();
+				// We don't know whether this vertex is the source or the sink
+				// (or neither).
+				if (e.getSourceVertex().equals(v) &&
+						e.getSinkVertex().getType() == AnnotatedVertex.VertexType.CLASS) {
+					++vertexClassCount;
+				} else if (e.getSinkVertex().equals(v) &&
+						e.getSourceVertex().getType() == AnnotatedVertex.VertexType.CLASS) {
+					++vertexClassCount;
+				}
+			}
+			dacTotal += vertexClassCount;
+		}
+		return dacTotal / (float)classCount;
 	}
 	private float CohesionAmongClassMethods(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		return 0.0F;

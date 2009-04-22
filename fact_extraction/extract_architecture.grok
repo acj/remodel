@@ -13,17 +13,17 @@ outputRsf := $2
 % Declare relations
 calls := EMPTYREL
 %class := EMPTYREL
+interfaces := EMPTYREL
 implements := EMPTYREL
 inherits := EMPTYREL
 instantiates := EMPTYREL
-interface := EMPTYREL
 uses := EMPTYREL
 relToFile calls outputRsf
 %relToFile class outputRsf
+relToFile interfaces outputRsf
 relToFile implements outputRsf
 relToFile instantiates outputRsf
 relToFile inherits outputRsf
-relToFile interface outputRsf
 relToFile uses outputRsf
 
 E258 := EMPTYREL
@@ -58,6 +58,12 @@ constructors := @_label . "<init>"
 private_constructors := private_methods ^ constructors
 classes_with_private_constructors := contain . private_constructors
 private := classes_with_private_constructors . @_label
+
+interface_classes := @_interface . "y"
+interface_labels := interface_classes . @_label
+interfaces := interface_labels X {""}
+
+appendRelToFile interfaces outputRsf
 
 % Retrieve the set of declared classes
 class_instances := $INSTANCE . $_C
