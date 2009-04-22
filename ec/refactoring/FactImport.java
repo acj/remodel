@@ -13,6 +13,7 @@ public class FactImport implements IModelImport {
 	public void Import(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g,
 						String Filename) throws FileNotFoundException {
 		ArrayList<String> classes = new ArrayList<String>();
+		ArrayList<String> interfaces = new ArrayList<String>();
 		ArrayList<String> operations = new ArrayList<String>();
 		Map<String, ArrayList<String>> has_oper = new HashMap<String, ArrayList<String>>();
 		Map<String, ArrayList<String>> inherits = new HashMap<String, ArrayList<String>>();
@@ -37,6 +38,8 @@ public class FactImport implements IModelImport {
 
 	        	if (tokens[0].equals("classes")) {
 	        		classes.add(tokens[1]);
+	        	} else if (tokens[0].equals("interfaces")) {
+	        		interfaces.add(tokens[1]);
 	        	} else if (tokens[0].equals("opers")) {
 	        		operations.add(tokens[1]);
 	        	} else if (tokens[0].equals("has_oper")) {
@@ -63,6 +66,12 @@ public class FactImport implements IModelImport {
         while (it_classes.hasNext()) {
         	g.addVertex(new AnnotatedVertex(it_classes.next(),
         			AnnotatedVertex.VertexType.CLASS,
+        			AnnotatedVertex.Visibility.PUBLIC));
+        }
+        Iterator<String> it_interfaces = interfaces.iterator();
+        while (it_interfaces.hasNext()) {
+        	g.addVertex(new AnnotatedVertex(it_interfaces.next(),
+        			AnnotatedVertex.VertexType.INTERFACE,
         			AnnotatedVertex.Visibility.PUBLIC));
         }
         Iterator<String> it_opers = operations.iterator();
