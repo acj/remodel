@@ -18,7 +18,7 @@ parent.0 = ../ec.params
 
 #seed.0 = 				1234
 #seed.0 =				5678
-seed.0 = 1
+seed.0 = 2
 
 # ec.Evolve
 # ==============================
@@ -131,13 +131,13 @@ gp.koza.xover.source.0 = ec.select.TournamentSelection
 gp.koza.xover.source.1 = same
 gp.koza.xover.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.xover.ns.1 = same
-gp.koza.xover.maxdepth = 17
+gp.koza.xover.maxdepth = 4
 gp.koza.xover.tries = 1
 
 gp.koza.mutate.source.0 = ec.select.TournamentSelection
 gp.koza.mutate.ns.0 = ec.gp.koza.KozaNodeSelector
 gp.koza.mutate.build.0 = ec.gp.koza.GrowBuilder
-gp.koza.mutate.maxdepth = 17
+gp.koza.mutate.maxdepth = 4
 gp.koza.mutate.tries = 1
 
 #
@@ -199,7 +199,7 @@ gp.tc.0.returns = nil
 #gp.tc.0.init = ec.gp.koza.HalfBuilder
 gp.tc.0.init = ec.gp.build.Uniform
 gp.tc.0.init.min-size = 5
-gp.tc.0.init.max-size = 50
+gp.tc.0.init.max-size = 15
 
 # We set the default for HalfBuilder to be a ramp of 2--6,
 # with a grow probability of 0.5
@@ -219,11 +219,13 @@ gp.fs.0.info = ec.gp.GPFuncInfo
 
 # Primitive types
 #   - Atomic -
-gp.type.a.size = 4
+gp.type.a.size = 6
 gp.type.a.0.name = ClassNode
 gp.type.a.1.name = OperNode
 gp.type.a.2.name = IfaceNode
 gp.type.a.3.name = StringNode
+gp.type.a.4.name = RootNode
+gp.type.a.5.name = nil
 
 #   - Set -
 gp.type.s.size = 1
@@ -233,7 +235,7 @@ gp.type.s.0.member.0 = ClassNode
 gp.type.s.0.member.1 = IfaceNode
 
 # Node constraints
-gp.nc.size = 7
+gp.nc.size = 8
 
 gp.nc.0 = ec.gp.GPNodeConstraints
 gp.nc.0.name = AbstractAccess-nc
@@ -279,10 +281,18 @@ gp.nc.6.name = IfaceNode-nc
 gp.nc.6.returns = IfaceNode
 gp.nc.6.size = 0
 
-gp.tc.0.returns = ClassOrIfaceNode
+gp.nc.7 = ec.gp.GPNodeConstraints
+gp.nc.7.name = RootNode-nc
+gp.nc.7.returns = nil
+gp.nc.7.size = 3
+gp.nc.7.child.0 = ClassOrIfaceNode
+gp.nc.7.child.1 = ClassOrIfaceNode
+gp.nc.7.child.2 = ClassOrIfaceNode
+
+gp.tc.0.returns = nil
 
 # Function set
-gp.fs.0.size = 7
+gp.fs.0.size = 8
 gp.fs.0.func.0 = ec.refactoring.AbstractAccess
 gp.fs.0.func.0.nc = AbstractAccess-nc
 gp.fs.0.func.1 = ec.refactoring.Abstraction
@@ -297,6 +307,8 @@ gp.fs.0.func.5 = ec.refactoring.ClassNode
 gp.fs.0.func.5.nc = ClassNode-nc
 gp.fs.0.func.6 = ec.refactoring.IfaceNode
 gp.fs.0.func.6.nc = IfaceNode-nc
+gp.fs.0.func.7 = ec.refactoring.RootNode
+gp.fs.0.func.7.nc = RootNode-nc
 
 eval.problem = ec.refactoring.RefactorProblem
 eval.problem.data = ec.refactoring.RefactorData

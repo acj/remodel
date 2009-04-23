@@ -31,16 +31,21 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		Float fitness_value = 0F;
 		
 		// QMOOD evaluation
-		float designSizeInClasses = DesignSizeInClasses(g);
-		float avgNumberOfAncestors = AvgNumberOfAncestors(g);
-		float dataAccessMetric = DataAccessMetric(g);
-		float directClassCoupling = DirectClassCoupling(g);
-		float numberOfMethods = NumberOfMethods(g);
-		float numberOfPolyMethods = NumberOfPolymorphicMethods(g);
-		float classInterfaceSize = ClassInterfaceSize(g);
-		float measureOfAggregation = MeasureOfAggregation(g);
-		//float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g);
-
+		float designSizeInClasses = DesignSizeInClasses(g); 	// Design size
+		float avgNumberOfAncestors = AvgNumberOfAncestors(g); 	// Abstraction
+		float dataAccessMetric = DataAccessMetric(g); 			// Encapsulation
+		float directClassCoupling = DirectClassCoupling(g);		// Coupling
+		float numberOfMethods = NumberOfMethods(g);				// Complexity
+		float numberOfPolyMethods = NumberOfPolymorphicMethods(g);	// Polymorphism
+		float classInterfaceSize = ClassInterfaceSize(g);		// Messaging
+		float measureOfAggregation = MeasureOfAggregation(g);	// Composition
+		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g); // Inheritance
+		
+		// Currently no support for method parameters
+		float cohesionAmongMethods = 0.0F; // Cohesion
+		// Number of hierarchies (TODO)
+		float numberOfHierarchies = 0.0F;
+		
 		/*
 		System.out.println("DSIC: " + designSizeInClasses);
 		System.out.println("ANOA: " + avgNumberOfAncestors);
@@ -52,26 +57,67 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
 		*/
 		
-		// TODO: Implement the rest of the measure from the Bansiya paper
-		float flexibility = 0.25F*dataAccessMetric - 
+		/**
+		 * Reusability: -0.25*Coupling + 0.25*Cohesion + 0.5*Messaging + 0.5*DesignSize
+		 * Flexibility: 0.25*Encapsulation - 0.25*Coupling + 0.5*Composition + 0.5*Polymorphism
+		 * Understandability: -0.33*Abstraction + 0.33*Encapsulation - 0.33*Coupling +
+		 * 					0.33*Cohesion - 0.33*Polymorphism - 0.33*Complexity -
+		 * 					0.33*DesignSize
+		 * Functionality: 0.12*Cohesion + 0.22*Polymorphism + 0.22*Messaging +
+		 * 					0.22*DesignSize + 0.22*Hierarchies
+		 * Extendibility: 0.5*Abstraction - 0.5*Coupling + 0.5*Inheritance +
+		 * 					0.5*Polymorphism
+		 * Effectiveness: 0.2*Abstraction + 0.2*Encapsulation + 0.2*Composition +
+		 * 					0.2*Inheritance + 0.2*Polymorphism
+		 */
+		final float reusability = 0.5F*designSizeInClasses -
+							0.25F*directClassCoupling + 
+							0.5F*classInterfaceSize;
+		final float flexibility = 0.25F*dataAccessMetric - 
 							0.25F*directClassCoupling + 
 							0.5F*measureOfAggregation + 
 							0.5F*numberOfPolyMethods;
-		float reusability = 0.5F*designSizeInClasses -
-							0.25F*directClassCoupling + 
-							0.5F*classInterfaceSize;
-		float understandability = -0.33F*designSizeInClasses -
-								0.33F*avgNumberOfAncestors +
-								0.33F*dataAccessMetric -
-								0.33F*directClassCoupling -
-								0.33F*numberOfPolyMethods -
-								0.33F*numberOfMethods;
+		final float understandability = -0.33F*designSizeInClasses -
+							0.33F*avgNumberOfAncestors +
+							0.33F*dataAccessMetric -
+							0.33F*directClassCoupling -
+							0.33F*numberOfPolyMethods -
+							0.33F*numberOfMethods;
+		final float functionality = -0.12F*cohesionAmongMethods +
+							0.22F*numberOfPolyMethods +
+							0.22F*classInterfaceSize +
+							0.22F*designSizeInClasses +
+							0.22F*numberOfHierarchies;
+		final float extendibility = 0.5F*avgNumberOfAncestors -
+							0.5F*directClassCoupling +
+							0.5F*measureOfFunctionalAbstraction +
+							0.5F*numberOfPolyMethods;
+		final float effectiveness = 0.2F*avgNumberOfAncestors +
+							0.2F*dataAccessMetric +
+							0.2F*measureOfAggregation +
+							0.2F*measureOfFunctionalAbstraction +
+							0.2F*numberOfPolyMethods;
 		
 		// In order: flexibility, reusability, understandability
 		//
 		// These coefficients determine the relative importance of each
 		// non-functional property.
-		float[] preferenceMatrix = new float[] { 0.0F, 0.0F, 0.0F };
+		float[] preferenceMatrix = new float[] { 
+				0.1666F, // reusability 
+				0.1666F, // flexibility
+				0.1666F, // understandability
+				0.1666F, // functionality
+				0.1666F, // extendibility
+				0.1666F  // effectiveness
+		};
+		
+		float QMOOD_value = flexibility * preferenceMatrix[0] +
+							reusability * preferenceMatrix[1] +
+							understandability * preferenceMatrix[2] +
+							functionality * preferenceMatrix[3] +
+							extendibility * preferenceMatrix[4] +
+							effectiveness * preferenceMatrix[5] -
+							0.0F*designSizeInClasses; // Damper for exploding class count
 
 		// Design pattern detection
 		int patternsFound = QLWrapper.EvaluateGraph(g.ToFacts());
@@ -79,11 +125,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			System.out.println("Patterns found: " + patternsFound);
 		}
 		
-		fitness_value = flexibility * preferenceMatrix[0] +
-						reusability * preferenceMatrix[1] +
-						understandability * preferenceMatrix[2] +
-						100*patternsFound;
-		
+		fitness_value = QMOOD_value + 100*patternsFound;
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;

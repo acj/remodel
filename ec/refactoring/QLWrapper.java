@@ -125,9 +125,15 @@ public class QLWrapper {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return sb.substring(0, sb.indexOf("\0"));
+		// Look for the end of the string .
+		int endOfDataIndex = sb.indexOf("\0");
+		if (endOfDataIndex == -1) {
+			System.out.println("Problem text: " + sb.toString());
+			return "";
+		}
+		
+		return sb.substring(0, endOfDataIndex);
 	}
 }
