@@ -18,7 +18,7 @@ parent.0 = ../ec.params
 
 #seed.0 = 				1234
 #seed.0 =				5678
-seed.0 = 2
+seed.0 = 4
 
 # ec.Evolve
 # ==============================
@@ -47,7 +47,7 @@ eval =					ec.simple.SimpleEvaluator
 # We're using simple statistics
 stat =					ec.simple.SimpleStatistics
 
-generations =				50
+generations =				10
 quit-on-run-complete =			true
 
 # ec.Initializer
@@ -63,13 +63,14 @@ pop = 					ec.Population
 pop.subpops =				1
 pop.subpop.0 = 				ec.Subpopulation
 
+#pop.subpop.0.file = seed.pop
 
 # ec.Subpopulation
 # ==============================
 
 # subpop size is 1024 individuals
 #pop.subpop.0.size =			200
-pop.subpop.0.size =			100
+pop.subpop.0.size =			250
 
 # TODO
 # Fact file used to build our annotated graph

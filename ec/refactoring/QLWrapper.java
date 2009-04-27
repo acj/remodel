@@ -1,6 +1,7 @@
 package ec.refactoring;
 
 import java.io.*;
+import java.util.*;
 import java.nio.CharBuffer;
 
 /**
@@ -20,11 +21,11 @@ public class QLWrapper {
 	// Set up a QL instance for pattern detection
 	public static void SetupQL() {
 		try {
-			qlProcess = Runtime.getRuntime().exec("java -Xms128M -Xmx128M -classpath QLDX/lib/jar/ql.jar:QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main");
+			qlProcess = Runtime.getRuntime().exec("java -Xms128M -Xmx128M -classpath tools/QLDX/lib/jar/ql.jar:tools/QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main");
 			qlReader = new BufferedReader(
 				new InputStreamReader(qlProcess.getInputStream()));
 			qlError = new BufferedReader(
-					new InputStreamReader(qlProcess.getErrorStream()));
+				new InputStreamReader(qlProcess.getErrorStream()));
 			qlWriter = new BufferedWriter(
 				new OutputStreamWriter(qlProcess.getOutputStream()));
 			
@@ -37,18 +38,18 @@ public class QLWrapper {
 		}
 	}
 	
-	public static int EvaluateGraph(String facts) {
-		int patternsFound = 0;
+        public static ArrayList<String[]> EvaluateGraph(String facts, Boolean printFacts) {
+	        ArrayList<String[]> patternInstances = new ArrayList<String[]>();
 		
 		// TODO: This "write to disk and then read it back in" thing is very
 		// inefficient.  A ramdisk might be useful here to cut down on disk
 		// delay.
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts"));
-			/*
-			System.out.println("============ Writing facts ================\n" + facts + 
+			if (printFacts) {
+			    System.out.println("============ Writing facts ================\n" + facts + 
 					"\n============= Done ============\n\n");
-			*/
+			}
 			out.write(facts);
 			out.flush();
 			out.close();
@@ -67,7 +68,7 @@ public class QLWrapper {
 			//	System.out.println("STUFF: " + (char)qlReader.read());
 			//}
 			qlReader.skip(3);
-			qlWriter.write("DP[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
+			qlWriter.write("DP[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[conC,conP]; inherits[conP,p]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
 			qlReader.skip(3);
@@ -79,10 +80,7 @@ public class QLWrapper {
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {
-				// TODO: Need to count the number of instances here
-				System.out.println("Stuff: \"" + buf + "\"");
-				
-				++patternsFound;
+			        patternInstances = parsePatternInstances(buf);
 			}
 			
 			if (qlError.ready()) {
@@ -105,9 +103,18 @@ public class QLWrapper {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return patternsFound;
+		return patternInstances;
 	}
-	
+
+        private static ArrayList<String[]> parsePatternInstances(String patternData) {
+	    ArrayList<String[]> patternArray = new ArrayList<String[]>();
+	    String[] lines = patternData.split("\n");
+	    for (int i=0; i<lines.length; ++i) {
+		patternArray.add(lines[i].split(" "));
+	    }
+	    return patternArray;
+	}
+
 	/**
 	 * Convenience function that retrieves all available data in the
 	 * process's output buffer.

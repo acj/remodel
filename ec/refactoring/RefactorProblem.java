@@ -6,7 +6,7 @@ import java.util.*;
 import ec.*;
 import ec.gp.*;
 import ec.simple.*;
-import ec.util.Parameter;
+import ec.util.*;
 
 public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	private static final long serialVersionUID = 4425245889654977390L;
@@ -20,6 +20,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	
 	public void evaluate(EvolutionState state, Individual ind,
 			int subpopulation, int threadnum) {
+	    
 		if (!ind.evaluated) {	// Don't reevaluate
 			((GPIndividual)ind).trees[0].child.eval(
 					state,threadnum,input,stack,((GPIndividual)ind), this);
@@ -29,7 +30,33 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
+
+	        Float node_bonus = 0.0F;
 		
+		GPNode first = ((GPIndividual)ind).trees[0].child.children[0];
+		GPNode second = ((GPIndividual)ind).trees[0].child.children[1];
+		GPNode third = ((GPIndividual)ind).trees[0].child.children[2];
+
+		/*
+		if (first.toString().equals("PartialAbstraction")) {
+		    node_bonus += 50F;
+		    if (first.children[0].toString().equals("ClassNode<testfactorymethod.ConcreteFooFactory>")) {
+			node_bonus += 50F;
+		    }
+		}
+		if (second.toString().equals("PartialAbstraction")) {
+		    node_bonus += 50F;
+		    if (second.children[0].toString().equals("ClassNode<testfactorymethod.Foo>")) {
+			node_bonus += 50F;
+		    }
+		}
+		if (third.toString().equals("EncapsulateConstruction")) {
+		    node_bonus += 50F;
+		    if (third.children[0].toString().equals("ClassNode<testfactorymethod.ConcreteFooFactory>")) {
+			node_bonus += 50F;
+		    }
+		}
+		*/
 		// QMOOD evaluation
 		float designSizeInClasses = DesignSizeInClasses(g); 	// Design size
 		float avgNumberOfAncestors = AvgNumberOfAncestors(g); 	// Abstraction
@@ -120,12 +147,15 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 							0.0F*designSizeInClasses; // Damper for exploding class count
 
 		// Design pattern detection
-		int patternsFound = QLWrapper.EvaluateGraph(g.ToFacts());
+		ArrayList<String[]> patternInstances = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+		int patternsFound = patternInstances.size();
+		((RefactorIndividual)ind).SetPatternList(patternInstances);
+
 		if (patternsFound > 0) {
 			System.out.println("Patterns found: " + patternsFound);
 		}
 		
-		fitness_value = QMOOD_value + 100*patternsFound;
+		fitness_value = QMOOD_value + 50*patternsFound + node_bonus;
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;

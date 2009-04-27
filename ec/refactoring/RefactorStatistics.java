@@ -1,5 +1,8 @@
 package ec.refactoring;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import ec.EvolutionState;
 import ec.simple.SimpleProblemForm;
 import ec.simple.SimpleStatistics;
@@ -18,8 +21,19 @@ public class RefactorStatistics extends SimpleStatistics {
         for(int x=0;x<state.population.subpops.length;x++ )
         {
 	        best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
+			state.output.message("=== Begin pattern list ===");
+			ArrayList<String[]> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList(); 
+			Iterator<String[]> p_it = patternList.iterator();
+			while (p_it.hasNext()) {
+				String[] patternFields = p_it.next();
+				for (int p_ndx=0; p_ndx<patternFields.length; ++p_ndx) {
+					state.output.message(patternFields[p_ndx]);
+				}
+				state.output.message("\n");
+			}
+			state.output.message("=== End pattern list ===");
 	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
-	        state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
+	        //state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
 	
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
