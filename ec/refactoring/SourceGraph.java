@@ -46,6 +46,7 @@ public class SourceGraph {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		System.out.println("--- Graph construction complete ---");
 	}
 	public static int GetNextGraphId() {
 		return nextGraphId++;
@@ -74,6 +75,11 @@ public class SourceGraph {
 			QLWrapper.SetupQL();
 			
 			annotatedGraph = g;
+			
+			// Determine the baseline number of patterns in this graph
+			ArrayList<String> patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+			patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+			System.out.println("Baseline: " + patternList.size());
 		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);

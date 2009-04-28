@@ -22,14 +22,10 @@ public class RefactorStatistics extends SimpleStatistics {
         {
 	        best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
 			state.output.message("=== Begin pattern list ===");
-			ArrayList<String[]> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList(); 
-			Iterator<String[]> p_it = patternList.iterator();
+			ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList(); 
+			Iterator<String> p_it = patternList.iterator();
 			while (p_it.hasNext()) {
-				String[] patternFields = p_it.next();
-				for (int p_ndx=0; p_ndx<patternFields.length; ++p_ndx) {
-					state.output.message(patternFields[p_ndx]);
-				}
-				state.output.message("\n");
+				state.output.message(p_it.next() + "\n");
 			}
 			state.output.message("=== End pattern list ===");
 	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
@@ -43,7 +39,6 @@ public class RefactorStatistics extends SimpleStatistics {
 
 	@Override
 	public void postEvaluationStatistics(EvolutionState state) {
-		// TODO Auto-generated method stub
 		super.postEvaluationStatistics(state);
 		//state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[0]).GetGraph().ToGraphViz());
 	}

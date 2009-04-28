@@ -31,13 +31,13 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 
-	        Float node_bonus = 0.0F;
-		
+	    Float node_bonus = 0.0F;
+	    /*
 		GPNode first = ((GPIndividual)ind).trees[0].child.children[0];
 		GPNode second = ((GPIndividual)ind).trees[0].child.children[1];
 		GPNode third = ((GPIndividual)ind).trees[0].child.children[2];
 
-		/*
+
 		if (first.toString().equals("PartialAbstraction")) {
 		    node_bonus += 50F;
 		    if (first.children[0].toString().equals("ClassNode<testfactorymethod.ConcreteFooFactory>")) {
@@ -147,12 +147,16 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 							0.0F*designSizeInClasses; // Damper for exploding class count
 
 		// Design pattern detection
-		ArrayList<String[]> patternInstances = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+		ArrayList<String> patternInstances = QLWrapper.EvaluateGraph(g.ToFacts(), false);
 		int patternsFound = patternInstances.size();
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
 		if (patternsFound > 0) {
 			System.out.println("Patterns found: " + patternsFound);
+			//System.out.println("----------");
+			//System.out.println(patternInstances);
+			//System.out.println(">>>>>>>>>>");
+			
 		}
 		
 		fitness_value = QMOOD_value + 50*patternsFound + node_bonus;

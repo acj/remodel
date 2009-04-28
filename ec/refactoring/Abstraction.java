@@ -49,7 +49,7 @@ public class Abstraction extends GPNode {
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		String newName = rd.name;
+		String newName = "Abstract" + rd.name;
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);

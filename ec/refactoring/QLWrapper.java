@@ -13,13 +13,15 @@ import java.nio.CharBuffer;
  *
  */
 public class QLWrapper {
-	private static Process qlProcess;
+	private static Process qlProcess = null;
 	private static BufferedReader qlError;
 	private static BufferedReader qlReader;
 	private static BufferedWriter qlWriter;
 	
 	// Set up a QL instance for pattern detection
 	public static void SetupQL() {
+		if (qlProcess != null) { return; }
+		
 		try {
 			qlProcess = Runtime.getRuntime().exec("java -Xms128M -Xmx128M -classpath tools/QLDX/lib/jar/ql.jar:tools/QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main");
 			qlReader = new BufferedReader(
@@ -38,8 +40,8 @@ public class QLWrapper {
 		}
 	}
 	
-        public static ArrayList<String[]> EvaluateGraph(String facts, Boolean printFacts) {
-	        ArrayList<String[]> patternInstances = new ArrayList<String[]>();
+        public static ArrayList<String> EvaluateGraph(String facts, Boolean printFacts) {
+	        ArrayList<String> patternInstances = new ArrayList<String>();
 		
 		// TODO: This "write to disk and then read it back in" thing is very
 		// inefficient.  A ramdisk might be useful here to cut down on disk
@@ -47,8 +49,9 @@ public class QLWrapper {
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts"));
 			if (printFacts) {
-			    System.out.println("============ Writing facts ================\n" + facts + 
-					"\n============= Done ============\n\n");
+			    System.out.println("============ Writing facts ================\n" +
+			    		facts
+			    		+ "\n============= Done ============\n\n");
 			}
 			out.write(facts);
 			out.flush();
@@ -80,7 +83,7 @@ public class QLWrapper {
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {
-			    patternInstances.addAll(parsePatternInstances(buf));
+			    patternInstances.addAll(parsePatternInstances(buf, "FactoryMethod"));
 			}
 
 			qlWriter.write("PT[pi,pr,c] = {classes[pr]; classes[c]; interfaces[pi]; calls[c,pr]; inherits[pr,pi]}\n");
@@ -95,7 +98,7 @@ public class QLWrapper {
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {
-			    patternInstances.addAll(parsePatternInstances(buf));
+			    patternInstances.addAll(parsePatternInstances(buf, "Prototype"));
 			}
 			
 			if (qlError.ready()) {
@@ -121,11 +124,18 @@ public class QLWrapper {
 		return patternInstances;
 	}
 
-        private static ArrayList<String[]> parsePatternInstances(String patternData) {
-	    ArrayList<String[]> patternArray = new ArrayList<String[]>();
+        private static ArrayList<String> parsePatternInstances(String patternData, String nameOfPattern) {
+	    ArrayList<String> patternArray = new ArrayList<String>();
 	    String[] lines = patternData.split("\n");
+	    
 	    for (int i=0; i<lines.length; ++i) {
-		patternArray.add(lines[i].split(" "));
+	    	String[] lineTokens = lines[i].split(" "); 
+	    	String labeledLine = nameOfPattern + " ";
+	    	// Prepend the name of the DP instance to the list
+	    	for (int tok_ndx=0; tok_ndx<lineTokens.length; ++tok_ndx) {
+	    		labeledLine += lineTokens[tok_ndx] + " ";
+	    	}
+	    	patternArray.add(labeledLine);
 	    }
 	    return patternArray;
 	}
@@ -139,7 +149,7 @@ public class QLWrapper {
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (qlReader.ready()) {
-				char[] buf = new char[16384];
+				char[] buf = new char[65535];
 				qlReader.read(buf, 0, buf.length);
 				sb.append(buf);
 				Thread.sleep(50); // Let the buffer have a chance to update
