@@ -1,5 +1,6 @@
 package ec.refactoring;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
@@ -54,37 +55,34 @@ public class EncapsulateConstruction extends GPNode {
 		children[1].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		
-		String create_method_name = "create" + product_v.toString();
-		
-		// Build the "createProduct" method
-		AnnotatedVertex abstract_meth_v =
-			Helpers.makeAbstract(creator_v, create_method_name, ag);
-		
-		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(creator_v).iterator();
-		HashMap<AnnotatedVertex,AnnotatedVertex> add_edges =
-			new HashMap<AnnotatedVertex,AnnotatedVertex>();
-		Stack<AnnotatedEdge> delete_edges = new Stack<AnnotatedEdge>();
-		// This loop simply does bookkeeping to determine which edges need to
-		// be added or removed.  Since they are added/removed from the list
-		// that is being iterated over, we can't do the add/remove here.
+		AnnotatedEdge e;
 		while (edge_it.hasNext()) {
 			e = edge_it.next();
-			if (e.getSinkVertex() == product_v && e.getLabel() == Label.INSTANTIATE) {		
-				delete_edges.add(e);
-				add_edges.put(creator_v, abstract_meth_v);
+			
+			if (e.getSinkVertex() == product_v && e.getLabel() == Label.INSTANTIATE) {
+				// Remove the old INSTANTIATE edge
+				ag.removeEdge(e);
+		
+				// Build the "createProduct" method
+				String create_method_name = "create" + product_v.toString();
+				AnnotatedVertex abstract_meth_v =
+					Helpers.makeAbstract(creator_v, create_method_name, ag);
+				
+				// Add an INSTANTIATE edge between the new method and the
+				// product that it creates.
+				AnnotatedEdge e_new = new AnnotatedEdge(Label.INSTANTIATE);
+				ag.addEdge(abstract_meth_v, product_v, e_new);
+				
+				// The creator now calls the creator method.  Add an
+				// edge to represent this.
+				ag.addEdge(creator_v, abstract_meth_v, new AnnotatedEdge(Label.CALL));
+				
+				// We assume here that the fact extraction pipeline removed any
+				// duplicate edges.  Therefore, we can bail out once we've found
+				// the lone INSTANTIATE edge.
+				break;
 			}
-		}
-		// Now process the edges that we marked for deletion.
-		while (!delete_edges.empty()) {
-			ag.removeEdge(delete_edges.pop());
-		}
-		// Now process the edges that we marked for addition.
-		Iterator<AnnotatedVertex> vertex_it = add_edges.keySet().iterator();
-		AnnotatedEdge e_new;
-		while (vertex_it.hasNext()) {
-			e_new = new AnnotatedEdge(Label.CALL);
-			ag.addEdge(creator_v, add_edges.get(vertex_it.next()), e_new); //abstract_meth_v
 		}
 		
 		// We pass up the "creator" class here since we do not create a new

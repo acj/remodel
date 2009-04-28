@@ -67,20 +67,35 @@ public class QLWrapper {
 			//while (qlReader.ready()) {
 			//	System.out.println("STUFF: " + (char)qlReader.read());
 			//}
-			qlReader.skip(3);
-			qlWriter.write("DP[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[conC,conP]; inherits[conP,p]}\n");
+			//qlReader.skip(3);
+			qlWriter.write("FM[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
-			qlReader.skip(3);
-			qlWriter.write("DP\n");
+			//qlReader.skip(3);
+			qlWriter.write("FM\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
-			
+
 			String buf = readAvailableData();
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {
-			        patternInstances = parsePatternInstances(buf);
+			    patternInstances.addAll(parsePatternInstances(buf));
+			}
+
+			qlWriter.write("PT[pi,pr,c] = {classes[pr]; classes[c]; interfaces[pi]; calls[c,pr]; inherits[pr,pi]}\n");
+			qlWriter.flush();
+			Thread.sleep(30,0);
+			//qlReader.skip(3);
+			qlWriter.write("PT\n");
+			qlWriter.flush();
+			Thread.sleep(30,0);
+			
+			buf = readAvailableData();
+			//System.out.println("Read " + buf.length());
+			buf = buf.replaceAll(">> ", "");
+			if (buf.length() > 0 && !buf.contains("unresolvable")) {
+			    patternInstances.addAll(parsePatternInstances(buf));
 			}
 			
 			if (qlError.ready()) {
@@ -91,7 +106,7 @@ public class QLWrapper {
 			// Reset for the next evaluation
 			qlWriter.write("reset\n");
 			qlWriter.flush();
-			qlReader.skip(3);
+			//qlReader.skip(3);
 			
 			while (qlReader.ready()) {
 				System.out.println("Skipping leftovers: " + (char)qlReader.read());
