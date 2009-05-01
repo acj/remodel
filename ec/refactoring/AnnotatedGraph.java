@@ -197,7 +197,11 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			while (edge_it.hasNext()) {
 				e = (AnnotatedEdge) edge_it.next();
 				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
-				AnnotatedVertex v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+				// Look for one of the role-playing classes first
+				AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSinkVertex().toString() + "<role>");
+				if (v_neighbor == null) {
+					v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+				}
 				subgraph.addVertex(v_neighbor);
 				subgraph.addEdge(v_new, v_neighbor, e_new);
 			}
@@ -206,7 +210,11 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			while (edge_it.hasNext()) {
 				e = (AnnotatedEdge) edge_it.next();
 				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
-				AnnotatedVertex v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+				// Look for one of the role-playing classes first
+				AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSourceVertex().toString() + "<role>");
+				if (v_neighbor == null) {
+					v_neighbor = new AnnotatedVertex(e.getSourceVertex().toString(), e.getSourceVertex().getType(), e.getSourceVertex().getVisibility());
+				}
 				subgraph.addVertex(v_neighbor);
 				subgraph.addEdge(v_neighbor, v_new, e_new);
 			}
