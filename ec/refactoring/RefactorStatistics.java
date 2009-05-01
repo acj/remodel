@@ -1,7 +1,7 @@
 package ec.refactoring;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.io.*;
+import java.util.*;
 
 import ec.EvolutionState;
 import ec.simple.SimpleProblemForm;
@@ -31,6 +31,18 @@ public class RefactorStatistics extends SimpleStatistics {
 	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
 	        //state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
 	
+	        AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph =
+	        	((RefactorIndividual)best_of_run[x]).GetGraph().GetPatternSubgraph(patternList.get(0));
+	        
+			try {
+				BufferedWriter out = new BufferedWriter(new FileWriter("pattern.0.dot"));
+				out.write(graph.ToGraphViz());
+				out.flush();
+				out.close();
+			} catch (IOException e) {
+				System.err.println("Could not export pattern to graphviz!");
+			}
+	        
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
 	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);      

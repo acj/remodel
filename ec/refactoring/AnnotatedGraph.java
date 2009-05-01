@@ -181,5 +181,39 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		return getVertex(SourceGraph.GetRandom().nextInt(vertices.size()));
 	}
 	
+	public AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> GetPatternSubgraph(String patternData) {
+		AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> subgraph =
+			new AnnotatedGraph<AnnotatedVertex,AnnotatedEdge>(AnnotatedEdge.class);
+		
+		String[] patternRoles = patternData.split(" ");
+		for (int ndx=1; ndx<patternRoles.length; ++ndx) {
+			AnnotatedVertex v = (AnnotatedVertex)getVertex(patternRoles[ndx]);
+			AnnotatedVertex v_new = new AnnotatedVertex(v.toString() + "<role>", v.getType(), v.getVisibility());
+			subgraph.addVertex(v_new);
+			
+			Set<E> edges = outgoingEdgesOf((V)v);
+			Iterator<E> edge_it = edges.iterator();
+			AnnotatedEdge e;
+			while (edge_it.hasNext()) {
+				e = (AnnotatedEdge) edge_it.next();
+				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
+				AnnotatedVertex v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+				subgraph.addVertex(v_neighbor);
+				subgraph.addEdge(v_new, v_neighbor, e_new);
+			}
+			edges = incomingEdgesOf((V)v);
+			edge_it = edges.iterator();
+			while (edge_it.hasNext()) {
+				e = (AnnotatedEdge) edge_it.next();
+				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
+				AnnotatedVertex v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+				subgraph.addVertex(v_neighbor);
+				subgraph.addEdge(v_neighbor, v_new, e_new);
+			}
+		}
+		
+		return subgraph;
+	}
+	
 	public int GetGraphId() { return graphId; }
 }
