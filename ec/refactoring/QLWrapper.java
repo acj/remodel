@@ -23,7 +23,7 @@ public class QLWrapper {
 		if (qlProcess != null) { return; }
 		
 		try {
-			qlProcess = Runtime.getRuntime().exec("java -Xms128M -Xmx128M -classpath tools/QLDX/lib/jar/ql.jar:tools/QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main");
+			qlProcess = Runtime.getRuntime().exec("/Users/acj/research/java6/bin/java -Xms128M -Xmx128M -classpath tools/QLDX/lib/jar/ql.jar:tools/QLDX/lib/jar/java_readline.jar ca.uwaterloo.cs.ql.Main");
 			qlReader = new BufferedReader(
 				new InputStreamReader(qlProcess.getInputStream()));
 			qlError = new BufferedReader(
@@ -62,7 +62,7 @@ public class QLWrapper {
 		try {
 			if (qlError.ready()) {
 				System.out.println("ERROR! : " + qlError.readLine());
-				System.exit(-1);
+				SetupQL();
 			}
 			qlWriter.write("getdb(\"graph.facts\")\n");
 			qlWriter.flush();
