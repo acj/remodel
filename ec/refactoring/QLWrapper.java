@@ -71,6 +71,29 @@ public class QLWrapper {
 			//	System.out.println("STUFF: " + (char)qlReader.read());
 			//}
 			//qlReader.skip(3);
+
+			String buf = "";
+
+			/*
+			qlWriter.write("AD[client,adapter_meth,adaptee_meth,adapter,adaptee,target] = {opers[client]; opers[adapter_meth]; opers[adaptee_meth]; classes[adapter]; classes[adaptee]; classes[target]; owns[adapter,adapter_meth]; calls[client,adapter_meth]; inherits[adapter,target]; owns[adaptee,adaptee_meth]; calls[adapter_meth,adaptee_meth];}\n");
+
+			qlWriter.flush();
+			Thread.sleep(1000,0);
+			//qlReader.skip(3);
+			qlWriter.write("AD\n");
+			qlWriter.flush();
+			Thread.sleep(500,0);
+			
+			buf = readAvailableData();
+			//System.out.println("Read " + buf.length());
+			buf = buf.replaceAll(">> ", "");
+			if (buf.length() > 0 && !buf.contains("unresolvable")) {
+			    patternInstances.addAll(parsePatternInstances(buf, "Adapter"));
+			} else {
+			    System.out.println(buf);
+			}
+			*/
+
 			qlWriter.write("FM[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
@@ -79,7 +102,7 @@ public class QLWrapper {
 			qlWriter.flush();
 			Thread.sleep(30,0);
 
-			String buf = readAvailableData();
+			buf = readAvailableData();
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {

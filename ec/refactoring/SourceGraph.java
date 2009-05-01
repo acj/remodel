@@ -56,8 +56,8 @@ public class SourceGraph {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
-			//BuildGraph(g, "cse891hw-annotated.facts");
-			BuildGraph(g, "beaver-annotated.facts");
+			BuildGraph(g, "cse891hw-annotated.facts");
+			//BuildGraph(g, "beaver-annotated.facts");
 			//BuildGraph(g, "testfactorymethod-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
@@ -68,6 +68,11 @@ public class SourceGraph {
 				out.write(g.ToFacts());
 				out.flush();
 				out.close();
+				
+			    out = new BufferedWriter(new FileWriter("graphstart.dot"));
+			    out.write(g.ToGraphViz());
+			    out.flush();
+			    out.close();
 			} catch (IOException e) {
 				System.err.println("Could not export graph facts!");
 			}
@@ -80,6 +85,17 @@ public class SourceGraph {
 			ArrayList<String> patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
 			patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
 			System.out.println("Baseline: " + patternList.size());
+			try {
+			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.orig"));
+			    Iterator<String> it = patternList.iterator();
+			    while (it.hasNext()) {
+				out.write(it.next() + "\n");
+			    }
+			    out.flush();
+			    out.close();
+                        } catch (IOException e) {
+			    System.err.println("Could not export initial patterns!");
+                        }
 		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);

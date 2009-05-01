@@ -1,7 +1,7 @@
 package ec.refactoring;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
+import java.io.*;
 
 import ec.EvolutionState;
 import ec.simple.SimpleProblemForm;
@@ -21,19 +21,31 @@ public class RefactorStatistics extends SimpleStatistics {
         for(int x=0;x<state.population.subpops.length;x++ )
         {
 	        best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
-			state.output.message("=== Begin pattern list ===");
+	        
 			ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList(); 
 			Iterator<String> p_it = patternList.iterator();
-			while (p_it.hasNext()) {
-				state.output.message(p_it.next() + "\n");
+			try {
+			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.end"));
+			    
+			    while (p_it.hasNext()) {
+			    	out.write(p_it.next() + "\n");
+			    }
+			    out.flush();
+			    out.close();
+			    
+			    out = new BufferedWriter(new FileWriter("graphfinal.dot"));
+			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
+			    out.flush();
+			    out.close();
+			} catch (IOException e) {
+			    System.err.println("Could not export graph statistics!");
 			}
-			state.output.message("=== End pattern list ===");
+			
 	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
-	        //state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
 	
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
-	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);      
+	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);
         }
     }
 
