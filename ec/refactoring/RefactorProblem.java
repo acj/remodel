@@ -143,8 +143,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 							understandability * preferenceMatrix[2] +
 							functionality * preferenceMatrix[3] +
 							extendibility * preferenceMatrix[4] +
-							effectiveness * preferenceMatrix[5] -
-							0.0F*designSizeInClasses; // Damper for exploding class count
+							effectiveness * preferenceMatrix[5];
 
 		// Design pattern detection
 		ArrayList<String> patternInstances = QLWrapper.EvaluateGraph(g.ToFacts(), false);

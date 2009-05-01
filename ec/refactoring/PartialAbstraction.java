@@ -48,7 +48,7 @@ public class PartialAbstraction extends GPNode {
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		String newName = rd.name;
+		String newName = "PAbstract" + rd.name;
 		
 		// Class abstract = createEmptyClass(newName);
 		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName, ag);

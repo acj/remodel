@@ -5,4 +5,4 @@ JAVA=/usr/bin/java
 #JAVA=~/research/java6/bin/java
 
 #$JAVAC -g -cp .:ec/refactoring/jgrapht-jdk1.6.jar ec/refactoring/*.java && $JAVA -cp .:ec/refactoring/jgrapht-jdk1.6.jar:tijmp.jar -agentlib:tijmp -Xmx768m -enableassertions ec.Evolve -file ec/refactoring/refactoring.params
-$JAVAC -g -cp .:ec/refactoring/jgrapht-jdk1.6.jar ec/refactoring/*.java && $JAVA -cp .:ec/refactoring/jgrapht-jdk1.6.jar:tijmp.jar -Xmx768m -enableassertions ec.Evolve -file ec/refactoring/refactoring.params
+$JAVAC -g -cp .:ec/refactoring/jgrapht-jdk1.6.jar ec/refactoring/*.java && $JAVA -cp .:ec/refactoring/jgrapht-jdk1.6.jar:tijmp.jar -Xmx1024m -enableassertions ec.Evolve -file ec/refactoring/refactoring.params

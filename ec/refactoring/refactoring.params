@@ -70,7 +70,7 @@ pop.subpop.0 = 				ec.Subpopulation
 
 # subpop size is 1024 individuals
 #pop.subpop.0.size =			200
-pop.subpop.0.size =			250
+pop.subpop.0.size =			100
 
 # TODO
 # Fact file used to build our annotated graph

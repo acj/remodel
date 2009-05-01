@@ -101,7 +101,7 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		while (it_e.hasNext()) {
 			e = (AnnotatedEdge)it_e.next();
 			sb.append("\"" + e.getSourceVertex().toString() + "\"");
-			sb.append(" -> ").append(e.getSinkVertex().toString());
+			sb.append(" -> ").append("\"" + e.getSinkVertex().toString() + "\"");
 			sb.append("[label=\"").append(e.getLabel().toString());
 			sb.append("\"];\n");
 		}
