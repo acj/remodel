@@ -1,11 +1,6 @@
 package ec.refactoring;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import ec.EvolutionState;
 import ec.Evolve;
@@ -25,7 +20,7 @@ public class SourceGraph {
 	public static int RANDOM_SEED = -1;
 	private static int nextGraphId = 0;
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
-	private static Process qlProcess;
+	private static PatternDetector detector;
 	
 	public static void SetRandom(Random r) {
 		rand = r;
@@ -56,8 +51,8 @@ public class SourceGraph {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
-			BuildGraph(g, "cse891hw-annotated.facts");
-			//BuildGraph(g, "beaver-annotated.facts");
+			//BuildGraph(g, "cse891hw-annotated.facts");
+			BuildGraph(g, "beaver-annotated.facts");
 			//BuildGraph(g, "testfactorymethod-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
@@ -77,25 +72,29 @@ public class SourceGraph {
 				System.err.println("Could not export graph facts!");
 			}
 			// Set up a QL instance to do pattern detection
-			QLWrapper.SetupQL();
+			//detector = new QLWrapper();
+			
+			// Set up an in-memory pattern detector
+			detector = new SQLDetector();
+			detector.Setup();
 			
 			annotatedGraph = g;
 			
 			// Determine the baseline number of patterns in this graph
-			ArrayList<String> patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
-			patternList = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+			ArrayList<String> patternList = detector.DetectPatterns(g);
+			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
 			System.out.println("Baseline: " + patternList.size());
 			try {
 			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.orig"));
 			    Iterator<String> it = patternList.iterator();
 			    while (it.hasNext()) {
-				out.write(it.next() + "\n");
+			    	out.write(it.next() + "\n");
 			    }
 			    out.flush();
 			    out.close();
-                        } catch (IOException e) {
+            } catch (IOException e) {
 			    System.err.println("Could not export initial patterns!");
-                        }
+            }
 		}
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
@@ -121,6 +120,12 @@ public class SourceGraph {
 		}
 		//System.err.println("New clone: " + graph_clone.getSize() + " vertices");
 		return graph_clone;
+	}
+	public static void SetDetector(PatternDetector detector) {
+		SourceGraph.detector = detector;
+	}
+	public static PatternDetector GetDetector() {
+		return detector;
 	}
 
 	/*

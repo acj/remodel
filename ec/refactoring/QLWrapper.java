@@ -12,14 +12,14 @@ import java.nio.CharBuffer;
  * @author acj
  *
  */
-public class QLWrapper {
-	private static Process qlProcess = null;
-	private static BufferedReader qlError;
-	private static BufferedReader qlReader;
-	private static BufferedWriter qlWriter;
+public class QLWrapper implements PatternDetector {
+	private Process qlProcess = null;
+	private BufferedReader qlError;
+	private BufferedReader qlReader;
+	private BufferedWriter qlWriter;
 	
 	// Set up a QL instance for pattern detection
-	public static void SetupQL() {
+	public void Setup() {
 		if (qlProcess != null) { return; }
 		
 		try {
@@ -40,19 +40,15 @@ public class QLWrapper {
 		}
 	}
 	
-        public static ArrayList<String> EvaluateGraph(String facts, Boolean printFacts) {
-	        ArrayList<String> patternInstances = new ArrayList<String>();
-		
+    public ArrayList<String> DetectPatterns(AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> g) {
+    	String facts = g.ToFacts();
+        ArrayList<String> patternInstances = new ArrayList<String>();
+	
 		// TODO: This "write to disk and then read it back in" thing is very
 		// inefficient.  A ramdisk might be useful here to cut down on disk
 		// delay.
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts"));
-			if (printFacts) {
-			    System.out.println("============ Writing facts ================\n" +
-			    		facts
-			    		+ "\n============= Done ============\n\n");
-			}
 			out.write(facts);
 			out.flush();
 			out.close();
@@ -62,7 +58,7 @@ public class QLWrapper {
 		try {
 			if (qlError.ready()) {
 				System.out.println("ERROR! : " + qlError.readLine());
-				SetupQL();
+				Setup();
 			}
 			qlWriter.write("getdb(\"graph.facts\")\n");
 			qlWriter.flush();
@@ -71,12 +67,12 @@ public class QLWrapper {
 			//	System.out.println("STUFF: " + (char)qlReader.read());
 			//}
 			//qlReader.skip(3);
-
+	
 			String buf = "";
-
+	
 			/*
 			qlWriter.write("AD[client,adapter_meth,adaptee_meth,adapter,adaptee,target] = {opers[client]; opers[adapter_meth]; opers[adaptee_meth]; classes[adapter]; classes[adaptee]; classes[target]; owns[adapter,adapter_meth]; calls[client,adapter_meth]; inherits[adapter,target]; owns[adaptee,adaptee_meth]; calls[adapter_meth,adaptee_meth];}\n");
-
+	
 			qlWriter.flush();
 			Thread.sleep(1000,0);
 			//qlReader.skip(3);
@@ -93,7 +89,7 @@ public class QLWrapper {
 			    System.out.println(buf);
 			}
 			*/
-
+	
 			qlWriter.write("FM[c,conC,conP,p,methC] = {classes[conC]; classes[c]; classes[conP]; classes[p]; opers[methC]; inherits[conC,c]; owns[conC,methC]; instantiates[methC,conP]; inherits[conP,p]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
@@ -101,14 +97,14 @@ public class QLWrapper {
 			qlWriter.write("FM\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
-
+	
 			buf = readAvailableData();
 			//System.out.println("Read " + buf.length());
 			buf = buf.replaceAll(">> ", "");
 			if (buf.length() > 0 && !buf.contains("unresolvable")) {
 			    patternInstances.addAll(parsePatternInstances(buf, "FactoryMethod"));
 			}
-
+	
 			qlWriter.write("PT[pi,pr,c] = {classes[pr]; classes[c]; interfaces[pi]; calls[c,pr]; inherits[pr,pi]}\n");
 			qlWriter.flush();
 			Thread.sleep(30,0);
@@ -137,7 +133,7 @@ public class QLWrapper {
 			while (qlReader.ready()) {
 				System.out.println("Skipping leftovers: " + (char)qlReader.read());
 			}
-
+	
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -147,7 +143,7 @@ public class QLWrapper {
 		return patternInstances;
 	}
 
-        private static ArrayList<String> parsePatternInstances(String patternData, String nameOfPattern) {
+    private ArrayList<String> parsePatternInstances(String patternData, String nameOfPattern) {
 	    ArrayList<String> patternArray = new ArrayList<String>();
 	    String[] lines = patternData.split("\n");
 	    
@@ -168,7 +164,7 @@ public class QLWrapper {
 	 * process's output buffer.
 	 * @return
 	 */
-	private static String readAvailableData() {
+	private String readAvailableData() {
 		StringBuilder sb = new StringBuilder();
 		try {
 			while (qlReader.ready()) {

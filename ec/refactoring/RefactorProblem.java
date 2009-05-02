@@ -146,7 +146,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 							effectiveness * preferenceMatrix[5];
 
 		// Design pattern detection
-		ArrayList<String> patternInstances = QLWrapper.EvaluateGraph(g.ToFacts(), false);
+		ArrayList<String> patternInstances = SourceGraph.GetDetector().DetectPatterns(g);
 		int patternsFound = patternInstances.size();
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
