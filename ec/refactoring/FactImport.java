@@ -30,7 +30,7 @@ public class FactImport implements IModelImport {
 	        	// We ignore the following:
 	        	// 	* global fields ('$' in the java name)
 	        	// 	* java.lang.Object instances
-	        	if (strLine.contains("$") || strLine.contains("java.lang.Object")) {
+	        	if (strLine.contains("$") || strLine.contains("java")) {
 	        		continue;
 	        	}
 
