@@ -136,7 +136,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 				0.1666F, // understandability
 				0.1666F, // functionality
 				0.1666F, // extendibility
-				0.1F  // effectiveness
+				0.1666F  // effectiveness
 		};
 		
 		float QMOOD_value = flexibility * preferenceMatrix[0] +
