@@ -166,7 +166,7 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		return sb.toString();
 	}
 	
-	public V GetRandomVertex(AnnotatedVertex.VertexType t) {
+	public AnnotatedVertex GetRandomVertex(AnnotatedVertex.VertexType t) {
 		// This is expensive, but it guarantees that we choose among vertices
 		// of the correct type.  This is important for proper tree growing.
 		Iterator<V> it = vertexSet().iterator();
@@ -178,10 +178,10 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			}
 		}
 		assert vertices.size() > 0;
-		return getVertex(SourceGraph.GetRandom().nextInt(vertices.size()));
+		return vertices.get(SourceGraph.GetRandom().nextInt(vertices.size()));
 	}
 	
-	public AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> GetPatternSubgraph(String patternData) {
+	public AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> GetPatternSubgraph(String patternData, Boolean includeNeighbors) {
 		AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> subgraph =
 			new AnnotatedGraph<AnnotatedVertex,AnnotatedEdge>(AnnotatedEdge.class);
 		
@@ -191,32 +191,53 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			AnnotatedVertex v_new = new AnnotatedVertex(v.toString() + "<role>", v.getType(), v.getVisibility());
 			subgraph.addVertex(v_new);
 			
-			Set<E> edges = outgoingEdgesOf((V)v);
-			Iterator<E> edge_it = edges.iterator();
-			AnnotatedEdge e;
-			while (edge_it.hasNext()) {
-				e = (AnnotatedEdge) edge_it.next();
-				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
-				// Look for one of the role-playing classes first
-				AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSinkVertex().toString() + "<role>");
-				if (v_neighbor == null) {
-					v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+			if (includeNeighbors) {
+				Set<E> edges = outgoingEdgesOf((V)v);
+				Iterator<E> edge_it = edges.iterator();
+				AnnotatedEdge e;
+				while (edge_it.hasNext()) {
+					e = (AnnotatedEdge) edge_it.next();
+					AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
+					// Look for one of the role-playing classes first
+					AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSinkVertex().toString() + "<role>");
+					if (v_neighbor == null) {
+						v_neighbor = new AnnotatedVertex(e.getSinkVertex().toString(), e.getSinkVertex().getType(), e.getSinkVertex().getVisibility());
+					}
+					subgraph.addVertex(v_neighbor);
+					subgraph.addEdge(v_new, v_neighbor, e_new);
 				}
-				subgraph.addVertex(v_neighbor);
-				subgraph.addEdge(v_new, v_neighbor, e_new);
+				edges = incomingEdgesOf((V)v);
+				edge_it = edges.iterator();
+				while (edge_it.hasNext()) {
+					e = (AnnotatedEdge) edge_it.next();
+					AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
+					// Look for one of the role-playing classes first
+					AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSourceVertex().toString() + "<role>");
+					if (v_neighbor == null) {
+						v_neighbor = new AnnotatedVertex(e.getSourceVertex().toString(), e.getSourceVertex().getType(), e.getSourceVertex().getVisibility());
+					}
+					subgraph.addVertex(v_neighbor);
+					subgraph.addEdge(v_neighbor, v_new, e_new);
+				}
 			}
-			edges = incomingEdgesOf((V)v);
-			edge_it = edges.iterator();
+		}
+		
+		// If we're not including all neighbors of role-playing vertices in
+		// this subgraph, then we only add the neighbors that are ALSO
+		// role-playing vertices.
+		if (!includeNeighbors) {
+			String patternDataPadded = " " + patternData + " ";
+			Set<E> edges = edgeSet();
+			Iterator<E> edge_it = edges.iterator();
 			while (edge_it.hasNext()) {
-				e = (AnnotatedEdge) edge_it.next();
-				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
-				// Look for one of the role-playing classes first
-				AnnotatedVertex v_neighbor = subgraph.getVertex(e.getSourceVertex().toString() + "<role>");
-				if (v_neighbor == null) {
-					v_neighbor = new AnnotatedVertex(e.getSourceVertex().toString(), e.getSourceVertex().getType(), e.getSourceVertex().getVisibility());
+				AnnotatedEdge e = (AnnotatedEdge) edge_it.next();
+				if (patternDataPadded.contains(" " + e.getSourceVertex().toString() + " ") &&
+						patternDataPadded.contains(" " + e.getSinkVertex().toString() + " ")) {
+					// Both source and sink are role-players.  Add the edge.
+					subgraph.addEdge(subgraph.getVertex(e.getSourceVertex().toString() + "<role>"),
+							subgraph.getVertex(e.getSinkVertex().toString() + "<role>"),
+							new AnnotatedEdge(e.getLabel()));
 				}
-				subgraph.addVertex(v_neighbor);
-				subgraph.addEdge(v_neighbor, v_new, e_new);
 			}
 		}
 		

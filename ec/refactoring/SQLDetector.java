@@ -69,7 +69,8 @@ public class SQLDetector implements PatternDetector {
 					"JOIN tOwn ON tInherit1.source=tOwn.source " +
 					"JOIN tInstantiate ON tOwn.sink=tInstantiate.source " +
 					"JOIN tInherit tInherit2 ON tInstantiate.sink=tInherit2.source " +
-					"JOIN tClass tClass2 ON tInherit2.sink=tClass2.name");
+					"JOIN tClass tClass2 ON tInherit2.sink=tClass2.name " +
+					"WHERE tInherit1.sink != tInherit2.sink");
 	        ResultSetMetaData meta   = rs.getMetaData();
 	        int               colmax = meta.getColumnCount();
 	        Object            o = null;

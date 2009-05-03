@@ -22,6 +22,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			int subpopulation, int threadnum) {
 	    
 		if (!ind.evaluated) {	// Don't reevaluate
+			((RefactorIndividual)ind).ResetNodeCount();
 			((GPIndividual)ind).trees[0].child.eval(
 					state,threadnum,input,stack,((GPIndividual)ind), this);
 		}
@@ -135,7 +136,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 				0.1666F, // understandability
 				0.1666F, // functionality
 				0.1666F, // extendibility
-				0.1666F  // effectiveness
+				0.1F  // effectiveness
 		};
 		
 		float QMOOD_value = flexibility * preferenceMatrix[0] +
@@ -150,15 +151,13 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		int patternsFound = patternInstances.size();
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
+		/*
 		if (patternsFound > 0) {
 			System.out.println("Patterns found: " + patternsFound);
-			//System.out.println("----------");
-			//System.out.println(patternInstances);
-			//System.out.println(">>>>>>>>>>");
-			
 		}
-		
-		fitness_value = QMOOD_value + 50*patternsFound + node_bonus;
+		*/
+		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
+		fitness_value = QMOOD_value + 10*patternsFound - ((float)nodeCount);
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;
