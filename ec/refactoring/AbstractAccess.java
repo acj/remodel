@@ -45,6 +45,7 @@ public class AbstractAccess extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("AbstractAccess()");
+		((RefactorIndividual)individual).IncrementNodeCount();
 		
 		// For each "uses" relationship between the context and the concrete
 		// class, replace this relationship with an "implements" link to

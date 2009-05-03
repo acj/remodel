@@ -47,6 +47,7 @@ public class EncapsulateConstruction extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("EncapsulateConstruction()");
+		((RefactorIndividual)individual).IncrementNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
 			((RefactorIndividual)individual).GetGraph();

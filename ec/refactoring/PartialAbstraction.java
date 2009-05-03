@@ -41,6 +41,7 @@ public class PartialAbstraction extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("PartialAbstraction()");
+		((RefactorIndividual)individual).IncrementNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
