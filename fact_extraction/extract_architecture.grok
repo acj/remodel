@@ -82,8 +82,11 @@ appendRelToFile opers outputRsf
 has_oper := (id (class_instances . @_label)) o ((dom contain . @_label) X (rng contain . @_label))
 has_oper_dup := dom has_oper ^ rng has_oper
 has_oper := has_oper - (id has_oper_dup)
-appendRelToFile has_oper outputRsf
 
+% Remove class-to-class ownership
+has_oper_classtoclass := (inv (id ($INSTANCE . $_C . @_label)) o (inv has_oper))
+has_oper := has_oper - has_oper_classtoclass
+appendRelToFile has_oper outputRsf
 
 % Bil
 classes := $INSTANCE . $_C
