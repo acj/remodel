@@ -42,6 +42,7 @@ public class Abstraction extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("Abstraction()");
+		((RefactorIndividual)individual).IncrementNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
@@ -49,7 +50,7 @@ public class Abstraction extends GPNode {
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
 		children[1].eval(state, thread, input, stack, individual, problem);
-		String newName = "Abstract" + rd.name;
+		String newName = "I" + rd.name;
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);

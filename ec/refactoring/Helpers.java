@@ -27,7 +27,7 @@ public class Helpers {
 		int verts_added = 0;
 		// Construct a new "interface" vertex along with a set of operation
 		// vertices to represent the interface methods.
-		AnnotatedVertex iface_v = new AnnotatedVertex("NewInterface", 
+		AnnotatedVertex iface_v = new AnnotatedVertex(n, 
 										AnnotatedVertex.VertexType.INTERFACE,
 										AnnotatedVertex.Visibility.PUBLIC);
 		ArrayList<AnnotatedEdge> edges = ag.GetEdges(c, AnnotatedEdge.Label.OWN);
