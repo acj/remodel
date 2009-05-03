@@ -21,40 +21,46 @@ public class RefactorStatistics extends SimpleStatistics {
         for(int x=0;x<state.population.subpops.length;x++ )
         {
 	        best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
-	        
-			ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList(); 
-			Iterator<String> p_it = patternList.iterator();
+			
+	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
+	
+	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
+		        
 			try {
 			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.end"));
-			    
+				 
+				Iterator<String> p_it = patternList.iterator();
 			    while (p_it.hasNext()) {
 			    	out.write(p_it.next() + "\n");
 			    }
 			    out.flush();
 			    out.close();
 			    
-			    out = new BufferedWriter(new FileWriter("graphfinal.dot"));
+			    out = new BufferedWriter(new FileWriter("output/graphfinal.facts"));
+			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToFacts());
+			    out.flush();
+			    out.close();
+			    
+			    out = new BufferedWriter(new FileWriter("output/graphfinal.dot"));
 			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
 			    out.flush();
 			    out.close();
-			} catch (IOException e) {
-			    System.err.println("Could not export graph statistics!");
-			}
-			
-	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
-	
-	        AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph =
-	        	((RefactorIndividual)best_of_run[x]).GetGraph().GetPatternSubgraph(patternList.get(0));
-	        
-			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("pattern.0.dot"));
-				out.write(graph.ToGraphViz());
-				out.flush();
-				out.close();
+			    
+			    // TODO: Print all patterns, not just the first
+		        if (patternList.size() > 0) {
+        			for (int ndx=0; ndx<patternList.size(); ++ndx) {
+						AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph =
+							((RefactorIndividual)best_of_run[x]).GetGraph().GetPatternSubgraph(patternList.get(ndx), false);
+						out = new BufferedWriter(new FileWriter("output/pattern." + ndx + ".dot"));
+						out.write(graph.ToGraphViz());
+						out.flush();
+						out.close();
+				    }
+		        }
 			} catch (IOException e) {
 				System.err.println("Could not export pattern to graphviz!");
 			}
-	        
+	        System.out.println("Patterns in best individual: " + patternList.size());
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
 	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);
