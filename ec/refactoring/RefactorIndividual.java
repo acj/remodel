@@ -5,7 +5,8 @@ import java.util.*;
 public class RefactorIndividual extends GPIndividual {
 	private static final long serialVersionUID = -2213239528716782559L;
 	private AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph;
-        private ArrayList<String> patternList;
+    private ArrayList<String> patternList;
+    private int nodeCount = 0;
 
 	public RefactorIndividual lightClone() {
 		RefactorIndividual ri = (RefactorIndividual)(super.lightClone());
@@ -25,11 +26,15 @@ public class RefactorIndividual extends GPIndividual {
 		graph = ag;
 	}
 
-        public ArrayList<String> GetPatternList() {
+    public ArrayList<String> GetPatternList() {
 	    return patternList;
 	}
 
-        public void SetPatternList(ArrayList<String> patternInstances) {
+    public void SetPatternList(ArrayList<String> patternInstances) {
 	    patternList = patternInstances;
 	}
+    
+    public int GetNodeCount() { return nodeCount; }
+    public void IncrementNodeCount() { ++nodeCount; }
+    public void ResetNodeCount() { nodeCount = 0; }
 }

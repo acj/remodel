@@ -19,6 +19,7 @@ public class DummyNode extends GPNode {
 	@Override
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		((RefactorIndividual)individual).IncrementNodeCount();
 		// Do nothing.
 	}
 

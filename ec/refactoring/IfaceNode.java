@@ -6,6 +6,7 @@ import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
+import ec.refactoring.AnnotatedVertex.VertexType;
 import ec.util.Parameter;
 
 /**
@@ -72,6 +73,7 @@ public class IfaceNode extends GPNode {
 	
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
+		((RefactorIndividual)individual).IncrementNodeCount();
 		RefactorData rd = (RefactorData)input;
 		//System.out.println("VertexNode");
 		// If we don't have a graph or have been assigned to a new tree that
@@ -79,7 +81,9 @@ public class IfaceNode extends GPNode {
 		if (ag == null || ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
 			ag = ((RefactorIndividual)individual).GetGraph();
 		}
-		vertexName = ag.GetRandomVertex(AnnotatedVertex.VertexType.INTERFACE).toString();
+		AnnotatedVertex v = ag.GetRandomVertex(AnnotatedVertex.VertexType.INTERFACE);
+		assert v.getType() == VertexType.INTERFACE;
+		vertexName = v.toString();
 		rd.name = vertexName;
 	}
 
