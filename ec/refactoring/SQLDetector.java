@@ -64,40 +64,70 @@ public class SQLDetector implements PatternDetector {
 				}
 			}
 			
+			// Abstract Factory
 			ResultSet rs = st.executeQuery("SELECT DISTINCT * FROM tClass " +
 					"JOIN tInherit tInherit1 ON tClass.name=tInherit1.sink " +
 					"JOIN tOwn ON tInherit1.source=tOwn.source " +
 					"JOIN tInstantiate ON tOwn.sink=tInstantiate.source " +
 					"JOIN tInherit tInherit2 ON tInstantiate.sink=tInherit2.source " +
 					"JOIN tClass tClass2 ON tInherit2.sink=tClass2.name " +
-					"WHERE tInherit1.sink != tInherit2.sink");
-	        ResultSetMetaData meta   = rs.getMetaData();
+					"WHERE tInherit1.sink != tInherit2.sink AND " +
+					"tInherit1.source != tInherit2.source");
+			patternInstances.addAll(ReadPatternsFromResult(rs, "AbstractFactory"));
+
+			// Prototype
+			//PT[c,protAbs,protCon,protAbs_meth] = {classes[c]; classes[protAbs];
+			// classes[protCon]; operations[protAbs_meth]; inherits[protCon,protAbs];
+			// owns[protAbs,protAbs_meth]
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass protCon " +
+					"JOIN tInherit ON protCon.name=tInherit.source " +
+					"JOIN tOwn ON tInherit.sink=tOwn.source " +
+					"JOIN tOperation ON tOwn.sink=tOperation.name");
+			patternInstances.addAll(ReadPatternsFromResult(rs, "Prototype"));
+
+			// Adapter
+	        //AD[client,adapter_meth,adaptee_meth,adapter,adaptee,target] =
+	        // {opers[client]; opers[adapter_meth]; opers[adaptee_meth]; 
+			// classes[adapter]; classes[adaptee]; classes[target];
+			// owns[adapter,adapter_meth]; calls[client,adapter_meth]; 
+			// inherits[adapter,target]; owns[adaptee,adaptee_meth]; 
+			// calls[adapter_meth,adaptee_meth];}
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass tClass1 " +
+					"JOIN tOwn tOwn1 ON tClass1.name=tOwn1.source " +
+					"JOIN tOperation tOperation1 ON tOwn1.sink=tOperation1.name " +
+					"JOIN tCall tCall1 ON tOperation1.name=tCall1.sink " +
+					"JOIN tInherit tInherit1 ON (tInherit1.source=tClass1.name AND tInherit1.sink=tOperation1.name) " +
+					"JOIN tCall tCall2 ON tCall2.source=tOperation1.name " +
+					"JOIN tOwn tOwn2 ON tCall2.sink!=tOperation1.name ");
+			patternInstances.addAll(ReadPatternsFromResult(rs, "Adapter"));
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		return patternInstances;
+	}
+	
+	ArrayList<String> ReadPatternsFromResult(ResultSet rs, String patternName) {
+		ArrayList<String> patternInstances = new ArrayList<String>();
+        ResultSetMetaData meta;
+		try {
+			meta = rs.getMetaData();
 	        int               colmax = meta.getColumnCount();
+	        int i = 0;
 	        Object            o = null;
-
-	        // the result set is a cursor into the data.  You can only
-	        // point to one row at a time
-	        // assume we are pointing to BEFORE the first row
-	        // rs.next() points to next row and returns true
-	        // or false if there is no next row, which breaks the loop
-	        
 	        for (; rs.next(); ) {
-		    String patternInstance = "";
+	        	String patternInstance = patternName + " ";
 	            for (i = 0; i < colmax; ++i) {
-	            	
 	                o = rs.getObject(i + 1);    // In SQL the first column is indexed
-
-	                // with 1 not 0
 	                if (o != null) {
 	                	//System.out.print("[" + meta.getTableName(i+1) + "." + meta.getColumnName(i + 1) + "]" + o.toString() + " ");
 	                	patternInstance += o.toString() + " ";
 	                }
 	            }
 	            //System.out.println(" ");
-		    patternInstances.add(patternInstance);
+	            patternInstances.add(patternInstance);
 	        }
-		} catch (SQLException e1) {
-			e1.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return patternInstances;
 	}

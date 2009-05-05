@@ -2,12 +2,6 @@ package ec.refactoring;
 
 import java.io.*;
 import java.util.*;
-import ec.EvolutionState;
-import ec.Evolve;
-import ec.Singleton;
-import ec.Prototype;
-import ec.simple.SimpleDefaults;
-import ec.util.Parameter;
 import ec.refactoring.AnnotatedEdge;
 import ec.refactoring.AnnotatedVertex;
 
@@ -21,6 +15,7 @@ public class SourceGraph {
 	private static int nextGraphId = 0;
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 	private static PatternDetector detector;
+	private static ArrayList<String> patternList;
 	
 	public static void SetRandom(Random r) {
 		rand = r;
@@ -52,8 +47,8 @@ public class SourceGraph {
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
 			//BuildGraph(g, "cse891hw-annotated.facts");
-			//BuildGraph(g, "beaver-annotated.facts");
-			BuildGraph(g, "testfactorymethod-annotated.facts");
+			BuildGraph(g, "beaver-annotated.facts");
+			//BuildGraph(g, "testfactorymethod-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
@@ -65,7 +60,7 @@ public class SourceGraph {
 				out.close();
 				
 			    out = new BufferedWriter(new FileWriter("graphstart.dot"));
-			    out.write(g.ToGraphViz());
+			    out.write(g.ToGraphViz("Starting Graph"));
 			    out.flush();
 			    out.close();
 			} catch (IOException e) {
@@ -81,12 +76,12 @@ public class SourceGraph {
 			annotatedGraph = g;
 			
 			// Determine the baseline number of patterns in this graph
-			ArrayList<String> patternList = detector.DetectPatterns(g);
+			SetPatternList(detector.DetectPatterns(g));
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
-			System.out.println("Baseline: " + patternList.size());
+			System.out.println("Baseline: " + GetPatternList().size());
 			try {
 			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.orig"));
-			    Iterator<String> it = patternList.iterator();
+			    Iterator<String> it = GetPatternList().iterator();
 			    while (it.hasNext()) {
 			    	out.write(it.next() + "\n");
 			    }
@@ -126,6 +121,12 @@ public class SourceGraph {
 	}
 	public static PatternDetector GetDetector() {
 		return detector;
+	}
+	public static void SetPatternList(ArrayList<String> patternList) {
+		SourceGraph.patternList = patternList;
+	}
+	public static ArrayList<String> GetPatternList() {
+		return patternList;
 	}
 
 	/*

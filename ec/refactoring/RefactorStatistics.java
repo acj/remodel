@@ -42,7 +42,7 @@ public class RefactorStatistics extends SimpleStatistics {
 			    out.close();
 			    
 			    out = new BufferedWriter(new FileWriter("output/graphfinal.dot"));
-			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz());
+			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz("Final"));
 			    out.flush();
 			    out.close();
 			    
@@ -52,7 +52,7 @@ public class RefactorStatistics extends SimpleStatistics {
 						AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph =
 							((RefactorIndividual)best_of_run[x]).GetGraph().GetPatternSubgraph(patternList.get(ndx), false);
 						out = new BufferedWriter(new FileWriter("output/pattern." + ndx + ".dot"));
-						out.write(graph.ToGraphViz());
+						out.write(graph.ToGraphViz(patternList.get(ndx).split(" ")[0]));
 						out.flush();
 						out.close();
 				    }
@@ -60,7 +60,7 @@ public class RefactorStatistics extends SimpleStatistics {
 			} catch (IOException e) {
 				System.err.println("Could not export pattern to graphviz!");
 			}
-	        System.out.println("Patterns in best individual: " + patternList.size());
+	        System.out.println("New patterns instances in best individual: " + patternList.size());
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
 	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);

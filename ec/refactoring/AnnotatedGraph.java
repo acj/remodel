@@ -80,9 +80,9 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 	 * Export the graph into the dot language used by graphviz.
 	 * @return String representation suitable for graphviz.
 	 */
-	public String ToGraphViz() {
+	public String ToGraphViz(String graphTitle) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("digraph G {\n");
+		sb.append("digraph G {\nlabel=\"" + graphTitle + "\"\n");
 		// For each vertex, create a node
 		Iterator<V> it_v = vertexSet().iterator();
 		AnnotatedVertex v;

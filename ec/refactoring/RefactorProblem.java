@@ -32,8 +32,8 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 
-	    Float node_bonus = 0.0F;
 	    /*
+	    Float node_bonus = 0.0F;
 		GPNode first = ((GPIndividual)ind).trees[0].child.children[0];
 		GPNode second = ((GPIndividual)ind).trees[0].child.children[1];
 		GPNode third = ((GPIndividual)ind).trees[0].child.children[2];
@@ -148,6 +148,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 
 		// Design pattern detection
 		ArrayList<String> patternInstances = SourceGraph.GetDetector().DetectPatterns(g);
+		patternInstances.removeAll(SourceGraph.GetPatternList());
 		int patternsFound = patternInstances.size();
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
@@ -157,7 +158,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		}
 		*/
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + 10*patternsFound - ((float)nodeCount);
+		fitness_value = QMOOD_value + 10*patternsFound - (float)nodeCount;
 		fit.setFitness(state, fitness_value, false);
 		//System.err.println("Fitness: " + fitness_value);
 		ind.fitness = fit;
