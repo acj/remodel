@@ -49,22 +49,10 @@ public class SourceGraph {
 			//BuildGraph(g, "cse891hw-annotated.facts");
 			BuildGraph(g, "beaver-annotated.facts");
 			//BuildGraph(g, "testfactorymethod-annotated.facts");
+			//BuildGraph(g, "accountmgt-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
-			}
-			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("graph.facts.orig"));
-				out.write(g.ToFacts());
-				out.flush();
-				out.close();
-				
-			    out = new BufferedWriter(new FileWriter("graphstart.dot"));
-			    out.write(g.ToGraphViz("Starting Graph"));
-			    out.flush();
-			    out.close();
-			} catch (IOException e) {
-				System.err.println("Could not export graph facts!");
 			}
 			// Set up a QL instance to do pattern detection
 			//detector = new QLWrapper();
@@ -80,7 +68,17 @@ public class SourceGraph {
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
 			System.out.println("Baseline: " + GetPatternList().size());
 			try {
-			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.orig"));
+				BufferedWriter out = new BufferedWriter(new FileWriter("output/graph.facts.orig"));
+				out.write(g.ToFacts());
+				out.flush();
+				out.close();
+				
+			    out = new BufferedWriter(new FileWriter("output/graphstart.dot"));
+			    out.write(g.ToGraphViz("Starting Graph"));
+			    out.flush();
+			    out.close();
+
+			    out = new BufferedWriter(new FileWriter("output/patterns.orig"));
 			    Iterator<String> it = GetPatternList().iterator();
 			    while (it.hasNext()) {
 			    	out.write(it.next() + "\n");

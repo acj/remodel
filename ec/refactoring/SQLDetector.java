@@ -73,7 +73,7 @@ public class SQLDetector implements PatternDetector {
 					"JOIN tClass tClass2 ON tInherit2.sink=tClass2.name " +
 					"WHERE tInherit1.sink != tInherit2.sink AND " +
 					"tInherit1.source != tInherit2.source");
-			patternInstances.addAll(ReadPatternsFromResult(rs, "AbstractFactory"));
+			patternInstances.addAll(ReadPatternsFromResult(rs, "FactoryMethod"));
 
 			// Prototype
 			//PT[c,protAbs,protCon,protAbs_meth] = {classes[c]; classes[protAbs];

@@ -152,28 +152,20 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		int patternsFound = patternInstances.size();
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
+		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
+		fitness_value = QMOOD_value + (patternsFound > 0 ? 10F : 0F) - (float)nodeCount;
+		fit.setFitness(state, fitness_value, false);
 		/*
 		if (patternsFound > 0) {
 			System.out.println("Patterns found: " + patternsFound);
 		}
+		System.err.println("Fitness: " + fitness_value);
 		*/
-		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + 10*patternsFound - (float)nodeCount;
-		fit.setFitness(state, fitness_value, false);
-		//System.err.println("Fitness: " + fitness_value);
+		
 		ind.fitness = fit;
 		
 		stack.reset();
 		ind.evaluated = true;
-		/*
-		try {
-			BufferedWriter out = new BufferedWriter(new FileWriter("model.out"));
-			out.write(g.ToGraphViz());
-			out.close();
-		} catch (IOException e) {
-			System.err.println("Could not export graphviz data!");
-		}
-		*/
 	}
     public void setup(final EvolutionState state, final Parameter base)
 	{

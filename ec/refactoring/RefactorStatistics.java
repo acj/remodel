@@ -27,7 +27,7 @@ public class RefactorStatistics extends SimpleStatistics {
 	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
 		        
 			try {
-			    BufferedWriter out = new BufferedWriter(new FileWriter("patterns.end"));
+			    BufferedWriter out = new BufferedWriter(new FileWriter("output/patterns.end"));
 				 
 				Iterator<String> p_it = patternList.iterator();
 			    while (p_it.hasNext()) {
