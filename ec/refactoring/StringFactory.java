@@ -16,12 +16,13 @@ public class StringFactory {
 	public static void Setup() {
 		strings = new ArrayList<String>();
 		rand = new Random(SourceGraph.RANDOM_SEED);
-		strings.add("These");
-		strings.add("Are");
-		strings.add("Some");
-		strings.add("Words");
-		strings.add("Seeding");
-		strings.add("Approach");
+		//strings.add("These");
+		//strings.add("Are");
+		//strings.add("Some");
+		//strings.add("Words");
+		//strings.add("Seeding");
+		//strings.add("Approach");
+		strings.add("RandomWord");
 	}
 	/**
 	 * Returns a randomly-chosen string from the set of available words.

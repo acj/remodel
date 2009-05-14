@@ -47,7 +47,7 @@ eval =					ec.simple.SimpleEvaluator
 # We're using simple statistics
 stat =					ec.simple.SimpleStatistics
 
-generations =				20
+generations =				10
 quit-on-run-complete =			true
 
 # ec.Initializer
