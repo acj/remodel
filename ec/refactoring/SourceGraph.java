@@ -47,9 +47,12 @@ public class SourceGraph {
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
 			//BuildGraph(g, "cse891hw-annotated.facts");
-			BuildGraph(g, "beaver-annotated.facts");
+			//BuildGraph(g, "beaver-annotated.facts");
 			//BuildGraph(g, "testfactorymethod-annotated.facts");
 			//BuildGraph(g, "accountmgt-annotated.facts");
+			//BuildGraph(g, "BankingCompany-annotated.facts");
+			//BuildGraph(g, "jhotdrawframework-annotated.facts");
+			BuildGraph(g, "jhotdrawstandard-annotated.facts");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
@@ -66,9 +69,16 @@ public class SourceGraph {
 			// Determine the baseline number of patterns in this graph
 			SetPatternList(detector.DetectPatterns(g));
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
-			System.out.println("Baseline: " + GetPatternList().size());
+			System.out.print("Baseline: " + GetPatternList().size() + "\n{ ");
+			Iterator<String> it = GetPatternList().iterator();
+			while (it.hasNext()) {
+				String token = it.next();
+				token = token.substring(0, token.indexOf(" ")+1);
+				System.out.print(token);
+			}
+			System.out.print("}\n");
 			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter("output/graph.facts.orig"));
+				BufferedWriter out = new BufferedWriter(new FileWriter("output/graphstart.facts"));
 				out.write(g.ToFacts());
 				out.flush();
 				out.close();
@@ -79,7 +89,7 @@ public class SourceGraph {
 			    out.close();
 
 			    out = new BufferedWriter(new FileWriter("output/patterns.orig"));
-			    Iterator<String> it = GetPatternList().iterator();
+			    it = GetPatternList().iterator();
 			    while (it.hasNext()) {
 			    	out.write(it.next() + "\n");
 			    }
@@ -92,9 +102,9 @@ public class SourceGraph {
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 		Set<AnnotatedVertex> vertices = annotatedGraph.vertexSet();
-		Iterator<AnnotatedVertex> it = vertices.iterator();
-		while (it.hasNext()) {
-			AnnotatedVertex v_old = it.next();
+		Iterator<AnnotatedVertex> it_vert = vertices.iterator();
+		while (it_vert.hasNext()) {
+			AnnotatedVertex v_old = it_vert.next();
 			AnnotatedVertex v = new AnnotatedVertex(v_old.toString(), v_old.getType(), v_old.getVisibility());
 			graph_clone.addVertex(v);
 		}
