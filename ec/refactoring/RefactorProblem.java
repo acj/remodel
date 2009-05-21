@@ -153,7 +153,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + (patternsFound > 0 ? 10F : 0F) - 0.25F*(float)nodeCount;
+		fitness_value = QMOOD_value + (patternsFound > 0 ? 0.10F*QMOOD_value : 0F) - 0.25F*(float)nodeCount;
 		fit.setFitness(state, fitness_value, false);
 		/*
 		if (patternsFound > 0) {
