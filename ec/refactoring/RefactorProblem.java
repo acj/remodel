@@ -32,32 +32,6 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		SimpleFitness fit = new SimpleFitness();
 		Float fitness_value = 0F;
 
-	    /*
-	    Float node_bonus = 0.0F;
-		GPNode first = ((GPIndividual)ind).trees[0].child.children[0];
-		GPNode second = ((GPIndividual)ind).trees[0].child.children[1];
-		GPNode third = ((GPIndividual)ind).trees[0].child.children[2];
-
-
-		if (first.toString().equals("PartialAbstraction")) {
-		    node_bonus += 50F;
-		    if (first.children[0].toString().equals("ClassNode<testfactorymethod.ConcreteFooFactory>")) {
-			node_bonus += 50F;
-		    }
-		}
-		if (second.toString().equals("PartialAbstraction")) {
-		    node_bonus += 50F;
-		    if (second.children[0].toString().equals("ClassNode<testfactorymethod.Foo>")) {
-			node_bonus += 50F;
-		    }
-		}
-		if (third.toString().equals("EncapsulateConstruction")) {
-		    node_bonus += 50F;
-		    if (third.children[0].toString().equals("ClassNode<testfactorymethod.ConcreteFooFactory>")) {
-			node_bonus += 50F;
-		    }
-		}
-		*/
 		// QMOOD evaluation
 		float designSizeInClasses = DesignSizeInClasses(g); 	// Design size
 		float avgNumberOfAncestors = AvgNumberOfAncestors(g); 	// Abstraction
@@ -153,7 +127,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + (patternsFound > 0 ? 0.10F*QMOOD_value : 0F) - 0.25F*(float)nodeCount;
+		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*QMOOD_value : 0F) - 0.0F*QMOOD_value*(float)nodeCount;
 		fit.setFitness(state, fitness_value, false);
 		/*
 		if (patternsFound > 0) {
