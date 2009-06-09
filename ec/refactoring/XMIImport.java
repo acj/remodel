@@ -305,6 +305,7 @@ public class XMIImport implements IModelImport {
         // parse file
         try {
             Vector<Node> classNodes = new Vector<Node>();
+            Vector<Node> interfaceNodes = new Vector<Node>();
             TreeMap<String, AnnotatedVertex> xmiIdMap = new TreeMap<String, AnnotatedVertex>();
             
             Document document = parser.parse(Filename);
@@ -321,6 +322,20 @@ public class XMIImport implements IModelImport {
             		AnnotatedVertex v = new AnnotatedVertex(n.getAttributes().getNamedItem("name").getNodeValue(), VertexType.CLASS, Visibility.PUBLIC);
             		g.addVertex(v);
             		xmiIdMap.put(allClassNodes.item(ndx).getAttributes().getNamedItem("xmi.id").getNodeValue(), v);
+            	}
+            }
+            
+            // Extract classes from the model
+            NodeList allInterfaceNodes = document.getElementsByTagName("UML:Interface");
+            for (int ndx=0; ndx<allInterfaceNodes.getLength(); ++ndx) {
+            	if (allInterfaceNodes.item(ndx).getAttributes().getNamedItem("name") != null) {
+            		interfaceNodes.add(allInterfaceNodes.item(ndx));
+            		
+            		// Add a class for this vertex to the graph
+            		Node n = allInterfaceNodes.item(ndx);
+            		AnnotatedVertex v = new AnnotatedVertex(n.getAttributes().getNamedItem("name").getNodeValue(), VertexType.INTERFACE, Visibility.PUBLIC);
+            		g.addVertex(v);
+            		xmiIdMap.put(allInterfaceNodes.item(ndx).getAttributes().getNamedItem("xmi.id").getNodeValue(), v);
             	}
             }
             
