@@ -435,20 +435,54 @@ public class XMIImport implements IModelImport {
 	            		int numElements = elementNodes.getLength();
 	            		for (int element_ndx=0; element_ndx<numElements; ++element_ndx) {
 	            			if (elementNodes.item(element_ndx).getNodeName() == "UML:Operation") {
-	            				String operName = elementNodes.item(element_ndx).getAttributes().getNamedItem("name").getNodeValue();
-	            				System.out.println("\t\tOperation: " + operName);
-	            				// TODO: Fix visibility
-	            				AnnotatedVertex new_op = new AnnotatedVertex(className + "_" + operName, VertexType.OPERATION, Visibility.PUBLIC);
-	            				g.addVertex(new_op);
-	            				g.addEdge(classVertex, new_op, new AnnotatedEdge(Label.OWN));
+	            				// If an operation returns an instance of a class in our graph,
+	            				// then create an instantiation relationship between the owning class
+	            				// and the instantiated class.
+	            				NodeList operChildNodes = elementNodes.item(element_ndx).getChildNodes();
+	            				for (int elchild_ndx=0; elchild_ndx<operChildNodes.getLength(); ++elchild_ndx) {
+	            					if (operChildNodes.item(elchild_ndx).getNodeName() == "UML:BehavioralFeature.parameter") {
+	            						NodeList paramChildNodes = operChildNodes.item(elchild_ndx).getChildNodes();
+	            						// Find the parameter that specifies the return type
+	            						for (int operparam_ndx=0; operparam_ndx<paramChildNodes.getLength(); ++operparam_ndx) {
+	            							Node paramNode = paramChildNodes.item(operparam_ndx);
+	            							if (paramNode.getNodeName() == "UML:Parameter" &&
+	            									paramNode.getAttributes().getNamedItem("kind").getNodeValue().equals("return")) {
+	            								// Finally, extract the class whose instance is being returned
+	            								assert paramNode.hasChildNodes();
+	            								String returnClassName = paramNode.getChildNodes().item(1).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue();
+	            								if (xmiIdMap.containsKey(returnClassName)) {
+	            									AnnotatedVertex returnClass = xmiIdMap.get(returnClassName); 
+	            									g.addEdge(classVertex, returnClass, new AnnotatedEdge(Label.INSTANTIATE));
+	            								} else {
+	            									// Bail out - the return type is not a class in our annotated graph.
+	            									break;
+	            								}
+	            							}
+	            						}
+	            					}
+	            				}
 	            			} else if (elementNodes.item(element_ndx).getNodeName() == "UML:Attribute") {
-	            				String attrib_name = elementNodes.item(element_ndx).getAttributes().getNamedItem("name").getNodeValue();
-	            				System.out.println("\t\tAttribute: " + attrib_name);
-	            				AnnotatedAttribute new_attrib = new AnnotatedAttribute();
-	            				new_attrib.setDataType("TODO");
-	            				new_attrib.setName(attrib_name);
-	            				new_attrib.setVisibility(AnnotatedAttribute.Visibility.PUBLIC); // TODO
-	            				classVertex.addAttribute(new_attrib);
+	            				// If an attribute has a data type that is a class in our
+	            				// annotated graph, then create an instantiation relationship
+	            				// between the owning class and the instantiated class.
+	            				NodeList attribChildNodes = elementNodes.item(element_ndx).getChildNodes();
+	            				for (int type_ndx=0; type_ndx<attribChildNodes.getLength(); ++type_ndx) {
+	            					Node typeNode = attribChildNodes.item(type_ndx);
+	            					if (typeNode.getNodeName() == "UML:StructuralFeature.type" &&
+	            							typeNode.hasChildNodes() &&
+	            							typeNode.getChildNodes().item(1).getNodeName() == "UML:Class") {
+	            						String attribTypeName = typeNode.getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue();
+	            						if (xmiIdMap.containsKey(attribTypeName)) {
+		            						AnnotatedVertex attribTypeVertex = xmiIdMap.get(attribTypeName);
+		            						g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.INSTANTIATE));
+	            						} else {
+	            							// Bail out of this attribute.  The
+	            							// attribute data type is not in
+	            							// our annotated graph.
+	            							break;
+	            						}
+	            					}
+	            				}
 	            			}
 	            		}
 	            	}
