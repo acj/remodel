@@ -401,6 +401,8 @@ public class XMIImport implements IModelImport {
             			System.err.println("\t\tWarning: Expected two children, found " + children.size());
             		}
             		g.addEdge(children.get(0), children.get(1), new AnnotatedEdge(Label.ASSOCIATE));
+            		g.addEdge(children.get(0), children.get(1), new AnnotatedEdge(Label.CALL));
+            		g.addEdge(children.get(1), children.get(0), new AnnotatedEdge(Label.CALL));
             	}
             }
             NodeList generalizationNodes = document.getElementsByTagName("UML:Generalization");
