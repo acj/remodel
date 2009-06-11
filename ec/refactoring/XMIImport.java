@@ -361,6 +361,9 @@ public class XMIImport implements IModelImport {
             					// default to none.  If aggregation or
             					// composition is found, though, we need to
             					// process this as a part-whole structure.
+            					if (endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation") == null) {
+            						continue;
+            					}
             					String endType = endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation").getNodeValue();
             					if (endType.equals("composite")) {
             						assocType = AssociationType.COMPOSITION;
@@ -380,6 +383,10 @@ public class XMIImport implements IModelImport {
             			}
             			break; // Assumption: only one UML:Association.connection tag
             		}
+            	}
+            	// If no children were found, skip this association.
+            	if (children.size() == 0) {
+            		continue;
             	}
             	// Now process all of the ends that we just found.
             	if (parent != null) {
