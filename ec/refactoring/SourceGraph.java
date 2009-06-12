@@ -28,7 +28,8 @@ public class SourceGraph {
 	 */
 	private static void BuildGraph(AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> g,
 									String filename) {
-		IModelImport importer = new FactImport();
+		//IModelImport importer = new FactImport();
+		IModelImport importer = new XMIImport();
 		try {
 			importer.Import(g, filename);
 		} catch (FileNotFoundException e) {
@@ -45,14 +46,10 @@ public class SourceGraph {
 		if (annotatedGraph == null) {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
-			//BuildGraph(g, "test-annotated.facts"); // TODO: parameterize this
-			//BuildGraph(g, "cse891hw-annotated.facts");
-			//BuildGraph(g, "beaver-annotated.facts");
-			//BuildGraph(g, "testfactorymethod-annotated.facts");
-			//BuildGraph(g, "accountmgt-annotated.facts");
-			//BuildGraph(g, "BankingCompany-annotated.facts");
-			//BuildGraph(g, "jhotdrawframework-annotated.facts");
-			BuildGraph(g, "jhotdrawstandard-annotated.facts");
+			//BuildGraph(g, "Models/TestModel.xmi");
+			BuildGraph(g, "Models/ServiceDepartment-Builder.xmi");
+			//BuildGraph(g, "Models/BankingCompany-AbstractFactory.xmi");
+			//BuildGraph(g, "Models/AccountManagement-AbstractFactory.xmi");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
