@@ -10,6 +10,9 @@ import java.util.Vector;
 import org.jgrapht.*;
 import org.jgrapht.graph.*;
 
+import ec.refactoring.AnnotatedVertex.VertexType;
+import ec.refactoring.AnnotatedVertex.Visibility;
+
 public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
     private static final long serialVersionUID = 4984872244526792365L;
     private HashMap<String, V> vertexHash;
@@ -176,6 +179,12 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			if (v.getType() == t) {
 				vertices.add(v);
 			}
+		}
+		
+		if (vertices.size() == 0 && t == VertexType.INTERFACE) {
+			AnnotatedVertex v = new AnnotatedVertex("IDummy", VertexType.INTERFACE, Visibility.PRIVATE);
+			addVertex((V)v);
+			vertices.add(v);
 		}
 		assert vertices.size() > 0;
 		return vertices.get(SourceGraph.GetRandom().nextInt(vertices.size()));

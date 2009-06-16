@@ -81,6 +81,7 @@ public class IfaceNode extends GPNode {
 		if (ag == null || ag.GetGraphId() != ((RefactorIndividual)individual).GetGraph().GetGraphId()) {
 			ag = ((RefactorIndividual)individual).GetGraph();
 		}
+		// NOTE: GetRandomVertex creates a dummy interface node if none exists
 		AnnotatedVertex v = ag.GetRandomVertex(AnnotatedVertex.VertexType.INTERFACE);
 		assert v.getType() == VertexType.INTERFACE;
 		vertexName = v.toString();
