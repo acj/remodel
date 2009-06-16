@@ -5,6 +5,7 @@ import java.util.*;
 
 import ec.*;
 import ec.gp.*;
+import ec.refactoring.AnnotatedEdge.Label;
 import ec.simple.*;
 import ec.util.*;
 
@@ -42,11 +43,10 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		float classInterfaceSize = ClassInterfaceSize(g);		// Messaging
 		float measureOfAggregation = MeasureOfAggregation(g);	// Composition
 		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g); // Inheritance
+		float numberOfHierarchies = NumberOfHierarchies(g);		// Functionality 
 		
 		// Currently no support for method parameters
 		float cohesionAmongMethods = 0.0F; // Cohesion
-		// Number of hierarchies (TODO)
-		float numberOfHierarchies = 0.0F;
 		
 		/*
 		System.out.println("DSIC: " + designSizeInClasses);
@@ -57,6 +57,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		System.out.println("CIF: " + classInterfaceSize);
 		System.out.println("MOA: " + measureOfAggregation);
 		System.out.println("MOFA: " + measureOfFunctionalAbstraction);
+		System.out.println("NOH: " + numberOfHierarchies);
 		*/
 		
 		/**
@@ -127,7 +128,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*QMOOD_value : 0F) - 0.0F*QMOOD_value*(float)nodeCount;
+		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*QMOOD_value : 0F) - 0.25F*QMOOD_value*(float)nodeCount;
 		fit.setFitness(state, fitness_value, false);
 		/*
 		if (patternsFound > 0) {
@@ -155,6 +156,14 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
     /**
      * Metrics
      */
+    
+    /**
+     * Computes the size of the software design by counting the number of
+     * classes.
+     * 
+     * @param g A graph.
+     * @return Number of classes in the graph.
+     */
 	private float DesignSizeInClasses(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
 		Set<AnnotatedVertex> vertices = g.vertexSet();
 		Iterator<AnnotatedVertex> it = vertices.iterator();
@@ -168,8 +177,49 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		}
 		return (float)class_count;
 	}
+	/**
+	 * Computes the number of inheritance hierarchies in the graph.
+	 * 
+	 * Basic idea: look for classes that are inherited but do not inherit
+	 * anything themselves.  In other words, find vertices that have incoming
+	 * inheritance edges but do not have outgoing inheritance edges.
+	 * 
+	 * @param g A graph.
+	 * @return Number of inheritance hierarchies in the graph.
+	 */
 	private float NumberOfHierarchies(AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g) {
-		return 0.0F;
+		float numOfHierarchies = 0F;
+		Set<AnnotatedVertex> vertices = g.vertexSet();
+		Iterator<AnnotatedVertex> it = vertices.iterator();
+		AnnotatedVertex v;
+		while (it.hasNext()) {
+			v = it.next();
+			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
+				ArrayList<AnnotatedEdge> edges = g.GetEdges(v, Label.INHERIT);
+				// If this class doesn't inherit, then skip it
+				if (edges.size() == 0) {
+					continue;
+				}
+				// Look for outgoing inheritance edges.  If we find any,
+				// then we skip this vertex.  Otherwise, increment
+				// the number of hierarchies by 1.
+				Boolean foundOutgoingInheritance = false;
+				Iterator<AnnotatedEdge> inherit_it = edges.iterator();
+				while (inherit_it.hasNext()) {
+					AnnotatedEdge e = inherit_it.next();
+					if (e.getSourceVertex() == v) {
+						foundOutgoingInheritance = true;
+						break;
+					}
+				}
+				if (foundOutgoingInheritance) {
+					// Nothing to do.  This is not an inheritance root.
+				} else {
+					numOfHierarchies += 1F;
+				}
+			}
+		}
+		return numOfHierarchies;
 	}
 	/**
 	 * Computes the average number of ancestors between a given class and the
