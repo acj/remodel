@@ -14,7 +14,22 @@ import ec.refactoring.AnnotatedVertex.VertexType;
 import ec.refactoring.AnnotatedVertex.Visibility;
 
 public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
-    private static final long serialVersionUID = 4984872244526792365L;
+    @Override
+	public String toString() {
+    	StringBuilder stb = new StringBuilder();
+		Iterator<V> it_v = vertexSet().iterator();
+		while (it_v.hasNext()) {
+			stb.append(it_v.next() + "\n");
+		}
+		Iterator<E> it_e = edgeSet().iterator();
+		while (it_e.hasNext()) {
+			AnnotatedEdge e = (AnnotatedEdge)it_e.next();
+			stb.append(e.getSourceVertex() + " --(" + e.getLabel() + ")--> " + e.getSinkVertex() + "\n");
+		}
+		return stb.toString();
+	}
+
+	private static final long serialVersionUID = 4984872244526792365L;
     private HashMap<String, V> vertexHash;
     private Vector<V> vertexList;
     private int graphId; // Unique identifier for this graph instance
