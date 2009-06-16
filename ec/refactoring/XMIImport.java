@@ -369,7 +369,7 @@ public class XMIImport implements IModelImport {
             					} else {
             						endType = endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation").getNodeValue();
             					}
-            					System.out.println("\tEnd type: " + endType);
+            					//System.out.println("\tEnd type: " + endType);
             					
             					NodeList participantNodes = endNodes.item(end_ndx).getChildNodes();
             					for (int part_ndx=0; part_ndx<participantNodes.getLength(); ++part_ndx) {
@@ -435,7 +435,6 @@ public class XMIImport implements IModelImport {
             }
             NodeList generalizationNodes = document.getElementsByTagName("UML:Generalization");
             for (int ndx=0; ndx<generalizationNodes.getLength(); ++ndx) {
-            	System.out.println(generalizationNodes.item(ndx));
             	AnnotatedVertex parent = null;
             	AnnotatedVertex child = null;
             	NodeList childNodes = generalizationNodes.item(ndx).getChildNodes();
@@ -445,7 +444,6 @@ public class XMIImport implements IModelImport {
             	// empty text node.
             	for (int child_ndx=0; child_ndx<childNodes.getLength(); ++child_ndx) {
             		if (childNodes.item(child_ndx).getNodeName() == "UML:Generalization.parent") {
-            			System.out.println(childNodes.item(child_ndx).getChildNodes().item(1).getNodeName());
             			parent = xmiIdMap.get(childNodes.item(child_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
             			break;
             		}
@@ -460,15 +458,15 @@ public class XMIImport implements IModelImport {
             	}
             	if (parent != null && child != null) {
             		g.addEdge(child, parent, new AnnotatedEdge(Label.INHERIT));
-            	} else {
-            		System.out.println("Error: missing one of " + parent + ", " + child);
+            	} else if (parent == null) {
+            		System.out.println("Error in generalization: parent is null");
+            	} else if (child == null) {
+            		System.out.println("Error in generalization: child is null");
             	}
             }
             
             // Extract operations from each class
             for (int cl_ndx=0; cl_ndx<classNodes.size(); ++cl_ndx) {
-            	String className = classNodes.get(cl_ndx).getAttributes().getNamedItem("name").getNodeValue();
-        		System.out.println("Processing class: " + className);
             	NodeList opNodes = classNodes.get(cl_ndx).getChildNodes();
             	AnnotatedVertex classVertex = xmiIdMap.get(classNodes.get(cl_ndx).getAttributes().getNamedItem("xmi.id").getNodeValue());
             	int numFeatures = opNodes.getLength();
@@ -479,6 +477,13 @@ public class XMIImport implements IModelImport {
 	            		int numElements = elementNodes.getLength();
 	            		for (int element_ndx=0; element_ndx<numElements; ++element_ndx) {
 	            			if (elementNodes.item(element_ndx).getNodeName() == "UML:Operation") {
+	            				String operName = elementNodes.item(element_ndx).getAttributes().getNamedItem("name").getNodeValue();
+	            				System.out.println("\t\tOperation: " + operName);
+	            				// TODO: Fix visibility
+	            				AnnotatedVertex new_op = new AnnotatedVertex(classVertex + "_" + operName, VertexType.OPERATION, Visibility.PUBLIC);
+	            				g.addVertex(new_op);
+	            				g.addEdge(classVertex, new_op, new AnnotatedEdge(Label.OWN));
+
 	            				// If an operation returns an instance of a class in our graph,
 	            				// then create an instantiation relationship between the owning class
 	            				// and the instantiated class.
@@ -521,7 +526,7 @@ public class XMIImport implements IModelImport {
 	            						if (xmiIdMap.containsKey(attribTypeName)) {
 		            						AnnotatedVertex attribTypeVertex = xmiIdMap.get(attribTypeName);
 		            						g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.INSTANTIATE));
-		            						//g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.AGGREGATE));
+		            						g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.AGGREGATE));
 	            						} else {
 	            							// Bail out of this attribute.  The
 	            							// attribute data type is not in

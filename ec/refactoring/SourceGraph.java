@@ -47,13 +47,19 @@ public class SourceGraph {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 			//BuildGraph(g, "Models/TestModel.xmi");
-			BuildGraph(g, "Models/ServiceDepartment-Builder.xmi");
+			//BuildGraph(g, "Models/ServiceDepartment-Builder.xmi");
 			//BuildGraph(g, "Models/BankingCompany-AbstractFactory.xmi");
+			//BuildGraph(g, "Models/BankingCompany-Builder.xmi");
+			//BuildGraph(g, "Models/BankingCompany-Prototype.xmi");
+			//BuildGraph(g, "Models/BankingCompany-Singleton.xmi");
 			//BuildGraph(g, "Models/AccountManagement-AbstractFactory.xmi");
+			BuildGraph(g, "Models/ReMoDD.xmi");
+			//BuildGraph(g, "Models/NZInternationalAirport.xmi");
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
 			}
+			System.out.println("(|V|, |E|) = (" + g.getSize() + "," + g.edgeSet().size() + ")");
 			// Set up a QL instance to do pattern detection
 			//detector = new QLWrapper();
 			
@@ -77,6 +83,11 @@ public class SourceGraph {
 			try {
 				BufferedWriter out = new BufferedWriter(new FileWriter("output/graphstart.facts"));
 				out.write(g.ToFacts());
+				out.flush();
+				out.close();
+				
+				out = new BufferedWriter(new FileWriter("output/graphstart.dump"));
+				out.write(g.toString());
 				out.flush();
 				out.close();
 				
