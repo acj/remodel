@@ -357,28 +357,47 @@ public class XMIImport implements IModelImport {
             			NodeList endNodes = childNodes.item(child_ndx).getChildNodes();
             			for (int end_ndx=0; end_ndx<endNodes.getLength(); ++end_ndx) {
             				if (endNodes.item(end_ndx).getNodeName() == "UML:AssociationEnd") {
+            					//System.out.println("Processing " + endNodes.item(end_ndx).getChildNodes().item(3).getNodeName());
             					// What type of association is this?  We
             					// default to none.  If aggregation or
             					// composition is found, though, we need to
             					// process this as a part-whole structure.
+
+    							String endType;
             					if (endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation") == null) {
-            						continue;
-            					}
-            					String endType = endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation").getNodeValue();
-            					if (endType.equals("composite")) {
-            						assocType = AssociationType.COMPOSITION;
-            						parent = xmiIdMap.get(endNodes.item(end_ndx).getChildNodes().item(3).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
-            					} else if (endType.equals("aggregate")) {
-            						assocType = AssociationType.AGGREGATION;
-            						parent = xmiIdMap.get(endNodes.item(end_ndx).getChildNodes().item(3).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
-            					} else if (endType.equals("none")) {
-            						children.add(xmiIdMap.get(endNodes.item(end_ndx).getChildNodes().item(3).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue()));
+            						endType = "none";
             					} else {
-            						System.err.println("Unknown association type: \"" + endType + "\"");
-            						break;
+            						endType = endNodes.item(end_ndx).getAttributes().getNamedItem("aggregation").getNodeValue();
             					}
-            					System.out.println(endNodes.item(end_ndx).getChildNodes().item(1).getNodeName());
+            					System.out.println("\tEnd type: " + endType);
             					
+            					NodeList participantNodes = endNodes.item(end_ndx).getChildNodes();
+            					for (int part_ndx=0; part_ndx<participantNodes.getLength(); ++part_ndx) {
+            						if (participantNodes.item(part_ndx).getNodeName() == "UML:AssociationEnd.participant") {
+
+                    					if (endType.equals("composite")) {
+                    						assocType = AssociationType.COMPOSITION;
+                    						if (participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref") != null) {
+                    							parent = xmiIdMap.get(participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
+                    						}
+                    						//if (parent == null) { System.out.println(endNodes.item(end_ndx));  System.out.println("!!!Composite: parent is null"); }
+                    					} else if (endType.equals("aggregate")) {
+                    						assocType = AssociationType.AGGREGATION;
+                    						if (participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref") != null) {
+                    							parent = xmiIdMap.get(participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
+                    						}
+                    						//if (parent == null) { System.out.println(endNodes.item(end_ndx));  System.out.println("!!!Aggregate: parent is null"); }
+                    					} else if (endType.equals("none")) {
+                    						if (participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref") != null) {
+                    							children.add(xmiIdMap.get(participantNodes.item(part_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue()));
+                    						}
+                    						//if (children.isEmpty()) { System.out.println(endNodes.item(end_ndx));  System.out.println("!!!None: no children"); }
+                    					} else {
+                    						System.err.println("Unknown association type: \"" + endType + "\"");
+                    						break;
+                    					}
+            						}
+            					}
             				}
             			}
             			break; // Assumption: only one UML:Association.connection tag
@@ -402,7 +421,9 @@ public class XMIImport implements IModelImport {
 	            		}
 	            	}
             	} else {
-            		assert children.size() >= 2;
+            		assert children.size() >= 2 &&
+            			children.get(0) != null &&
+            			children.get(1) != null;
             		System.out.println("\tAssociation");
             		if (children.size() > 2) {
             			System.err.println("\t\tWarning: Expected two children, found " + children.size());
@@ -447,8 +468,7 @@ public class XMIImport implements IModelImport {
             // Extract operations from each class
             for (int cl_ndx=0; cl_ndx<classNodes.size(); ++cl_ndx) {
             	String className = classNodes.get(cl_ndx).getAttributes().getNamedItem("name").getNodeValue();
-        		System.out.println("Processing class: "
-        				+ className);
+        		System.out.println("Processing class: " + className);
             	NodeList opNodes = classNodes.get(cl_ndx).getChildNodes();
             	AnnotatedVertex classVertex = xmiIdMap.get(classNodes.get(cl_ndx).getAttributes().getNamedItem("xmi.id").getNodeValue());
             	int numFeatures = opNodes.getLength();
@@ -470,6 +490,8 @@ public class XMIImport implements IModelImport {
 	            						for (int operparam_ndx=0; operparam_ndx<paramChildNodes.getLength(); ++operparam_ndx) {
 	            							Node paramNode = paramChildNodes.item(operparam_ndx);
 	            							if (paramNode.getNodeName() == "UML:Parameter" &&
+	            									paramNode.hasAttributes() &&
+	            									paramNode.getAttributes().getNamedItem("kind") != null &&
 	            									paramNode.getAttributes().getNamedItem("kind").getNodeValue().equals("return")) {
 	            								// Finally, extract the class whose instance is being returned
 	            								assert paramNode.hasChildNodes();
@@ -499,6 +521,7 @@ public class XMIImport implements IModelImport {
 	            						if (xmiIdMap.containsKey(attribTypeName)) {
 		            						AnnotatedVertex attribTypeVertex = xmiIdMap.get(attribTypeName);
 		            						g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.INSTANTIATE));
+		            						//g.addEdge(classVertex, attribTypeVertex, new AnnotatedEdge(Label.AGGREGATE));
 	            						} else {
 	            							// Bail out of this attribute.  The
 	            							// attribute data type is not in
