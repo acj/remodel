@@ -16,9 +16,16 @@ public class RefactorSpecies extends GPSpecies {
 		if (SourceGraph.RANDOM_SEED == -1) {
 			SourceGraph.RANDOM_SEED = state.parameters.getInt(new Parameter("seed.0"), null);
 			SourceGraph.SetRandom(new Random(SourceGraph.RANDOM_SEED));
+			System.out.println("Your mom's Seed: " + SourceGraph.RANDOM_SEED);
+	
+			// Set up input file parameter at the same time
+			SourceGraph.SetInputFile(state.parameters.getString(new Parameter("ec.refactoring.inputfile"), null));
+			
+			System.out.println("Prototype individual set up");
 		}
     	RefactorIndividual ind = (RefactorIndividual)(super.newIndividual(state, thread));
 		ind.SetGraph(SourceGraph.GetClone());
+		
 		return ind;
     }
 }

@@ -15,9 +15,12 @@
 #
 
 parent.0 = ../ec.params
+parent.1 = refactoring.inputfile.params
+parent.2 = refactoring.seed.params
 
-seed.0 = 				1234
+#seed.0 = 				1234
 #seed.0 =				5678
+#seed.0 = 				9012
 #seed.0 = 9
 
 # ec.Evolve
@@ -47,7 +50,7 @@ eval =					ec.simple.SimpleEvaluator
 # We're using simple statistics
 stat =					ec.simple.SimpleStatistics
 
-generations =				10
+generations =				25
 quit-on-run-complete =			true
 
 # ec.Initializer
@@ -72,10 +75,6 @@ pop.subpop.0 = 				ec.Subpopulation
 #pop.subpop.0.size =             1024
 #pop.subpop.0.size =			200
 pop.subpop.0.size =			100
-
-# TODO
-# Fact file used to build our annotated graph
-#ec.refactoring.factfile = "cse891hw-annotated.facts"
 
 # don't bother trying to eliminate duplicates from the
 # initial population

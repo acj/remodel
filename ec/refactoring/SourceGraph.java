@@ -16,6 +16,7 @@ public class SourceGraph {
 	private static AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> annotatedGraph;
 	private static PatternDetector detector;
 	private static ArrayList<String> patternList;
+	private static String inputFile = "";
 	
 	public static void SetRandom(Random r) {
 		rand = r;
@@ -46,15 +47,7 @@ public class SourceGraph {
 		if (annotatedGraph == null) {
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g =
 				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
-			//BuildGraph(g, "Models/TestModel.xmi");
-			//BuildGraph(g, "Models/ServiceDepartment-Builder.xmi");
-			//BuildGraph(g, "Models/BankingCompany-AbstractFactory.xmi");
-			//BuildGraph(g, "Models/BankingCompany-Builder.xmi");
-			//BuildGraph(g, "Models/BankingCompany-Prototype.xmi");
-			//BuildGraph(g, "Models/BankingCompany-Singleton.xmi");
-			//BuildGraph(g, "Models/AccountManagement-AbstractFactory.xmi");
-			BuildGraph(g, "Models/ReMoDD.xmi");
-			//BuildGraph(g, "Models/NZInternationalAirport.xmi");
+			BuildGraph(g, GetInputFile());
 			if (g.getSize() == 0) {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
@@ -66,6 +59,7 @@ public class SourceGraph {
 			// Set up an in-memory pattern detector
 			detector = new SQLDetector();
 			detector.Setup();
+			System.out.println("SQL detector initialized");
 			
 			annotatedGraph = g;
 			
@@ -143,6 +137,12 @@ public class SourceGraph {
 	}
 	public static ArrayList<String> GetPatternList() {
 		return patternList;
+	}
+	public static void SetInputFile(String inputFile) {
+		SourceGraph.inputFile = inputFile;
+	}
+	public static String GetInputFile() {
+		return inputFile;
 	}
 
 	/*
