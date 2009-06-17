@@ -128,7 +128,17 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		((RefactorIndividual)ind).SetPatternList(patternInstances);
 
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
-		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*QMOOD_value : 0F) - 0.25F*QMOOD_value*(float)nodeCount;
+		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*QMOOD_value : 0F);
+		float nodeCountPenalty = 0.0F*QMOOD_value*(float)nodeCount;
+		
+		// Correct for negative QMOOD values.  If QMOOD is negative, then
+		// subtracting a node penalty that is computed in terms of the 
+		// QMOOD value is a reward!  This is not what we want.
+		if (QMOOD_value < 0.0F) {
+			 fitness_value += nodeCountPenalty;
+		} else {
+			fitness_value -= nodeCountPenalty; 
+		}
 		fit.setFitness(state, fitness_value, false);
 		/*
 		if (patternsFound > 0) {
