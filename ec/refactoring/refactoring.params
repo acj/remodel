@@ -14,11 +14,11 @@
 # fitness-proportionate selection, well, is kinda icky.
 #
 
-parent.0 = ../ec.params
-parent.1 = refactoring.inputfile.params
-parent.2 = refactoring.seed.params
+parent.0 = refactoring.inputfile.params
+parent.1 = ../ec.params
 
-#seed.0 = 				1234
+
+#seed.0 = 				1
 #seed.0 =				5678
 #seed.0 = 				9012
 #seed.0 = 9
