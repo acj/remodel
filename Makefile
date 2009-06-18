@@ -1,0 +1,2 @@
+all:
+	javac -g -cp .:ec/refactoring/jgrapht-jdk1.6.jar:nsuml1_4/lib/nsmdf.jar:nsuml1_4/build/nsuml1_3.jar:hsqldb/lib/hsqldb.jar:xerces-2_9_1/xercesImpl.jar:xerces-2_9_1/xml-apis.jar ec/refactoring/*.java
