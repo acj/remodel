@@ -66,17 +66,28 @@ public class SourceGraph {
 			// Determine the baseline number of patterns in this graph
 			SetPatternList(detector.DetectPatterns(g));
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
-			System.out.print("Baseline: " + GetPatternList().size() + "\n{ ");
+			StringBuilder sb_baseline = new StringBuilder();
+			sb_baseline.append("QMOOD: " + QMOODEvaluator.EvaluateGraph(g) + "\n");
+			sb_baseline.append("Patterns: " + GetPatternList().size() + "\n{ ");
+			
 			Iterator<String> it = GetPatternList().iterator();
 			while (it.hasNext()) {
 				String token = it.next();
 				token = token.substring(0, token.indexOf(" ")+1);
-				System.out.print(token);
+				sb_baseline.append(token);
 			}
-			System.out.print("}\n");
+			sb_baseline.append("}\n");
+			System.out.println(sb_baseline.toString());
 			try {
+				/*
 				BufferedWriter out = new BufferedWriter(new FileWriter("output/graphstart.facts"));
 				out.write(g.ToFacts());
+				out.flush();
+				out.close();
+				*/
+				
+				BufferedWriter out = new BufferedWriter(new FileWriter("output/baseline.txt"));
+				out.write(sb_baseline.toString());
 				out.flush();
 				out.close();
 				
