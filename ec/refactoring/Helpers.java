@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import ec.refactoring.AnnotatedEdge.Label;
+import ec.refactoring.AnnotatedVertex.VertexType;
 
 public class Helpers {
 	/**
@@ -120,16 +121,18 @@ public class Helpers {
 							String wrapperName,
 							String fieldName,
 							AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag) {
-		// TODO: Ensure that the child is an interface.
+		assert iface_v.getType() == VertexType.INTERFACE;
 		
 		// Construct a new "wrapper" vertex along with a set of operation
 		// vertices to represent the wrapped methods.
-		AnnotatedVertex wrapper_v = new AnnotatedVertex("NewWrapper", 
+		AnnotatedVertex wrapper_v = new AnnotatedVertex(wrapperName, 
 										AnnotatedVertex.VertexType.CLASS,
 										AnnotatedVertex.Visibility.PUBLIC);
-		AnnotatedVertex wrapped_field = new AnnotatedVertex("NewWrappedField",
+		AnnotatedVertex wrapped_field = new AnnotatedVertex(fieldName,
 										AnnotatedVertex.VertexType.FIELD,
 										AnnotatedVertex.Visibility.PRIVATE);
+		ag.addVertex(wrapper_v);
+		ag.addVertex(wrapped_field);
 		AnnotatedEdge wrapped_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
 		ag.addEdge(wrapper_v, wrapped_field, wrapped_e);
 		

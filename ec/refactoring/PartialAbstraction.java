@@ -66,5 +66,4 @@ public class PartialAbstraction extends GPNode {
 	public String toString() {
 		return "PartialAbstraction";
 	}
-
 }
