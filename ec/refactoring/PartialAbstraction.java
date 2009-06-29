@@ -51,13 +51,21 @@ public class PartialAbstraction extends GPNode {
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = "PAbstract" + rd.name;
 		
+		// This can create self-inherits loops if the concrete vertex has
+		// the same name as the new, abstract vertex.  Handle this gracefully.
+		if (concrete_v.toString().equals(newName)) {
+			rd.name = concrete_v.toString();
+			rd.newVertex = concrete_v;
+			
+			return;
+		}
+		
 		// Class abstract = createEmptyClass(newName);
 		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName, ag);
 		AnnotatedEdge e = new AnnotatedEdge(Label.INHERIT);
 		ag.addEdge(concrete_v, abstract_v, e);
 		
 		// TODO: Move some methods into the abstract class
-		
 		rd.name = abstract_v.toString();
 		rd.newVertex = abstract_v;
 	}
