@@ -25,7 +25,9 @@ public class RefactorStatistics extends SimpleStatistics {
 	        next_best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
 			
 	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
+	        state.output.message("Subpop " + x + " tree size of best individual: " + ((RefactorIndividual)best_of_run[x]).GetNodeCount());
 	        state.output.message("Subpop " + x + " second-best fitness of run: " + next_best_of_run[x].fitness.fitnessToStringForHumans());
+	        state.output.message("Subpop " + x + " tree size of second-best individual: " + ((RefactorIndividual)best_of_run[x]).GetNodeCount());
 	
 	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
 		        
