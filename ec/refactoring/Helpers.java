@@ -128,13 +128,13 @@ public class Helpers {
 		AnnotatedVertex wrapper_v = new AnnotatedVertex(wrapperName, 
 										AnnotatedVertex.VertexType.CLASS,
 										AnnotatedVertex.Visibility.PUBLIC);
-		AnnotatedVertex wrapped_field = new AnnotatedVertex(fieldName,
-										AnnotatedVertex.VertexType.FIELD,
-										AnnotatedVertex.Visibility.PRIVATE);
+		//AnnotatedVertex wrapped_field = new AnnotatedVertex(fieldName,
+		//								AnnotatedVertex.VertexType.FIELD,
+		//								AnnotatedVertex.Visibility.PRIVATE);
 		ag.addVertex(wrapper_v);
-		ag.addVertex(wrapped_field);
-		AnnotatedEdge wrapped_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
-		ag.addEdge(wrapper_v, wrapped_field, wrapped_e);
+		//ag.addVertex(wrapped_field);
+		//AnnotatedEdge wrapped_e = new AnnotatedEdge(AnnotatedEdge.Label.OWN);
+		//ag.addEdge(wrapper_v, wrapped_field, wrapped_e);
 		
 		ArrayList<AnnotatedEdge> edges = ag.GetEdges(iface_v, AnnotatedEdge.Label.OWN);
 		Iterator<AnnotatedEdge> it = edges.iterator();
