@@ -18,11 +18,22 @@ import ec.refactoring.AnnotatedVertex.VertexType;
 import ec.refactoring.AnnotatedVertex.Visibility;
 import ec.refactoring.dom.wrappers.*;
 
+/**
+ * XMIImport - An XMI-to-AnnotatedGraph translator
+ * 
+ * Implementation TODO list:
+ * 	- Add support for uni-directional associations (currently interpreted as
+ *    bi-directional)
+ *  
+ * @author acj
+ *
+ */
 public class XMIImport implements IModelImport {
 
 	enum AssociationType {
 		AGGREGATION,
 		COMPOSITION,
+		REALIZES,
 		NONE
 	}
 
@@ -433,6 +444,28 @@ public class XMIImport implements IModelImport {
             		g.addEdge(children.get(1), children.get(0), new AnnotatedEdge(Label.CALL));
             	}
             }
+            // Next, extract "implements" (class -> interface) associations
+            NodeList abstractionNodes = document.getElementsByTagName("UML:Abstraction");
+            for (int ndx=0; ndx<abstractionNodes.getLength(); ++ndx) {
+            	AnnotatedVertex v_iface = null;
+            	AnnotatedVertex v_class = null;
+            	NodeList childNodes = abstractionNodes.item(ndx).getChildNodes();
+            	for (int child_ndx=0; child_ndx<childNodes.getLength(); ++child_ndx) {
+            		if (childNodes.item(child_ndx).getNodeName() == "UML:Dependency.client") {
+            			v_class = xmiIdMap.get(childNodes.item(child_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
+            			continue;
+            		} else if (childNodes.item(child_ndx).getNodeName() == "UML:Dependency.supplier") {
+            			v_iface = xmiIdMap.get(childNodes.item(child_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
+            		}
+            	}
+            	if (v_iface != null && v_class != null) {
+            		g.addEdge(v_class, v_iface, new AnnotatedEdge(Label.IMPLEMENT));
+            	} else if (v_iface == null) {
+            		System.out.println("Error in abstraction: supplier is null");
+            	} else if (v_class == null) {
+            		System.out.println("Error in abstraction: class is null");
+            	}
+            }
             NodeList generalizationNodes = document.getElementsByTagName("UML:Generalization");
             for (int ndx=0; ndx<generalizationNodes.getLength(); ++ndx) {
             	AnnotatedVertex parent = null;
@@ -442,20 +475,17 @@ public class XMIImport implements IModelImport {
             	// class that the generalization relationship refers to will
             	// be the second child node.  The first child is usually an
             	// empty text node.
+            	//
+            	// Look for the UML:Generalization.child at the same time.
             	for (int child_ndx=0; child_ndx<childNodes.getLength(); ++child_ndx) {
             		if (childNodes.item(child_ndx).getNodeName() == "UML:Generalization.parent") {
             			parent = xmiIdMap.get(childNodes.item(child_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
-            			break;
-            		}
-            	}
-            	// Now look for the child (UML:Generalization.child).  Same
-            	// deal with the child node.
-            	for (int child_ndx=0; child_ndx<childNodes.getLength(); ++child_ndx) {
-            		if (childNodes.item(child_ndx).getNodeName() == "UML:Generalization.child") {
+            			continue;
+            		} else if (childNodes.item(child_ndx).getNodeName() == "UML:Generalization.child") {
             			child = xmiIdMap.get(childNodes.item(child_ndx).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue());
-            			break;
             		}
             	}
+            	
             	if (parent != null && child != null) {
             		g.addEdge(child, parent, new AnnotatedEdge(Label.INHERIT));
             	} else if (parent == null) {
