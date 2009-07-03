@@ -39,7 +39,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
 		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*Math.abs(QMOOD_value) : 0F);
 		// TODO: parameterize the node count penalty
-		float nodeCountPenalty = 0.1F*Math.abs(QMOOD_value)*(float)nodeCount;
+		float nodeCountPenalty = 0.5F*Math.abs(QMOOD_value)*(float)nodeCount;
 		fitness_value -= nodeCountPenalty;
 		SimpleFitness fit = new SimpleFitness();
 		fit.setFitness(state, fitness_value, false);
