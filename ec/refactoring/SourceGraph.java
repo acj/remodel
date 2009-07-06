@@ -52,7 +52,6 @@ public class SourceGraph {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
 			}
-			System.out.println("(|V|, |E|) = (" + g.getSize() + "," + g.edgeSet().size() + ")");
 			// Set up a QL instance to do pattern detection
 			//detector = new QLWrapper();
 			
@@ -77,6 +76,7 @@ public class SourceGraph {
 				sb_baseline.append(token);
 			}
 			sb_baseline.append("}\n");
+			sb_baseline.append("(|V|,|E|): (" + g.getSize() + "," + g.edgeSet().size() + ")");
 			System.out.println(sb_baseline.toString());
 			try {
 				/*

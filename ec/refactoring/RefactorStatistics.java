@@ -31,7 +31,7 @@ public class RefactorStatistics extends SimpleStatistics {
 	        		((RefactorIndividual)best_of_run[x]).GetNodeCount());
 	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
 	        		((RefactorIndividual)best_of_run[x]).GetGraph().getSize() + "," +
-	        		((RefactorIndividual)best_of_run[x]).GetGraph().edgeSet().size());
+	        		((RefactorIndividual)best_of_run[x]).GetGraph().edgeSet().size() + ")");
 	        // Next-best individual
 	        state.output.message("Subpop " + x + " second-best fitness of run: " +
 	        		next_best_of_run[x].fitness.fitnessToStringForHumans());
@@ -39,7 +39,7 @@ public class RefactorStatistics extends SimpleStatistics {
 	        		((RefactorIndividual)next_best_of_run[x]).GetNodeCount());
 	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
 	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().getSize() + "," +
-	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().edgeSet().size());
+	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().edgeSet().size() + ")");
 	
 	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
 		        
