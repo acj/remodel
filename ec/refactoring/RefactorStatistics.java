@@ -24,10 +24,22 @@ public class RefactorStatistics extends SimpleStatistics {
 	        
 	        next_best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
 			
-	        state.output.message("Subpop " + x + " best fitness of run: " + best_of_run[x].fitness.fitnessToStringForHumans());
-	        state.output.message("Subpop " + x + " tree size of best individual: " + ((RefactorIndividual)best_of_run[x]).GetNodeCount());
-	        state.output.message("Subpop " + x + " second-best fitness of run: " + next_best_of_run[x].fitness.fitnessToStringForHumans());
-	        state.output.message("Subpop " + x + " tree size of second-best individual: " + ((RefactorIndividual)best_of_run[x]).GetNodeCount());
+	        // Best individual
+	        state.output.message("Subpop " + x + " best fitness of run: " +
+	        		best_of_run[x].fitness.fitnessToStringForHumans());
+	        state.output.message("Subpop " + x + " tree size of best individual: " +
+	        		((RefactorIndividual)best_of_run[x]).GetNodeCount());
+	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
+	        		((RefactorIndividual)best_of_run[x]).GetGraph().getSize() + "," +
+	        		((RefactorIndividual)best_of_run[x]).GetGraph().edgeSet().size());
+	        // Next-best individual
+	        state.output.message("Subpop " + x + " second-best fitness of run: " +
+	        		next_best_of_run[x].fitness.fitnessToStringForHumans());
+	        state.output.message("Subpop " + x + " tree size of second-best individual: " +
+	        		((RefactorIndividual)next_best_of_run[x]).GetNodeCount());
+	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
+	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().getSize() + "," +
+	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().edgeSet().size());
 	
 	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
 		        
@@ -41,10 +53,10 @@ public class RefactorStatistics extends SimpleStatistics {
 			    out.flush();
 			    out.close();
 			    
-			    out = new BufferedWriter(new FileWriter("output/graphfinal.facts"));
-			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToFacts());
-			    out.flush();
-			    out.close();
+			    //out = new BufferedWriter(new FileWriter("output/graphfinal.facts"));
+			    //out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToFacts());
+			    //out.flush();
+			    //out.close();
 			    
 			    out = new BufferedWriter(new FileWriter("output/graphfinal.dot"));
 			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz("Final"));
@@ -65,7 +77,7 @@ public class RefactorStatistics extends SimpleStatistics {
 			} catch (IOException e) {
 				System.err.println("Could not export pattern to graphviz!");
 			}
-	        System.out.println("New patterns instances in best individual: " + patternList.size());
+	        System.out.println("New pattern instances in best individual: " + patternList.size());
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
 	            ((SimpleProblemForm)(state.evaluator.p_problem.clone())).describe(best_of_run[x], state, x, 0, statisticslog,Output.V_NO_GENERAL);
