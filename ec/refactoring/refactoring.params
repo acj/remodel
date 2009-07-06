@@ -273,7 +273,7 @@ gp.nc.4.returns = ClassNode
 gp.nc.4.size = 1
 gp.nc.4.child.0 = IfaceNode
 
-gp.nc.5 = ec.gpGPNodeConstraints
+gp.nc.5 = ec.gp.GPNodeConstraints
 gp.nc.5.name = Delegation-nc
 gp.nc.5.returns = ClassNode
 gp.nc.5.size = 1
