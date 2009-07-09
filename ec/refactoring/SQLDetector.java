@@ -14,8 +14,21 @@ public class SQLDetector implements PatternDetector {
 		try {
 			Statement st = conn.createStatement();
 
-			// First, translate the graph into tuples in SQL
+			// Delete indices
 			int i;
+			st.executeUpdate("DROP INDEX iClasses IF EXISTS");
+			st.executeUpdate("DROP INDEX iOperation IF EXISTS");
+			st.executeUpdate("DROP INDEX iInterface IF EXISTS");
+			st.executeUpdate("DROP INDEX iCall IF EXISTS");
+			st.executeUpdate("DROP INDEX iInherit IF EXISTS");
+			st.executeUpdate("DROP INDEX iAggregate IF EXISTS");
+			st.executeUpdate("DROP INDEX iAssociate IF EXISTS");
+			st.executeUpdate("DROP INDEX iCompose IF EXISTS");
+			st.executeUpdate("DROP INDEX iInstantiate IF EXISTS");
+			st.executeUpdate("DROP INDEX iOwn IF EXISTS");
+			st.executeUpdate("DROP INDEX iImplement IF EXISTS");
+			st.executeUpdate("DROP INDEX iReference IF EXISTS");
+			// Delete rows
 			st.executeUpdate("DELETE FROM  tClass");
 			st.executeUpdate("DELETE FROM  tInterface");
 			st.executeUpdate("DELETE FROM  tOperation");
@@ -65,6 +78,19 @@ public class SQLDetector implements PatternDetector {
 				}
 			}
 			
+	        st.executeUpdate("CREATE INDEX iClasses ON tClass(name)");
+	        st.executeUpdate("CREATE INDEX iOperation ON tOperation(name)");
+	        st.executeUpdate("CREATE INDEX iInterface ON tInterface(name)");
+	        st.executeUpdate("CREATE INDEX iCall ON tCall(source,sink)");
+	        st.executeUpdate("CREATE INDEX iInherit ON tInherit(source,sink)");
+	        st.executeUpdate("CREATE INDEX iAggregate ON tAggregate(source,sink)");
+	        st.executeUpdate("CREATE INDEX iAssociate ON tAssociate(source,sink)");
+	        st.executeUpdate("CREATE INDEX iCompose ON tCompose(source,sink)");
+	        st.executeUpdate("CREATE INDEX iInstantiate ON tInstantiate(source,sink)");
+	        st.executeUpdate("CREATE INDEX iOwn ON tOwn(source,sink)");
+	        st.executeUpdate("CREATE INDEX iImplement ON tImplement(source,sink)");
+	        st.executeUpdate("CREATE INDEX iReference ON tReference(source,sink)");
+
 			// Factory Method
 			//
 			// Original QL:
@@ -86,13 +112,11 @@ public class SQLDetector implements PatternDetector {
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Prototype"));
 
 			// Adapter
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cClient " +
-					"JOIN tClass cAdapter ON cAdapter.name != cClient.name " +
-					"JOIN tClass cAdaptee ON (cAdaptee.name != cClient.name AND cAdaptee.name != cAdapter.name) " +
-					"JOIN tClass cTarget ON (cTarget.name != cClient.name AND cTarget.name != cAdapter.name AND cTarget.name != cAdaptee.name) " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cClient, tClass cAdapter, tClass cAdaptee, tClass cTarget " +
 					"JOIN tCall callClientTarget ON cClient.name=callClientTarget.source " +
 					"JOIN tInherit inheritAdapterTarget ON (inheritAdapterTarget.sink=cTarget.name AND inheritAdapterTarget.source=cAdapter.name) " +
-					"JOIN tCall callAdapterAdaptee ON (callAdapterAdaptee.source=cAdapter.name AND callAdapterAdaptee.sink=cAdaptee.name)");
+					"JOIN tCall callAdapterAdaptee ON (callAdapterAdaptee.source=cAdapter.name AND callAdapterAdaptee.sink=cAdaptee.name)" +
+					"WHERE cAdapter.name != cClient.name AND cAdaptee.name != cClient.name AND cAdaptee.name != cAdapter.name AND cTarget.name != cClient.name AND cTarget.name != cAdapter.name AND cTarget.name != cAdaptee.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Adapter"));
 			
 			// Bridge
@@ -103,13 +127,11 @@ public class SQLDetector implements PatternDetector {
 			// imp    -> implementer
 			// conImp -> concreteImplementer
 			// DP[rfAbs,abs,imp,conImp] = {inherits[rfAbs,abs]; uses[abs,imp]; inherits[conImp,imp]}
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cAbstraction " +
-					"JOIN tClass cRefinedAbstraction ON cRefinedAbstraction.name != cAbstraction.name " +
-					"JOIN tClass cImplementor ON (cImplementor.name != cRefinedAbstraction.name AND cImplementor.name != cAbstraction.name) " +
-					"JOIN tClass cConcreteImplementor ON (cConcreteImplementor.name != cAbstraction.name AND cConcreteImplementor.name != cRefinedAbstraction.name AND cConcreteImplementor.name != cImplementor.name) " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cAbstraction, tClass cRefinedAbstraction, tClass cImplementor, tClass cConcreteImplementor " +
 					"JOIN tInherit inheritRefinedAbstractionAbstraction ON (inheritRefinedAbstractionAbstraction.source=cRefinedAbstraction.name AND inheritRefinedAbstractionAbstraction.sink=cAbstraction.name) " +
 					"JOIN tInherit inheritConcreteImplementor ON (inheritConcreteImplementor.source=cConcreteImplementor.name AND inheritConcreteImplementor.sink=cImplementor.name) " +
-					"JOIN tAggregate aggregateAbstractionImplementor ON (aggregateAbstractionImplementor.source=cAbstraction.name AND aggregateAbstractionImplementor.sink=cImplementor.name)");
+					"JOIN tAggregate aggregateAbstractionImplementor ON (aggregateAbstractionImplementor.source=cAbstraction.name AND aggregateAbstractionImplementor.sink=cImplementor.name) " +
+					"WHERE cRefinedAbstraction.name != cAbstraction.name AND cImplementor.name != cRefinedAbstraction.name AND cConcreteImplementor.name != cAbstraction.name ");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Bridge"));
 			
 			// Composite
@@ -117,14 +139,12 @@ public class SQLDetector implements PatternDetector {
 			// c  -> component
 			// cp -> composite
 			//DP[l,c,cp] = {inherits[l,c]; inherits[cp,c]; uses[cp,c]}
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cClient " +
-					"JOIN tClass cComponent ON cComponent.name != cClient.name " +
-					"JOIN tClass cLeaf ON (cLeaf.name != cClient.name AND cLeaf.name != cComponent.name) " +
-					"JOIN tClass cComposite ON (cComposite.name != cClient.name AND cComposite.name != cLeaf.name AND cComposite.name != cComponent.name) " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cClient, tClass cComponent, tClass cLeaf, tClass cComposite " +
 					"JOIN tCall callClientComponent ON (callClientComponent.source=cClient.name AND callClientComponent.sink=cComponent.name) " +
 					"JOIN tInherit inheritLeafComponent ON (inheritLeafComponent.source=cLeaf.name AND inheritLeafComponent.sink=cComponent.name) " +
 					"JOIN tInherit inheritCompositeComponent ON (inheritCompositeComponent.source=cComposite.name AND inheritCompositeComponent.sink=cComponent.name) " +
-					"JOIN tAggregate aggregateCompositeComponent ON (aggregateCompositeComponent.source=cComposite.name AND aggregateCompositeComponent.sink=cComponent.name)");			
+					"JOIN tAggregate aggregateCompositeComponent ON (aggregateCompositeComponent.source=cComposite.name AND aggregateCompositeComponent.sink=cComponent.name)" +
+					"WHERE cComponent.name != cClient.name AND cLeaf.name != cClient.name AND cLeaf.name != cComponent.name AND cComposite.name != cClient.name AND cComposite.name != cLeaf.name AND cComposite.name != cComponent.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Composite"));
 			
 			// Proxy
@@ -133,11 +153,10 @@ public class SQLDetector implements PatternDetector {
 			// s  -> subject
 			// p  -> proxy
 			//DP[rs,s,p] = {inherits[rs,s]; inherits[p,s]; uses[p,rs]}
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cRealSubject " +
-					"JOIN tClass cSubject ON cSubject.name != cRealSubject.name " +
-					"JOIN tClass cProxy ON (cProxy.name != cRealSubject.name AND cSubject.name != cRealSubject.name) " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cRealSubject, tClass cSubject, tClass cProxy " +
 					"JOIN tInherit inheritRealSubjectSubject ON (inheritRealSubjectSubject.source=cRealSubject.name AND inheritRealSubjectSubject.sink=cSubject.name) " +
-					"JOIN tCall callProxyRealSubject ON (callProxyRealSubject.source=cProxy.name AND callProxyRealSubject.sink=cRealSubject.name)");
+					"JOIN tCall callProxyRealSubject ON (callProxyRealSubject.source=cProxy.name AND callProxyRealSubject.sink=cRealSubject.name)" +
+					"WHERE cSubject.name != cRealSubject.name AND cProxy.name != cRealSubject.name AND cSubject.name != cRealSubject.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Proxy"));
 			
 			// Decorator
@@ -147,13 +166,11 @@ public class SQLDetector implements PatternDetector {
 			// d  -> decorator
 			// cd -> concreteDecorator
 			// DP[cc,c,d,cd] = {inherits[cc,c]; inherits[d,c]; uses[d,c]; inherits[cd,d]}
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cComponent " +
-					"JOIN tClass cConcreteComponent ON cConcreteComponent.name != cComponent.name " +
-					"JOIN tClass cDecorator ON (cDecorator.name != cComponent.name AND cDecorator.name != cConcreteComponent.name) " +
-					"JOIN tClass cConcreteDecorator ON (cConcreteDecorator.name != cComponent.name AND cConcreteDecorator.name != cConcreteComponent.name AND cConcreteDecorator.name != cDecorator.name) " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cComponent, tClass cConcreteComponent, tClass cDecorator, tClass cConcreteDecorator " +
 					"JOIN tInherit inheritConcreteComponentComponent ON (inheritConcreteComponentComponent.source=cConcreteComponent.name AND inheritConcreteComponentComponent.sink=cComponent.name) " +
 					"JOIN tInherit inheritDecoratorComponent ON (inheritDecoratorComponent.source=cDecorator.name AND inheritDecoratorComponent.sink=cComponent.name) " +
-					"JOIN tInherit inheritConcreteDecoratorDecorator ON (inheritConcreteDecoratorDecorator.source=cConcreteDecorator.name AND inheritConcreteDecoratorDecorator.sink=cDecorator.name)");
+					"JOIN tInherit inheritConcreteDecoratorDecorator ON (inheritConcreteDecoratorDecorator.source=cConcreteDecorator.name AND inheritConcreteDecoratorDecorator.sink=cDecorator.name)" +
+					"WHERE cConcreteComponent.name != cComponent.name AND cDecorator.name != cComponent.name AND cDecorator.name != cConcreteComponent.name AND cConcreteDecorator.name != cComponent.name AND cConcreteDecorator.name != cConcreteComponent.name AND cConcreteDecorator.name != cDecorator.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Decorator"));
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -217,7 +234,6 @@ public class SQLDetector implements PatternDetector {
 	        if (i == -1) { System.out.println("db error : implement"); }
 	        i = st.executeUpdate("CREATE TABLE tReference (source varchar(128), sink varchar(128));");
 	        if (i == -1) { System.out.println("db error : reference"); }
-
 	        st.close();
 
 		} catch (SQLException e) {
