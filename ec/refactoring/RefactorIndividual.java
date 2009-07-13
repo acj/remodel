@@ -6,7 +6,8 @@ public class RefactorIndividual extends GPIndividual {
 	private static final long serialVersionUID = -2213239528716782559L;
 	private AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph;
     private ArrayList<String> patternList;
-    private int nodeCount = 0;
+    private int nodeCount = 0;	// Raw number of nodes in the tree
+    private int MTCount = 0;	// Number of MT nodes in the tree
 
 	public RefactorIndividual lightClone() {
 		RefactorIndividual ri = (RefactorIndividual)(super.lightClone());
@@ -37,4 +38,7 @@ public class RefactorIndividual extends GPIndividual {
     public int GetNodeCount() { return nodeCount; }
     public void IncrementNodeCount() { ++nodeCount; }
     public void ResetNodeCount() { nodeCount = 0; }
+    public int GetMTNodeCount() { return MTCount; }
+    public void IncrementMTNodeCount() { ++MTCount; }
+    public void ResetMTNodeCount() { MTCount = 0; }
 }

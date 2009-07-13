@@ -12,7 +12,7 @@ import ec.refactoring.AnnotatedEdge.Label;
  * Delegation
  * 
  * This mini-transformation is used to move part of an existing class to
- * a (new) component class and then create responsibility to that component
+ * a (new) component class and then pass responsibility to that component
  * class.  An instance of the component class is placed in the original
  * (delegating) class as a field.
  * 
@@ -27,6 +27,7 @@ public class Delegation extends GPNode {
 	public void eval(EvolutionState state, int thread, GPData input,
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		((RefactorIndividual)individual).IncrementNodeCount();
+		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();

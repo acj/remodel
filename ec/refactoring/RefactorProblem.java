@@ -22,6 +22,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	    
 		if (!ind.evaluated) {	// Don't reevaluate
 			((RefactorIndividual)ind).ResetNodeCount();
+			((RefactorIndividual)ind).ResetMTNodeCount();
 			((GPIndividual)ind).trees[0].child.eval(
 					state,threadnum,input,stack,((GPIndividual)ind), this);
 		}
@@ -36,10 +37,10 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		Float fitness_value = 0F;
 		float QMOOD_value = QMOODEvaluator.EvaluateGraph(g);
 		// Fitness computation
-		int nodeCount = ((RefactorIndividual)ind).GetNodeCount();		
+		int nodeCountMT = ((RefactorIndividual)ind).GetMTNodeCount();		
 		fitness_value = QMOOD_value + (patternsFound > 0 ? 2.0F*Math.abs(QMOOD_value) : 0F);
 		// TODO: parameterize the node count penalty
-		float nodeCountPenalty = 0.5F*Math.abs(QMOOD_value)*(float)nodeCount;
+		float nodeCountPenalty = 0.5F*Math.abs(QMOOD_value)*(float)nodeCountMT;
 		fitness_value -= nodeCountPenalty;
 		SimpleFitness fit = new SimpleFitness();
 		fit.setFitness(state, fitness_value, false);

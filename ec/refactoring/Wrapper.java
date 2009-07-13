@@ -46,6 +46,7 @@ public class Wrapper extends GPNode {
 		 *  	
 		 */
 		((RefactorIndividual)individual).IncrementNodeCount();
+		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();

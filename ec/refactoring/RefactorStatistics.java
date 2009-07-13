@@ -29,18 +29,21 @@ public class RefactorStatistics extends SimpleStatistics {
 	        		best_of_run[x].fitness.fitnessToStringForHumans());
 	        state.output.message("Subpop " + x + " tree size of best individual: " +
 	        		((RefactorIndividual)best_of_run[x]).GetNodeCount());
+	        state.output.message("Subpop " + x + " MTs in best individual: " +
+	        		((RefactorIndividual)best_of_run[x]).GetMTNodeCount());
 	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
 	        		((RefactorIndividual)best_of_run[x]).GetGraph().getSize() + "," +
 	        		((RefactorIndividual)best_of_run[x]).GetGraph().edgeSet().size() + ")");
+	        /*
 	        // Next-best individual
 	        state.output.message("Subpop " + x + " second-best fitness of run: " +
 	        		next_best_of_run[x].fitness.fitnessToStringForHumans());
 	        state.output.message("Subpop " + x + " tree size of second-best individual: " +
 	        		((RefactorIndividual)next_best_of_run[x]).GetNodeCount());
-	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
+	        state.output.message("Subpop " + x + " graph (|V|,|E|) of second-best individual: (" +
 	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().getSize() + "," +
 	        		((RefactorIndividual)next_best_of_run[x]).GetGraph().edgeSet().size() + ")");
-	
+			*/
 	        ArrayList<String> patternList = ((RefactorIndividual)best_of_run[x]).GetPatternList();
 		        
 			try {

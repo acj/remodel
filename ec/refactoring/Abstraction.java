@@ -43,6 +43,7 @@ public class Abstraction extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.err.println("Abstraction()");
 		((RefactorIndividual)individual).IncrementNodeCount();
+		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
