@@ -113,7 +113,7 @@ public class SQLDetector implements PatternDetector {
 
 			// Adapter
 			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cClient, tClass cAdapter, tClass cAdaptee, tClass cTarget " +
-					"JOIN tCall callClientTarget ON cClient.name=callClientTarget.source " +
+					"JOIN tCall callClientTarget ON (cClient.name=callClientTarget.source AND cTarget=callClientTarget.sink) " +
 					"JOIN tInherit inheritAdapterTarget ON (inheritAdapterTarget.sink=cTarget.name AND inheritAdapterTarget.source=cAdapter.name) " +
 					"JOIN tCall callAdapterAdaptee ON (callAdapterAdaptee.source=cAdapter.name AND callAdapterAdaptee.sink=cAdaptee.name)" +
 					"WHERE cAdapter.name != cClient.name AND cAdaptee.name != cClient.name AND cAdaptee.name != cAdapter.name AND cTarget.name != cClient.name AND cTarget.name != cAdapter.name AND cTarget.name != cAdaptee.name");
