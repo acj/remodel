@@ -17,6 +17,8 @@ public class SourceGraph {
 	private static PatternDetector detector;
 	private static ArrayList<String> patternList;
 	private static String inputFile = "";
+	private static float originalGraphQMOOD = 0.0F;
+	private static int originalGraphPatterns = 0;
 	
 	public static void SetRandom(Random r) {
 		rand = r;
@@ -66,8 +68,10 @@ public class SourceGraph {
 			SetPatternList(detector.DetectPatterns(g));
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
 			StringBuilder sb_baseline = new StringBuilder();
-			sb_baseline.append("QMOOD: " + QMOODEvaluator.EvaluateGraph(g) + "\n");
-			sb_baseline.append("Patterns: " + GetPatternList().size() + "\n{ ");
+			originalGraphQMOOD = QMOODEvaluator.EvaluateGraph(g);
+			originalGraphPatterns = GetPatternList().size();
+			sb_baseline.append("QMOOD: " +  getOriginalGraphQMOOD() + "\n");
+			sb_baseline.append("Patterns: " + getOriginalGraphPatterns() + "\n{ ");
 			
 			Iterator<String> it = GetPatternList().iterator();
 			while (it.hasNext()) {
@@ -154,6 +158,12 @@ public class SourceGraph {
 	}
 	public static String GetInputFile() {
 		return inputFile;
+	}
+	public static float getOriginalGraphQMOOD() {
+		return originalGraphQMOOD;
+	}
+	public static int getOriginalGraphPatterns() {
+		return originalGraphPatterns;
 	}
 
 	/*
