@@ -34,9 +34,12 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		Float fitness_value = 0F;
 		SimpleFitness fit = new SimpleFitness();
 		if (((RefactorIndividual)ind).GetMTNodeCount() == 0) {
-			fitness_value = ComputeFitness(SourceGraph.getOriginalGraphQMOOD(),
+			// Note -1.0F coefficient
+			fitness_value = -1.0F*ComputeFitness(SourceGraph.getOriginalGraphQMOOD(),
 					SourceGraph.getOriginalGraphPatterns(),
 					(float)((RefactorIndividual)ind).GetMTNodeCount());
+			ArrayList<String> patternInstances = new ArrayList<String>();
+			((RefactorIndividual)ind).SetPatternList(patternInstances);
 		} else {
 			// Otherwise, evaluate the individual as normal
 			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> g = 
