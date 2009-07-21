@@ -334,3 +334,6 @@ eval.problem.data = ec.refactoring.RefactorData
 # For those who are interested, it defines the data object used internally
 # inside ADF stack contexts
 eval.problem.stack.context.data = ec.refactoring.RefactorData
+
+# Custom parameters for refactoring
+ec.refactoring.treesizepenalty = 0.025

@@ -17,6 +17,7 @@ public class SourceGraph {
 	private static PatternDetector detector;
 	private static ArrayList<String> patternList;
 	private static String inputFile = "";
+	private static float treeSizePenalty = 0.0F;
 	private static float originalGraphQMOOD = 0.0F;
 	private static int originalGraphPatterns = 0;
 	
@@ -164,6 +165,12 @@ public class SourceGraph {
 	}
 	public static int getOriginalGraphPatterns() {
 		return originalGraphPatterns;
+	}
+	public static void setTreeSizePenalty(float treeSizePenalty) {
+		SourceGraph.treeSizePenalty = treeSizePenalty;
+	}
+	public static float getTreeSizePenalty() {
+		return treeSizePenalty;
 	}
 
 	/*

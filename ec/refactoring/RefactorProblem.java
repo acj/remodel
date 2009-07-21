@@ -70,8 +70,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 	}
     private float ComputeFitness(float QMOOD, int numPatterns, float nodeCountMT) {
     	float fitness_value = QMOOD + (numPatterns > 0 ? 2.0F*Math.abs(QMOOD) : 0F);
-		// TODO: parameterize the node count penalty
-    	float nodeCountPenalty = 0.5F*Math.abs(QMOOD)*(float)nodeCountMT;
+    	float nodeCountPenalty = SourceGraph.getTreeSizePenalty()*Math.abs(QMOOD)*(float)nodeCountMT;
 		fitness_value -= nodeCountPenalty;
     	return fitness_value;
     }

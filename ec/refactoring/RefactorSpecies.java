@@ -11,16 +11,16 @@ public class RefactorSpecies extends GPSpecies {
 
 	public RefactorIndividual newIndividual(EvolutionState state, int thread) 
     {
-		// Set the random seed.  Can this be placed somewhere else so that it
-		// only runs once?
+		// Read in our custom parameters.  Can this be placed somewhere else so
+		// that it only runs once?
 		if (SourceGraph.RANDOM_SEED == -1) {
 			SourceGraph.RANDOM_SEED = state.parameters.getInt(new Parameter("seed.0"), null);
 			SourceGraph.SetRandom(new Random(SourceGraph.RANDOM_SEED));
-			System.out.println("Seed: " + SourceGraph.RANDOM_SEED);
-	
-			// Set up input file parameter at the same time
+			System.out.println("Seed used for refactoring: " + SourceGraph.RANDOM_SEED);
+			// Set up input file parameter
 			SourceGraph.SetInputFile(state.parameters.getString(new Parameter("ec.refactoring.inputfile"), null));
-			
+			// Tree size penalty
+			SourceGraph.setTreeSizePenalty(state.parameters.getFloat(new Parameter("ec.refactoring.treesizepenalty"), null, 0.0));
 			System.out.println("Prototype individual set up");
 		}
     	RefactorIndividual ind = (RefactorIndividual)(super.newIndividual(state, thread));
