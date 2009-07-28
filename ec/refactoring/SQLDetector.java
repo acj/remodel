@@ -105,10 +105,11 @@ public class SQLDetector implements PatternDetector {
 			patternInstances.addAll(ReadPatternsFromResult(rs, "FactoryMethod"));
 
 			// Prototype
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass protCon " +
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass protCon, tClass cInstClass " +
 					"JOIN tInherit ON protCon.name=tInherit.source " +
 					"JOIN tOwn ON tInherit.sink=tOwn.source " +
-					"JOIN tOperation ON tOwn.sink=tOperation.name");
+					"JOIN tOperation ON tOwn.sink=tOperation.name " +
+					"JOIN tInstantiate ON (tInstantiate.source=protCon.name AND tInstantiate.sink=cInstClass.name)");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Prototype"));
 
 			// Adapter
