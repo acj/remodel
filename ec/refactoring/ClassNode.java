@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -85,6 +87,9 @@ public class ClassNode extends GPNode {
 		assert v.getType() == VertexType.CLASS;
 		vertexName = v.toString();
 		
+		String graphvizName = this.toGraphviz();
+		rd.graphvizName = graphvizName;
+		rd.graphvizData += graphvizName + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		rd.name = vertexName;
 	}
 
@@ -94,5 +99,11 @@ public class ClassNode extends GPNode {
 	
 	public String GetName() {
 		return vertexName;
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

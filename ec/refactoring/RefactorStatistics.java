@@ -22,7 +22,7 @@ public class RefactorStatistics extends SimpleStatistics {
         {
 	        best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
 	        
-	        next_best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
+	        //next_best_of_run[x].printIndividualForHumans(state,statisticslog,Output.V_NO_GENERAL);
 			
 	        // Best individual
 	        state.output.message("Subpop " + x + " best fitness of run: " +
@@ -63,6 +63,11 @@ public class RefactorStatistics extends SimpleStatistics {
 			    
 			    out = new BufferedWriter(new FileWriter("output/graphfinal.dot"));
 			    out.write(((RefactorIndividual)best_of_run[x]).GetGraph().ToGraphViz("Final"));
+			    out.flush();
+			    out.close();
+			    
+			    out = new BufferedWriter(new FileWriter("output/best-ast.dot"));
+			    out.write(((RefactorIndividual)best_of_run[x]).getGraphvizOutput());
 			    out.flush();
 			    out.close();
 			    

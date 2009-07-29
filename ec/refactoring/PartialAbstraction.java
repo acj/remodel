@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -44,20 +46,23 @@ public class PartialAbstraction extends GPNode {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
+		String thisNodeGraphviz = this.toString();
+		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex concrete_v = ag.getVertex(rd.name);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = "PAbstract" + rd.name;
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		
 		// This can create self-inherits loops if the concrete vertex has
 		// the same name as the new, abstract vertex.  Handle this gracefully.
 		if (concrete_v.toString().equals(newName)) {
 			rd.name = concrete_v.toString();
 			rd.newVertex = concrete_v;
-			
 			return;
 		}
 		
@@ -67,6 +72,7 @@ public class PartialAbstraction extends GPNode {
 		ag.addEdge(concrete_v, abstract_v, e);
 		
 		// TODO: Move some methods into the abstract class
+		rd.graphvizName = thisNodeGraphviz;
 		rd.name = abstract_v.toString();
 		rd.newVertex = abstract_v;
 	}
@@ -74,5 +80,11 @@ public class PartialAbstraction extends GPNode {
 	@Override
 	public String toString() {
 		return "PartialAbstraction";
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

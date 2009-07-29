@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -83,6 +85,10 @@ public class OperNode extends GPNode {
 		}
 		AnnotatedVertex v = ag.GetRandomVertex(AnnotatedVertex.VertexType.OPERATION);
 		assert v.getType() == VertexType.OPERATION;
+		
+		String graphvizName = this.toGraphviz();
+		rd.graphvizName = graphvizName;
+		rd.graphvizData += graphvizName + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		vertexName = v.toString();
 		rd.name = vertexName;
 	}
@@ -93,5 +99,11 @@ public class OperNode extends GPNode {
 	
 	public String GetName() {
 		return vertexName;
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

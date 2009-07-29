@@ -3,6 +3,7 @@ package ec.refactoring;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Stack;
 
 import ec.EvolutionState;
@@ -50,12 +51,16 @@ public class EncapsulateConstruction extends GPNode {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
+		String thisNodeGraphviz = this.toString();
+		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag = 
 			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex creator_v = ag.getVertex(rd.name);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		children[1].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(creator_v).iterator();
 		AnnotatedEdge e;
@@ -89,6 +94,7 @@ public class EncapsulateConstruction extends GPNode {
 		
 		// We pass up the "creator" class here since we do not create a new
 		// class with this mini-transformation.
+		rd.graphvizName = thisNodeGraphviz;
 		rd.name = creator_v.toString();
 		rd.newVertex = creator_v;
 	}
@@ -96,5 +102,11 @@ public class EncapsulateConstruction extends GPNode {
 	@Override
 	public String toString() {
 		return "EncapsulateConstruction";
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

@@ -1,6 +1,7 @@
 package ec.refactoring;
 
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 import ec.EvolutionState;
@@ -48,11 +49,15 @@ public class Wrapper extends GPNode {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
+		String thisNodeGraphviz = this.toString();
+		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex iface_v = ag.getVertex(rd.name);
 		AnnotatedVertex iface_wrapper = Helpers.createWrapperClass(iface_v, iface_v.toString() + "Wrapper", "wrapped" + iface_v.toString(), ag);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
+		
 		Vector<AnnotatedEdge> edgesToRemove = new Vector<AnnotatedEdge>();
 		Iterator<AnnotatedEdge> it_e = ag.edgesOf(iface_v).iterator();
 		while (it_e.hasNext()) {
@@ -71,6 +76,7 @@ public class Wrapper extends GPNode {
 		ag.addEdge(iface_wrapper, iface_v, new AnnotatedEdge(Label.INSTANTIATE));
 		ag.addEdge(iface_wrapper, iface_v, new AnnotatedEdge(Label.CALL));
 		
+		rd.graphvizName = thisNodeGraphviz;
 		rd.name = iface_wrapper.toString();
 		rd.newVertex = iface_wrapper;
 	}
@@ -78,5 +84,11 @@ public class Wrapper extends GPNode {
 	@Override
 	public String toString() {
 		return "Wrapper";
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

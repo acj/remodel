@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -85,7 +87,10 @@ public class IfaceNode extends GPNode {
 		AnnotatedVertex v = ag.GetRandomVertex(AnnotatedVertex.VertexType.INTERFACE);
 		assert v.getType() == VertexType.INTERFACE;
 		vertexName = v.toString();
+		String graphvizName = this.toGraphviz();
 		rd.name = vertexName;
+		rd.graphvizName = graphvizName;
+		rd.graphvizData += graphvizName + " [label=\"" + this.toString() + "\",shape=folder];\n";
 	}
 
 	public String toString() {
@@ -94,5 +99,11 @@ public class IfaceNode extends GPNode {
 	
 	public String GetName() {
 		return vertexName;
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

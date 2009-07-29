@@ -29,10 +29,13 @@ public class Delegation extends GPNode {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
+		String thisNodeGraphviz = this.toGraphviz();
+		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex original_v = ag.getVertex(rd.name);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		String componentClassName = original_v.toString() + "Component";
 		int name_ndx = 1;
 		while (ag.getVertex(componentClassName) != null) {
@@ -57,6 +60,7 @@ public class Delegation extends GPNode {
 				ag.removeEdge(ownEdges.get(methodNdx)); // Remove old "OWN" edge
 			}
 		}
+		rd.graphvizName = thisNodeGraphviz;
 		rd.name = component_v.toString();
 		rd.newVertex = component_v;
 	}
@@ -64,5 +68,11 @@ public class Delegation extends GPNode {
 	@Override
 	public String toString() {
 		return "Delegation";
+	}
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
 	}
 }

@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -24,6 +26,10 @@ public class StringNode extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		//System.out.println("StringNode");
 		RefactorData rd = (RefactorData)input;
+		
+		String graphvizName = this.toGraphviz();
+		rd.graphvizName = graphvizName;
+		rd.graphvizData += graphvizName + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		rd.name = stringName;
 	}
 	
@@ -51,5 +57,10 @@ public class StringNode extends GPNode {
 	public String toString() {
 		return "StringNode<" + stringName + ">";
 	}
-
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
+	}
 }

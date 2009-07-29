@@ -1,5 +1,7 @@
 package ec.refactoring;
 
+import java.util.Random;
+
 import ec.EvolutionState;
 import ec.Problem;
 import ec.gp.ADFStack;
@@ -45,13 +47,17 @@ public class Abstraction extends GPNode {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
 		RefactorData rd = (RefactorData)input;
+		String thisNodeGraphviz = this.toString();
+		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag =
 			((RefactorIndividual)individual).GetGraph();
 		
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex product_v = ag.getVertex(rd.name);
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		children[1].eval(state, thread, input, stack, individual, problem);
 		String newName = "I" + rd.name;
+		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		
 		// Interface inf = abstractClass(c, newName);
 		AnnotatedVertex inf = Helpers.abstractClass(product_v, newName, ag);
@@ -63,6 +69,7 @@ public class Abstraction extends GPNode {
 		AnnotatedEdge e = new AnnotatedEdge(Label.IMPLEMENT);
 		ag.addEdge(product_v, inf, e);
 		
+		rd.graphvizName = thisNodeGraphviz;
 		rd.name = inf.toString();
 		rd.newVertex = inf;
 	}
@@ -71,5 +78,10 @@ public class Abstraction extends GPNode {
 	public String toString() {
 		return "Abstraction";
 	}
-
+	
+	public String toGraphviz() {
+		Random r = SourceGraph.GetRandom();
+		
+		return "node" + Math.abs(r.nextInt()); 
+	}
 }
