@@ -7,9 +7,14 @@ public class RefactorIndividual extends GPIndividual {
 	private AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> graph;
     private ArrayList<String> patternList;
     private String graphvizOutput;
+    private ArrayList<String> mtList; // Order of MTS that have been applied
     private int nodeCount = 0;	// Raw number of nodes in the tree
     private int MTCount = 0;	// Number of MT nodes in the tree
 
+    public RefactorIndividual() {
+    	patternList = new ArrayList<String>();
+    	mtList = new ArrayList<String>();
+    }
 	public RefactorIndividual lightClone() {
 		RefactorIndividual ri = (RefactorIndividual)(super.lightClone());
 		ri.SetGraph(SourceGraph.GetClone());
@@ -44,6 +49,14 @@ public class RefactorIndividual extends GPIndividual {
 	}
 	
 	public int GetNodeCount() { return nodeCount; }
+	public void setMtList(ArrayList<String> mtList) {
+		this.mtList = mtList;
+	}
+	public ArrayList<String> getMtList() {
+		return mtList;
+	}
+	
+    public int GetNodeCount() { return nodeCount; }
     public void IncrementNodeCount() { ++nodeCount; }
     public void ResetNodeCount() { nodeCount = 0; }
     public int GetMTNodeCount() { return MTCount; }

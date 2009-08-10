@@ -48,7 +48,7 @@ public class AbstractAccess extends GPNode {
 		//System.err.println("AbstractAccess()");
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
-
+		((RefactorIndividual)individual).getMtList().add(this.toString());
 		// For each "uses" relationship between the context and the concrete
 		// class, replace this relationship with an "implements" link to
 		// an interface that mirrors the concrete class.

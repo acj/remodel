@@ -28,6 +28,7 @@ public class Delegation extends GPNode {
 			ADFStack stack, GPIndividual individual, Problem problem) {
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
+		((RefactorIndividual)individual).getMtList().add(this.toString());
 		RefactorData rd = (RefactorData)input;
 		String thisNodeGraphviz = this.toGraphviz();
 		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";

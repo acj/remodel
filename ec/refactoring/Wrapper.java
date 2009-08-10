@@ -48,6 +48,7 @@ public class Wrapper extends GPNode {
 		 */
 		((RefactorIndividual)individual).IncrementNodeCount();
 		((RefactorIndividual)individual).IncrementMTNodeCount();
+		((RefactorIndividual)individual).getMtList().add(this.toString());
 		RefactorData rd = (RefactorData)input;
 		String thisNodeGraphviz = this.toString();
 		rd.graphvizData += thisNodeGraphviz + " [label=\"" + this.toString() + "\",shape=folder];\n";
