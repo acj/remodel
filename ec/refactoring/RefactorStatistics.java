@@ -95,6 +95,7 @@ public class RefactorStatistics extends SimpleStatistics {
 	@Override
 	public void postEvaluationStatistics(EvolutionState state) {
 		super.postEvaluationStatistics(state);
-		//state.output.message("Genotype (graphviz):\n" + ((RefactorIndividual)best_of_run[0]).GetGraph().ToGraphViz());
+		state.output.println("DP instances in best individual: " + 
+				((RefactorIndividual)best_of_run[0]).GetPatternList().size(), Output.V_NO_GENERAL,statisticslog);
 	}
 }
