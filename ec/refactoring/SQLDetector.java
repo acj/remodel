@@ -91,25 +91,54 @@ public class SQLDetector implements PatternDetector {
 	        st.executeUpdate("CREATE INDEX iImplement ON tImplement(source,sink)");
 	        st.executeUpdate("CREATE INDEX iReference ON tReference(source,sink)");
 
+	        ResultSet rs;
+	        /*
+	        // Query for checking the execution plan.  Used for profiling and
+	        // optimizing queries.
+	        rs = st.executeQuery("EXPLAIN PLAN FOR SELECT [...]");
+	        
+	        ResultSetMetaData meta;
+			try {
+				meta = rs.getMetaData();
+		        int               colmax = meta.getColumnCount();
+		        i = 0;
+		        Object            o = null;
+		        for (; rs.next(); ) {
+		            for (i = 0; i < colmax; ++i) {
+		                o = rs.getObject(i + 1);    // In SQL the first column is indexed
+		                if (o != null) {
+		                	System.out.print("[" + meta.getTableName(i+1) + "." + meta.getColumnName(i + 1) + "]" + o.toString() + " ");
+		                }
+		            }
+		            System.out.println("\n");
+		        }
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			*/
+	        
 			// Factory Method
 			//
 			// Original QL:
 			//	DP[c,conC,conP,p] = {inherits[conC,c]; uses[conC,conP]; inherits[conP,p]}
-			ResultSet rs = st.executeQuery("SELECT DISTINCT * FROM tClass " +
-					"JOIN tInherit tInherit1 ON tClass.name=tInherit1.sink " +
-					"JOIN tInstantiate ON tInherit1.source=tInstantiate.source " +
-					"JOIN tInherit tInherit2 ON tInstantiate.sink=tInherit2.source " +
-					"JOIN tClass tClass2 ON tInherit2.sink=tClass2.name " +
-					"WHERE tInherit1.sink != tInherit2.sink AND " +
-					"tInherit1.source != tInherit2.source");
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass cAbsProd, tClass cAbsFact, tClass cConProd, tClass cConFact " +
+					"JOIN tInherit tInheritFact ON tInheritFact.sink=cAbsFact.name " +
+					"JOIN tInstantiate ON tInstantiate.source=tInheritFact.source " +
+					"JOIN tInherit tInheritProd ON tInheritProd.source=tInstantiate.sink " +
+					"WHERE tInheritFact.sink != tInheritProd.sink AND " +
+					"tInheritFact.source != tInheritProd.source AND " +
+					"tInheritFact.source = cConFact.name AND " +
+					"tInstantiate.sink = cConProd.name AND " +
+					"tInheritProd.sink = cAbsProd.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "FactoryMethod"));
 
 			// Prototype
-			rs = st.executeQuery("SELECT DISTINCT * FROM tClass protCon, tClass cInstClass " +
-					"JOIN tInherit ON protCon.name=tInherit.source " +
-					"JOIN tOwn ON tInherit.sink=tOwn.source " +
-					"JOIN tOperation ON tOwn.sink=tOperation.name " +
-					"JOIN tInstantiate ON (tInstantiate.source=protCon.name AND tInstantiate.sink=cInstClass.name)");
+			rs = st.executeQuery("SELECT DISTINCT * FROM tClass protAbs, tClass protCon, tClass cInstClass " +
+					"JOIN tInherit ON tInherit.source=protCon.name " +
+					"JOIN tOwn ON tOwn.source=tInherit.sink " +
+					"JOIN tOperation ON tOperation.name=tOwn.sink " +
+					"JOIN tInstantiate ON (tInstantiate.source=cInstClass.name AND tInstantiate.sink=protAbs.name) " +
+					"WHERE tInherit.sink = protAbs.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Prototype"));
 
 			// Adapter
