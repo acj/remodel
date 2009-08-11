@@ -56,7 +56,6 @@ public class RefactorIndividual extends GPIndividual {
 		return mtList;
 	}
 	
-    public int GetNodeCount() { return nodeCount; }
     public void IncrementNodeCount() { ++nodeCount; }
     public void ResetNodeCount() { nodeCount = 0; }
     public int GetMTNodeCount() { return MTCount; }
