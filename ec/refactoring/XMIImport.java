@@ -527,9 +527,9 @@ public class XMIImport implements IModelImport {
 	            							if (paramNode.getNodeName() == "UML:Parameter" &&
 	            									paramNode.hasAttributes() &&
 	            									paramNode.getAttributes().getNamedItem("kind") != null &&
-	            									paramNode.getAttributes().getNamedItem("kind").getNodeValue().equals("return")) {
+	            									paramNode.getAttributes().getNamedItem("kind").getNodeValue().equals("return") &&
+	            									paramNode.hasChildNodes()) {
 	            								// Finally, extract the class whose instance is being returned
-	            								assert paramNode.hasChildNodes();
 	            								String returnClassName = paramNode.getChildNodes().item(1).getChildNodes().item(1).getAttributes().getNamedItem("xmi.idref").getNodeValue();
 	            								if (xmiIdMap.containsKey(returnClassName)) {
 	            									AnnotatedVertex returnClass = xmiIdMap.get(returnClassName); 
