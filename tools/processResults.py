@@ -12,9 +12,10 @@ if (len(sys.argv) < 2):
 else:
     result_dir = sys.argv[1]
 
-# A dictionary of pattern information.  The key is the name of the model
+# Dictionaries of pattern information.  The key is the name of the model
 # being processed, e.g. "TestModel".
 model_dict = {}    # Count of pattern types for each model 
+pattern_dict = {}  # Count of instances per pattern type across all models
 qmood_dict = {}    # Initial QMOOD value for each model
 bestfit_dict = {}  # Best fitness for each model
 totals_dict = {}   # Total number of patterns for each model
@@ -22,6 +23,9 @@ treesize_dict = {} # Tree size for each GP program
 mtsize_dict = {}   # Number of MTs for each GP program
 startgraphsize_dict = {} # Starting graph size for each model
 finalgraphsize_dict = {} # Final graph size for each model
+origpatterns_dict = {}   # Patterns in the original design
+
+pattern_count = 0
 
 for dir in os.listdir(result_dir):
     # Skip "bak" directories that result from repeated runs
@@ -64,6 +68,9 @@ for dir in os.listdir(result_dir):
             mtsize_dict[dir] = line[33:]
         if line[0:39] == 'Subpop 0 best fitness of run: Fitness: ':
             bestfit_dict[dir] = line[39:]
+        # Pick up patterns in the original design
+        if line[0] == '{' and line[-2] == '}':
+            origpatterns_dict[dir] = line
             break
     
     for pattern_file in os.listdir(output_dir):
@@ -75,12 +82,18 @@ for dir in os.listdir(result_dir):
             p_file = open(result_dir + '/' + dir + '/output/' + pattern_file, 'r')
             for line in p_file:
                 if line[0:6] == 'label=':
+                    pattern_count += 1
                     # Extract the (quoted) name of the pattern instances
                     pattern_name = line[line.find('"')+1:len(line)-2]
                     if not model_dict[dir].has_key(pattern_name):
                         model_dict[dir][pattern_name] = [pattern_file]
                     else:
                         model_dict[dir][pattern_name].append(pattern_file)
+                    # Update pattern type counts
+                    if not pattern_dict.has_key(pattern_name):
+                        pattern_dict[pattern_name] = 1
+                    else:
+                        pattern_dict[pattern_name] += 1
 
             p_file.close()
         
@@ -88,12 +101,23 @@ for dir in os.listdir(result_dir):
 
 print '<html><head><title>GP Results</title></head><body>'
 
+
+
+print '<table border="1">'
+print '<tr><th>Pattern type</th><th>Count</th></tr>'
+for p in pattern_dict:
+    print '<tr><td>' + p + '</td><td>' + str(pattern_dict[p]) + '</td></tr>'
+print '<tr><td><b>Total</b></td><td>' + str(pattern_count) + '</td>'
+print '</table>'
+
 items = model_dict.items()
 items.sort()
 
 for (m, p_dict) in items:
     print '<div><h2>' + m + '</h2>'
 
+    if origpatterns_dict.has_key(m):
+        print 'Initial pattern set: ' + origpatterns_dict[m] + '<br/>'
     if qmood_dict.has_key(m):
         print 'Initial QMOOD value: ' + qmood_dict[m] + '<br/>'
     if bestfit_dict.has_key(m):
