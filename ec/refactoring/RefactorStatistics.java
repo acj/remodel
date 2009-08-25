@@ -71,6 +71,14 @@ public class RefactorStatistics extends SimpleStatistics {
 			    out.flush();
 			    out.close();
 			    
+			    out = new BufferedWriter(new FileWriter("output/qmood_dp.dat"));
+			    float[][] qmoodDPMap = SourceGraph.getQMOODDPMap();
+			    for (int ndx=0; ndx<qmoodDPMap.length; ++ndx) {
+			    	out.write(qmoodDPMap[ndx][0] + " " + qmoodDPMap[ndx][1] + "\n");
+			    }
+			    out.flush();
+			    out.close();
+			    
 			    // TODO: Print all patterns, not just the first
 		        if (patternList.size() > 0) {
         			for (int ndx=0; ndx<patternList.size(); ++ndx) {

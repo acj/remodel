@@ -21,6 +21,11 @@ public class SourceGraph {
 	private static float originalGraphQMOOD = 0.0F;
 	private static int originalGraphPatterns = 0;
 	
+	private static int qmoodDPMapRows = 10000;
+	private static int qmoodDPMapCols = 2;
+	private static float[][] qmoodDPMap = new float[qmoodDPMapRows][qmoodDPMapCols];
+	private static int qmoodDPMapIndex = 0;
+	
 	public static void SetRandom(Random r) {
 		rand = r;
 	}
@@ -116,7 +121,7 @@ public class SourceGraph {
             } catch (IOException e) {
 			    System.err.println("Could not export initial patterns!");
             }
-		}
+		} // end if (annotatedGraph == null)
 		AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> graph_clone = 
 			new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
 		Set<AnnotatedVertex> vertices = annotatedGraph.vertexSet();
@@ -171,6 +176,14 @@ public class SourceGraph {
 	}
 	public static float getTreeSizePenalty() {
 		return treeSizePenalty;
+	}
+	public static void addQMOODDPMapEntry(float QMOOD, float DP) {
+		getQMOODDPMap()[qmoodDPMapIndex][0] = QMOOD;
+		getQMOODDPMap()[qmoodDPMapIndex][1] = DP;
+		++qmoodDPMapIndex;
+	}
+	public static float[][] getQMOODDPMap() {
+		return qmoodDPMap;
 	}
 
 	/*

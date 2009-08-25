@@ -51,10 +51,12 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			int patternsFound = patternInstances.size();
 			rInd.SetPatternList(patternInstances);
 			float QMOOD_value = QMOODEvaluator.EvaluateGraph(g);
+			// Record this individual's QMOOD value and its DP instances
+			SourceGraph.addQMOODDPMapEntry(QMOOD_value, patternsFound);
 			// Fitness computation
 			fitness_value = ComputeFitness(QMOOD_value, patternsFound, (float)rInd.GetMTNodeCount());
 			// Look for MT sequences that should be rewarded
-			fitness_value += 0.5F*countMatchingSubsequences(rInd.getMtList());
+			fitness_value += 1.0F*countMatchingSubsequences(rInd.getMtList());
 		}
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;
