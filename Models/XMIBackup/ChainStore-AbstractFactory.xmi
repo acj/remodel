@@ -1,0 +1,1114 @@
+<?xml version = '1.0' encoding = 'UTF-8' ?>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Wed Jun 17 10:31:49 EDT 2009'>
+  <XMI.header>    <XMI.documentation>
+      <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
+      <XMI.exporterVersion>0.28(6) revised on $Date: 2007-05-12 08:08:08 +0200 (Sat, 12 May 2007) $ </XMI.exporterVersion>
+    </XMI.documentation>
+    <XMI.metamodel xmi.name="UML" xmi.version="1.4"/></XMI.header>
+  <XMI.content>
+    <UML:Model xmi.id = '-64--88-0--124-2585e:f0aebd5c92:-746f' name = 'Store System 3'
+      isSpecification = 'false' isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+      <UML:ModelElement.comment>
+        <UML:Comment xmi.idref = 'xmi.2'/>
+      </UML:ModelElement.comment>
+      <UML:Namespace.ownedElement>
+        <UML:TagDefinition xmi.id = 'N69720_tagdef' name = 'synSet' isSpecification = 'false'>
+          <UML:TagDefinition.multiplicity>
+            <UML:Multiplicity xmi.id = 'N69720_tagmult'>
+              <UML:Multiplicity.range>
+                <UML:MultiplicityRange xmi.id = 'N69720_tagmultrange' lower = '1' upper = '1'/>
+              </UML:Multiplicity.range>
+            </UML:Multiplicity>
+          </UML:TagDefinition.multiplicity>
+        </UML:TagDefinition>
+        <UML:Comment xmi.id = 'xmi.3' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.5' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>111289781</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '1073027TI-1115315180'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Package xmi.id = 'xmi.6' name = 'java' isSpecification = 'false' isRoot = 'true'
+          isLeaf = 'false' isAbstract = 'false'>
+          <UML:Namespace.ownedElement>
+            <UML:Package xmi.id = 'xmi.7' name = 'lang' isSpecification = 'false' isRoot = 'false'
+              isLeaf = 'false' isAbstract = 'false'>
+              <UML:Namespace.ownedElement>
+                <UML:Class xmi.id = 'xmi.8' name = 'String' isSpecification = 'false' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false' isActive = 'false'/>
+                <UML:DataType xmi.id = 'xmi.9' name = 'int' isSpecification = 'false' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'/>
+                <UML:DataType xmi.id = 'xmi.10' name = 'boolean' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+                <UML:DataType xmi.id = 'xmi.11' name = 'float' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+              </UML:Namespace.ownedElement>
+            </UML:Package>
+            <UML:Package xmi.id = 'xmi.12' name = 'util' isSpecification = 'false' isRoot = 'false'
+              isLeaf = 'false' isAbstract = 'false'>
+              <UML:Namespace.ownedElement>
+                <UML:Interface xmi.id = 'xmi.13' name = 'List' isSpecification = 'false'
+                  isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+              </UML:Namespace.ownedElement>
+            </UML:Package>
+          </UML:Namespace.ownedElement>
+        </UML:Package>
+        <UML:Class xmi.id = '1073027TI-1115315180' name = 'BankCheck' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.3'/>
+          </UML:ModelElement.comment>
+          <UML:GeneralizableElement.generalization>
+            <UML:Generalization xmi.idref = '459052TI-1115153035'/>
+          </UML:GeneralizableElement.generalization>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.15' name = 'bank' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.16' name = 'date' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.17' name = 'entity' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.18' name = 'number' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.19' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.21' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>111180711</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '6882977TI-1115335812'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '6882977TI-1115335812' name = 'Buy' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.19'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.22' name = 'date' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.23' name = 'hour' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.24' name = 'GetChainStore' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.25' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '3048692TI-1115348636'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.27' name = 'GetCustomer' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.28' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '5177987TI-1115331109'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.30' name = 'GetProducts' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.31' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.32' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.34' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>111293717</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '4659675TI-1115306314'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '4659675TI-1115306314' name = 'Cash' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.32'/>
+          </UML:ModelElement.comment>
+          <UML:GeneralizableElement.generalization>
+            <UML:Generalization xmi.idref = '5852445TI-1115147996'/>
+          </UML:GeneralizableElement.generalization>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.36' name = 'currency' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.37' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.38' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>102612914</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '3048692TI-1115348636'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '3048692TI-1115348636' name = 'ChainStore' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.37'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.39' name = 'address' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.40' name = 'name' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.41' name = 'phone' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.42' name = 'AddCustomer' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.43' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.44' name = 'newCustomer' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '5177987TI-1115331109'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.45' name = 'AddSupplier' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.46' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.47' name = 'newSupplier' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '895406TI-1115344304'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.49' name = 'DeleteCustomer' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.50' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.51' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.52' name = 'DeleteSupplier' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.53' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.54' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.55' name = 'GetCustomer' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.56' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '5177987TI-1115331109'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.57' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.58' name = 'GetCustomers' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.59' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.60' name = 'GetPurchase' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.61' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.62'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.63' name = 'clientName' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.64' name = 'date' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.65' name = 'GetSupplier' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.66' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '895406TI-1115344304'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.67' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.68' name = 'GetSuppliers' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.69' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.70' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.72' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>102656025</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '7655523TI-1115323232'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '7655523TI-1115323232' name = 'Clothes' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.70'/>
+          </UML:ModelElement.comment>
+          <UML:GeneralizableElement.generalization>
+            <UML:Generalization xmi.idref = '7653374TI-1115145216'/>
+          </UML:GeneralizableElement.generalization>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.74' name = 'size' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.75' name = 'GetSize' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.76' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.9'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.77' name = 'SetSize' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.78' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.79' name = 'newSize' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.9'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.80' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.82' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>111285084</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '6056302TI-1115310804'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '6056302TI-1115310804' name = 'CreditCard' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.80'/>
+          </UML:ModelElement.comment>
+          <UML:GeneralizableElement.generalization>
+            <UML:Generalization xmi.idref = '2256561TI-1115150742'/>
+          </UML:GeneralizableElement.generalization>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.84' name = 'expiryDate' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.85' name = 'number' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.86' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.87' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>108196833</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '5177987TI-1115331109'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '5177987TI-1115331109' name = 'Customer' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.86'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.88' name = 'address' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.89' name = 'email' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.90' name = 'name' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.91' name = 'phone' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.92' name = 'GetChainStores' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.93' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.94' name = 'GetPurchase' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.95' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.62'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.96' name = 'date' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.97' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.99' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>106288199</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '6692587TI-1115319498'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '6692587TI-1115319498' name = 'FoodProduct' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.97'/>
+          </UML:ModelElement.comment>
+          <UML:GeneralizableElement.generalization>
+            <UML:Generalization xmi.idref = '292335TI-1115142749'/>
+          </UML:GeneralizableElement.generalization>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.101' name = 'expiryDate' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.102' name = 'GetExpiryDate' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.103' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.104' name = 'SetExpiryDate' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.105' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.106' name = 'newExpiryDate' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.107' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.109' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>100852841</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '900237TI-1115326513'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '900237TI-1115326513' name = 'Payment' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.107'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.110' name = 'value' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.11'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.111' name = 'GetValue' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.112' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.11'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.113' name = 'SetValue' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.114' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.115' name = 'newValue' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.11'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.116' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.118' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>103265802</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '3963427TI-1115339978'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '3963427TI-1115339978' name = 'Product' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.116'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.119' name = 'name' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.120' name = 'price' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.11'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.121' name = 'reference' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.122' name = 'GetPrice' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.123' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.11'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.124' name = 'GetReference' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.125' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.9'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.126' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.127' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>108743399</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Class xmi.idref = '895406TI-1115344304'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Class xmi.id = '895406TI-1115344304' name = 'Supplier' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false' isActive = 'true'>
+          <UML:ModelElement.comment>
+            <UML:Comment xmi.idref = 'xmi.126'/>
+          </UML:ModelElement.comment>
+          <UML:Classifier.feature>
+            <UML:Attribute xmi.id = 'xmi.128' name = 'address' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.129' name = 'email' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.130' name = 'name' visibility = 'private' isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:Class xmi.idref = 'xmi.8'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Attribute xmi.id = 'xmi.131' name = 'phone' visibility = 'private'
+              isSpecification = 'false'>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref = 'xmi.9'/>
+              </UML:StructuralFeature.type>
+            </UML:Attribute>
+            <UML:Operation xmi.id = 'xmi.132' name = 'AddProduct' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.133' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.134' name = 'newProduct' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '3963427TI-1115339978'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.135' name = 'DeleteProduct' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.136' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:DataType xmi.idref = 'xmi.10'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.137' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.138' name = 'GetChainStores' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.139' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.140' name = 'GetProduct' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.141' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = '3963427TI-1115339978'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+                <UML:Parameter xmi.id = 'xmi.142' name = 'name' isSpecification = 'false'
+                  kind = 'in'>
+                  <UML:Parameter.type>
+                    <UML:Class xmi.idref = 'xmi.8'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+            <UML:Operation xmi.id = 'xmi.143' name = 'GetProducts' visibility = 'public'
+              isSpecification = 'false' isQuery = 'false' isRoot = 'false' isLeaf = 'false'
+              isAbstract = 'false'>
+              <UML:BehavioralFeature.parameter>
+                <UML:Parameter xmi.id = 'xmi.144' name = 'return' isSpecification = 'false'
+                  kind = 'return'>
+                  <UML:Parameter.type>
+                    <UML:Interface xmi.idref = 'xmi.13'/>
+                  </UML:Parameter.type>
+                </UML:Parameter>
+              </UML:BehavioralFeature.parameter>
+            </UML:Operation>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Comment xmi.id = 'xmi.2' isSpecification = 'false'>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue xmi.id = 'xmi.145' isSpecification = 'false'>
+              <UML:TaggedValue.dataValue>102612914</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref = 'N69720_tagdef'/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Comment.annotatedElement>
+            <UML:Model xmi.idref = '-64--88-0--124-2585e:f0aebd5c92:-746f'/>
+          </UML:Comment.annotatedElement>
+        </UML:Comment>
+        <UML:Association xmi.id = '5255163TI-1115050109' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.147' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'xmi.148'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'xmi.149' lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '6882977TI-1115335812'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.150' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'xmi.151'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'xmi.152' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '900237TI-1115326513'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '3301175TI-1115059669' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.154' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69486'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69486_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '3963427TI-1115339978'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.155' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69514'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69514_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '6882977TI-1115335812'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '6500473TI-1115087096' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.157' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69568'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69568_range' lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '3048692TI-1115348636'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.158' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69596'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69596_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '6882977TI-1115335812'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '7256830TI-1115100474' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.160' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69650'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69650_range' lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '5177987TI-1115331109'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.161' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69678'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69678_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '6882977TI-1115335812'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '2092310TI-1115110848' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.163' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69732'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69732_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '3048692TI-1115348636'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.164' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69760'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69760_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '5177987TI-1115331109'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '6571641TI-1115123295' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.166' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69814'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69814_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '895406TI-1115344304'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.167' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69842'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69842_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '3048692TI-1115348636'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Association xmi.id = '2775309TI-1115136067' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'>
+          <UML:Association.connection>
+            <UML:AssociationEnd xmi.id = 'xmi.169' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69896'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69896_range' lower = '1' upper = '1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '895406TI-1115344304'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+            <UML:AssociationEnd xmi.id = 'xmi.170' isSpecification = 'false' isNavigable = 'false'>
+              <UML:AssociationEnd.multiplicity>
+                <UML:Multiplicity xmi.id = 'N69924'>
+                  <UML:Multiplicity.range>
+                    <UML:MultiplicityRange xmi.id = 'N69924_range' lower = '1' upper = '-1'/>
+                  </UML:Multiplicity.range>
+                </UML:Multiplicity>
+              </UML:AssociationEnd.multiplicity>
+              <UML:AssociationEnd.participant>
+                <UML:Class xmi.idref = '3963427TI-1115339978'/>
+              </UML:AssociationEnd.participant>
+            </UML:AssociationEnd>
+          </UML:Association.connection>
+        </UML:Association>
+        <UML:Generalization xmi.id = '292335TI-1115142749' isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '6692587TI-1115319498'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '3963427TI-1115339978'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <UML:Generalization xmi.id = '7653374TI-1115145216' isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '7655523TI-1115323232'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '3963427TI-1115339978'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <UML:Generalization xmi.id = '5852445TI-1115147996' isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '4659675TI-1115306314'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '900237TI-1115326513'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <UML:Generalization xmi.id = '2256561TI-1115150742' isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '6056302TI-1115310804'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '900237TI-1115326513'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <UML:Generalization xmi.id = '459052TI-1115153035' isSpecification = 'false'>
+          <UML:Generalization.child>
+            <UML:Class xmi.idref = '1073027TI-1115315180'/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref = '900237TI-1115326513'/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <UML:DataType xmi.id = 'xmi.62' name = 'Purchase' isSpecification = 'false'
+          isRoot = 'false' isLeaf = 'false' isAbstract = 'false'/>
+      </UML:Namespace.ownedElement>
+    </UML:Model>
+  </XMI.content>
+</XMI>
