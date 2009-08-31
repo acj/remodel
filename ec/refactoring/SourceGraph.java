@@ -2,6 +2,7 @@ package ec.refactoring;
 
 import java.io.*;
 import java.util.*;
+
 import ec.refactoring.AnnotatedEdge;
 import ec.refactoring.AnnotatedVertex;
 
@@ -18,13 +19,10 @@ public class SourceGraph {
 	private static ArrayList<String> patternList;
 	private static String inputFile = "";
 	private static float treeSizePenalty = 0.0F;
-	private static float originalGraphQMOOD = 0.0F;
+	private static StatDataPoint originalGraphStat;
 	private static int originalGraphPatterns = 0;
 	
-	private static int qmoodDPMapRows = 10000;
-	private static int qmoodDPMapCols = 2;
-	private static float[][] qmoodDPMap = new float[qmoodDPMapRows][qmoodDPMapCols];
-	private static int qmoodDPMapIndex = 0;
+	private static Vector<StatDataPoint> StatMap = new Vector<StatDataPoint>();
 	
 	public static void SetRandom(Random r) {
 		rand = r;
@@ -74,9 +72,9 @@ public class SourceGraph {
 			SetPatternList(detector.DetectPatterns(g));
 			//patternList = detector(g); // Uncomment for QLWrapper! (Lame)
 			StringBuilder sb_baseline = new StringBuilder();
-			originalGraphQMOOD = QMOODEvaluator.EvaluateGraph(g);
+			originalGraphStat = QMOODEvaluator.EvaluateGraph(g);
 			originalGraphPatterns = GetPatternList().size();
-			sb_baseline.append("QMOOD: " +  getOriginalGraphQMOOD() + "\n");
+			sb_baseline.append("QMOOD: " +  getOriginalGraphQMOOD().qmood + "\n");
 			sb_baseline.append("Patterns: " + getOriginalGraphPatterns() + "\n{ ");
 			
 			Iterator<String> it = GetPatternList().iterator();
@@ -165,8 +163,8 @@ public class SourceGraph {
 	public static String GetInputFile() {
 		return inputFile;
 	}
-	public static float getOriginalGraphQMOOD() {
-		return originalGraphQMOOD;
+	public static StatDataPoint getOriginalGraphQMOOD() {
+		return originalGraphStat;
 	}
 	public static int getOriginalGraphPatterns() {
 		return originalGraphPatterns;
@@ -177,61 +175,10 @@ public class SourceGraph {
 	public static float getTreeSizePenalty() {
 		return treeSizePenalty;
 	}
-	public static void addQMOODDPMapEntry(float QMOOD, float DP) {
-		getQMOODDPMap()[qmoodDPMapIndex][0] = QMOOD;
-		getQMOODDPMap()[qmoodDPMapIndex][1] = DP;
-		++qmoodDPMapIndex;
+	public static void addStatMapEntry(StatDataPoint s) {
+		StatMap.add(s);
 	}
-	public static float[][] getQMOODDPMap() {
-		return qmoodDPMap;
+	public static Vector<StatDataPoint> getStatMap() {
+		return StatMap;
 	}
-
-	/*
-		// Set up a new instance of SourceGraph if necessary
-		if (sourceGraph == null) {
-			System.out.println("Creating new SourceGraph instance!");
-			sourceGraph = new SourceGraph();
-			AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> d = 
-				new AnnotatedGraph<AnnotatedVertex, AnnotatedEdge>(AnnotatedEdge.class);
-
-			// Based on Mens et al. (2004)
-	        d.addVertex(new AnnotatedVertex("Document", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("Document__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("Document__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("Document"), d.getVertex("Document__print"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addEdge(d.getVertex("Document"), d.getVertex("Document__preview"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addVertex(new AnnotatedVertex("AsciiDoc", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("AsciiDoc__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("AsciiDoc__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("AsciiDoc__print"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("AsciiDoc__preview"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addVertex(new AnnotatedVertex("PSDoc", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("PSDoc__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("PSDoc__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("PSDoc__print"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("PSDoc__preview"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addVertex(new AnnotatedVertex("PDFDoc", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("PDFDoc__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("PDFDoc__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("PDFDoc__print"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("PDFDoc__preview"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addVertex(new AnnotatedVertex("Previewer", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("Previewer__preview", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Previewer__preview"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        d.addVertex(new AnnotatedVertex("Printer", AnnotatedVertex.VertexType.CLASS, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addVertex(new AnnotatedVertex("Printer__print", AnnotatedVertex.VertexType.OPERATION, AnnotatedVertex.Visibility.PUBLIC));
-	        d.addEdge(d.getVertex("Printer"), d.getVertex("Printer__print"), new AnnotatedEdge(AnnotatedEdge.Label.OWN));
-	        
-	        d.addEdge(d.getVertex("AsciiDoc"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
-	        d.addEdge(d.getVertex("PSDoc"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
-	        d.addEdge(d.getVertex("PDFDoc"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.INHERIT));
-	        d.addEdge(d.getVertex("Previewer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
-	        d.addEdge(d.getVertex("Printer"), d.getVertex("Document"), new AnnotatedEdge(AnnotatedEdge.Label.ASSOCIATE));
-	        	        
-	        System.err.println("Initial graph has " + d.vertexSet().size() + " vertices");
-	        sourceGraph.annotatedGraph = d;
-		}
-		return sourceGraph;
-	
-	*/
 }

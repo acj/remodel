@@ -10,22 +10,23 @@ import java.util.Vector;
 
 import ec.refactoring.AnnotatedEdge.Label;
 
-public class QMOODEvaluator {
-	public static float EvaluateGraph(AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> g) {
+public class QMOODEvaluator {	
+	public static StatDataPoint EvaluateGraph(AnnotatedGraph<AnnotatedVertex,AnnotatedEdge> g) {
 		// QMOOD evaluation
-		float designSizeInClasses = DesignSizeInClasses(g); 	// Design size
-		float avgNumberOfAncestors = AvgNumberOfAncestors(g); 	// Abstraction
-		float dataAccessMetric = DataAccessMetric(g); 			// Encapsulation
-		float directClassCoupling = DirectClassCoupling(g);		// Coupling
-		float numberOfMethods = NumberOfMethods(g);				// Complexity
-		float numberOfPolyMethods = NumberOfPolymorphicMethods(g); // Polymorphism
-		float classInterfaceSize = ClassInterfaceSize(g);		// Messaging
-		float measureOfAggregation = MeasureOfAggregation(g);	// Composition
-		float measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g); // Inheritance
-		float numberOfHierarchies = NumberOfHierarchies(g);		// Functionality
+		StatDataPoint dp = new StatDataPoint();
+		dp.designSizeInClasses = DesignSizeInClasses(g); 	// Design size
+		dp.avgNumberOfAncestors = AvgNumberOfAncestors(g); 	// Abstraction
+		dp.dataAccessMetric = DataAccessMetric(g); 			// Encapsulation
+		dp.directClassCoupling = DirectClassCoupling(g);		// Coupling
+		dp.numberOfMethods = NumberOfMethods(g);				// Complexity
+		dp.numberOfPolyMethods = NumberOfPolymorphicMethods(g); // Polymorphism
+		dp.classInterfaceSize = ClassInterfaceSize(g);		// Messaging
+		dp.measureOfAggregation = MeasureOfAggregation(g);	// Composition
+		dp.measureOfFunctionalAbstraction = MeasureOfFunctionalAbstraction(g); // Inheritance
+		dp.numberOfHierarchies = NumberOfHierarchies(g);		// Functionality
 		
 		// Currently no support for method parameters
-		float cohesionAmongMethods = 0.0F; // Cohesion
+		//dp.cohesionAmongMethods = 0.0F; // Cohesion
 		
 		/*
 		System.out.println("DSIC: " + designSizeInClasses);
@@ -40,6 +41,8 @@ public class QMOODEvaluator {
 		*/
 		
 		/**
+		 * Original QMOOD formulas (Bansiya and Davis, 2002):
+		 * 
 		 * Reusability: -0.25*Coupling + 0.25*Cohesion + 0.5*Messaging + 0.5*DesignSize
 		 * Flexibility: 0.25*Encapsulation - 0.25*Coupling + 0.5*Composition + 0.5*Polymorphism
 		 * Understandability: -0.33*Abstraction + 0.33*Encapsulation - 0.33*Coupling +
@@ -52,39 +55,39 @@ public class QMOODEvaluator {
 		 * Effectiveness: 0.2*Abstraction + 0.2*Encapsulation + 0.2*Composition +
 		 * 					0.2*Inheritance + 0.2*Polymorphism
 		 */
-		final float reusability = 0.5F*designSizeInClasses -
-							0.25F*directClassCoupling + 
-							0.5F*classInterfaceSize;
-		final float flexibility = 0.25F*dataAccessMetric - 
-							0.25F*directClassCoupling + 
-							0.5F*measureOfAggregation + 
-							0.5F*numberOfPolyMethods;
-		final float understandability = -0.33F*designSizeInClasses -
-							0.33F*avgNumberOfAncestors +
-							0.33F*dataAccessMetric -
-							0.33F*directClassCoupling -
-							0.33F*numberOfPolyMethods -
-							0.33F*numberOfMethods;
-		final float functionality = -0.12F*cohesionAmongMethods +
-							0.22F*numberOfPolyMethods +
-							0.22F*classInterfaceSize +
-							0.22F*designSizeInClasses +
-							0.22F*numberOfHierarchies;
-		final float extendibility = 0.5F*avgNumberOfAncestors -
-							0.5F*directClassCoupling +
-							0.5F*measureOfFunctionalAbstraction +
-							0.5F*numberOfPolyMethods;
-		final float effectiveness = 0.2F*avgNumberOfAncestors +
-							0.2F*dataAccessMetric +
-							0.2F*measureOfAggregation +
-							0.2F*measureOfFunctionalAbstraction +
-							0.2F*numberOfPolyMethods;
+		dp.reusability = 0.5F*dp.designSizeInClasses -
+							0.25F*dp.directClassCoupling + 
+							0.5F*dp.classInterfaceSize;
+		dp.flexibility = 0.25F*dp.dataAccessMetric - 
+							0.25F*dp.directClassCoupling + 
+							0.5F*dp.measureOfAggregation + 
+							0.5F*dp.numberOfPolyMethods;
+		dp.understandability = -0.33F*dp.designSizeInClasses -
+							0.33F*dp.avgNumberOfAncestors +
+							0.33F*dp.dataAccessMetric -
+							0.33F*dp.directClassCoupling -
+							0.33F*dp.numberOfPolyMethods -
+							0.33F*dp.numberOfMethods;
+		dp.functionality = //-0.12F*dp.cohesionAmongMethods +
+							0.22F*dp.numberOfPolyMethods +
+							0.22F*dp.classInterfaceSize +
+							0.22F*dp.designSizeInClasses +
+							0.22F*dp.numberOfHierarchies;
+		dp.extendibility = 0.5F*dp.avgNumberOfAncestors -
+							0.5F*dp.directClassCoupling +
+							0.5F*dp.measureOfFunctionalAbstraction +
+							0.5F*dp.numberOfPolyMethods;
+		dp.effectiveness = 0.2F*dp.avgNumberOfAncestors +
+							0.2F*dp.dataAccessMetric +
+							0.2F*dp.measureOfAggregation +
+							0.2F*dp.measureOfFunctionalAbstraction +
+							0.2F*dp.numberOfPolyMethods;
 		
 		// In order: flexibility, reusability, understandability
 		//
 		// These coefficients determine the relative importance of each
 		// non-functional property.
-		float[] preferenceMatrix = new float[] { 
+		final float[] preferenceMatrix = new float[] { 
 				0.1666F, // reusability 
 				0.1666F, // flexibility
 				0.1666F, // understandability
@@ -93,13 +96,13 @@ public class QMOODEvaluator {
 				0.1666F  // effectiveness
 		};
 		
-		float QMOOD_value = flexibility * preferenceMatrix[0] +
-							reusability * preferenceMatrix[1] +
-							understandability * preferenceMatrix[2] +
-							functionality * preferenceMatrix[3] +
-							extendibility * preferenceMatrix[4] +
-							effectiveness * preferenceMatrix[5];
-		return QMOOD_value;
+		dp.qmood = dp.flexibility * preferenceMatrix[0] +
+							dp.reusability * preferenceMatrix[1] +
+							dp.understandability * preferenceMatrix[2] +
+							dp.functionality * preferenceMatrix[3] +
+							dp.extendibility * preferenceMatrix[4] +
+							dp.effectiveness * preferenceMatrix[5];
+		return dp;
 	}
 	
     /**

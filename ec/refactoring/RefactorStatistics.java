@@ -72,9 +72,32 @@ public class RefactorStatistics extends SimpleStatistics {
 			    out.close();
 			    
 			    out = new BufferedWriter(new FileWriter("output/qmood_dp.dat"));
-			    float[][] qmoodDPMap = SourceGraph.getQMOODDPMap();
-			    for (int ndx=0; ndx<qmoodDPMap.length; ++ndx) {
-			    	out.write(qmoodDPMap[ndx][0] + " " + qmoodDPMap[ndx][1] + "\n");
+			    Vector<StatDataPoint> statMap = SourceGraph.getStatMap();
+			    out.write("# DPCount QMOOD designSizeInClasses avgNumberOfAncestors " +
+			    		"dataAccessMetric directClassCoupling numberOfMethods numberOfPolyMethods " +
+			    		"classInterfaceSize measureOfAggregation measureOfFunctionalAbstraction " +
+			    		"numberOfHierarchies reusability flexibility understandability " +
+			    		"functionality extendibility effectiveness\n");
+			    for (int ndx=0; ndx<statMap.size(); ++ndx) {
+			    	out.write(statMap.get(ndx).dpCount + " ");
+			    	out.write(statMap.get(ndx).qmood + " ");
+			    	out.write(statMap.get(ndx).designSizeInClasses + " ");
+			    	out.write(statMap.get(ndx).avgNumberOfAncestors + " ");
+			    	out.write(statMap.get(ndx).dataAccessMetric + " ");
+			    	out.write(statMap.get(ndx).directClassCoupling + " ");
+			    	out.write(statMap.get(ndx).numberOfMethods + " ");
+			    	out.write(statMap.get(ndx).numberOfPolyMethods + " ");
+			    	out.write(statMap.get(ndx).classInterfaceSize + " ");
+			    	out.write(statMap.get(ndx).measureOfAggregation + " ");
+			    	out.write(statMap.get(ndx).measureOfFunctionalAbstraction + " ");
+			    	out.write(statMap.get(ndx).numberOfHierarchies + " ");
+			    	out.write(statMap.get(ndx).reusability + " ");
+			    	out.write(statMap.get(ndx).flexibility + " ");
+			    	out.write(statMap.get(ndx).understandability + " ");
+			    	out.write(statMap.get(ndx).functionality + " ");
+			    	out.write(statMap.get(ndx).extendibility + " ");
+			    	out.write(statMap.get(ndx).effectiveness + "\n");
+			    	// Remember to move the "\n" if you add more stats!
 			    }
 			    out.flush();
 			    out.close();

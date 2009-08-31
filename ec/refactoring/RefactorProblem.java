@@ -37,7 +37,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 		RefactorIndividual rInd = (RefactorIndividual)ind;
 		if (rInd.GetMTNodeCount() == 0) {
 			// Note -1.0F coefficient
-			fitness_value = -1.0F*ComputeFitness(SourceGraph.getOriginalGraphQMOOD(),
+			fitness_value = -1.0F*ComputeFitness(SourceGraph.getOriginalGraphQMOOD().qmood,
 					SourceGraph.getOriginalGraphPatterns(),
 					(float)rInd.GetMTNodeCount());
 			ArrayList<String> patternInstances = new ArrayList<String>();
@@ -50,11 +50,12 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			patternInstances.removeAll(SourceGraph.GetPatternList());
 			int patternsFound = patternInstances.size();
 			rInd.SetPatternList(patternInstances);
-			float QMOOD_value = QMOODEvaluator.EvaluateGraph(g);
+			StatDataPoint stat = QMOODEvaluator.EvaluateGraph(g);
 			// Record this individual's QMOOD value and its DP instances
-			SourceGraph.addQMOODDPMapEntry(QMOOD_value, patternsFound);
+			stat.dpCount = patternsFound;
+			SourceGraph.addStatMapEntry(stat);
 			// Fitness computation
-			fitness_value = ComputeFitness(QMOOD_value, patternsFound, (float)rInd.GetMTNodeCount());
+			fitness_value = ComputeFitness(stat.qmood, patternsFound, (float)rInd.GetMTNodeCount());
 			// Look for MT sequences that should be rewarded
 			fitness_value += 1.0F*countMatchingSubsequences(rInd.getMtList());
 		}
