@@ -55,13 +55,12 @@ public class SourceGraph {
 				System.err.println("ERROR: Empty graph after import.");
 				System.exit(-1);
 			}
-			// Set up a QL instance to do pattern detection
-			//detector = new QLWrapper();
 			
 			// Set up an in-memory pattern detector
 			detector = new SQLDetector();
+			//detector = new PrologDetector();
 			detector.Setup();
-			System.out.println("SQL detector initialized");
+			System.out.println("Pattern detector initialized");
 			
 			annotatedGraph = g;
 			
