@@ -27,7 +27,7 @@ public class SQLDetector implements PatternDetector {
 			st.executeUpdate("DROP INDEX iInstantiate IF EXISTS");
 			st.executeUpdate("DROP INDEX iOwn IF EXISTS");
 			st.executeUpdate("DROP INDEX iImplement IF EXISTS");
-			st.executeUpdate("DROP INDEX iReference IF EXISTS");
+			//st.executeUpdate("DROP INDEX iReference IF EXISTS");
 			// Delete rows
 			st.executeUpdate("DELETE FROM  tClass");
 			st.executeUpdate("DELETE FROM  tInterface");
@@ -73,9 +73,9 @@ public class SQLDetector implements PatternDetector {
 					i = st.executeUpdate("INSERT INTO tInstantiate(source,sink) VALUES('" + e.getSourceVertex().toString() + "','" + e.getSinkVertex().toString() + "')");
 				} else if (e.getLabel() == AnnotatedEdge.Label.OWN) {
 					i = st.executeUpdate("INSERT INTO tOwn(source,sink) VALUES('" + e.getSourceVertex().toString() + "','" + e.getSinkVertex().toString() + "')");
-				} else if (e.getLabel() == AnnotatedEdge.Label.REFERENCE) {
-					i = st.executeUpdate("INSERT INTO tReference(source,sink) VALUES('" + e.getSourceVertex().toString() + "','" + e.getSinkVertex().toString() + "')");
-				}
+				}// else if (e.getLabel() == AnnotatedEdge.Label.REFERENCE) {
+				//	i = st.executeUpdate("INSERT INTO tReference(source,sink) VALUES('" + e.getSourceVertex().toString() + "','" + e.getSinkVertex().toString() + "')");
+				//}
 			}
 			
 	        st.executeUpdate("CREATE INDEX iClasses ON tClass(name)");
@@ -89,7 +89,7 @@ public class SQLDetector implements PatternDetector {
 	        st.executeUpdate("CREATE INDEX iInstantiate ON tInstantiate(source,sink)");
 	        st.executeUpdate("CREATE INDEX iOwn ON tOwn(source,sink)");
 	        st.executeUpdate("CREATE INDEX iImplement ON tImplement(source,sink)");
-	        st.executeUpdate("CREATE INDEX iReference ON tReference(source,sink)");
+	        //st.executeUpdate("CREATE INDEX iReference ON tReference(source,sink)");
 
 	        ResultSet rs;
 	        /*
@@ -262,8 +262,8 @@ public class SQLDetector implements PatternDetector {
 	        if (i == -1) { System.out.println("db error : own"); }
 	        i = st.executeUpdate("CREATE TABLE tImplement (source varchar(128), sink varchar(128));");
 	        if (i == -1) { System.out.println("db error : implement"); }
-	        i = st.executeUpdate("CREATE TABLE tReference (source varchar(128), sink varchar(128));");
-	        if (i == -1) { System.out.println("db error : reference"); }
+	        //i = st.executeUpdate("CREATE TABLE tReference (source varchar(128), sink varchar(128));");
+	        //if (i == -1) { System.out.println("db error : reference"); }
 	        st.close();
 
 		} catch (SQLException e) {
