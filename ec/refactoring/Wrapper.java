@@ -57,6 +57,7 @@ public class Wrapper extends GPNode {
 		children[0].eval(state, thread, input, stack, individual, problem);
 		AnnotatedVertex iface_v = ag.getVertex(rd.name);
 		AnnotatedVertex iface_wrapper = Helpers.createWrapperClass(iface_v, iface_v.toString() + "Wrapper", "wrapped" + iface_v.toString(), ag);
+		iface_wrapper.setAddedByEvolution(true);
 		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		
 		Vector<AnnotatedEdge> edgesToRemove = new Vector<AnnotatedEdge>();
@@ -65,7 +66,9 @@ public class Wrapper extends GPNode {
 			AnnotatedEdge e = it_e.next();
 			// Assumption: iface_v is the sink.  It's an interface, so this
 			// should always be true.
-			ag.addEdge(e.getSourceVertex(), iface_wrapper, new AnnotatedEdge(e.getLabel()));
+			AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
+			e_new.setAddedByEvolution(true);
+			ag.addEdge(e.getSourceVertex(), iface_wrapper, e_new);
 			edgesToRemove.add(e);
 		}
 		// Now remove the edges that we marked
@@ -74,8 +77,12 @@ public class Wrapper extends GPNode {
 			ag.removeEdge(it_e.next());
 		}
 		// Add calls/instantiates edges to complete the wrapper
-		ag.addEdge(iface_wrapper, iface_v, new AnnotatedEdge(Label.INSTANTIATE));
-		ag.addEdge(iface_wrapper, iface_v, new AnnotatedEdge(Label.CALL));
+		AnnotatedEdge e_inst = new AnnotatedEdge(Label.INSTANTIATE);
+		e_inst.setAddedByEvolution(true);
+		ag.addEdge(iface_wrapper, iface_v, e_inst);
+		AnnotatedEdge e_call = new AnnotatedEdge(Label.CALL);
+		e_call.setAddedByEvolution(true);
+		ag.addEdge(iface_wrapper, iface_v, e_call);
 		
 		rd.graphvizName = thisNodeGraphviz;
 		rd.name = iface_wrapper.toString();

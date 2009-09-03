@@ -1,2 +1,2 @@
-ec.refactoring.inputfile = Models/Cinneide/BridgePrecursor.xmi
-seed.0 = 2
+ec.refactoring.inputfile = Models/Balance-Builder.xmi
+seed.0 = 1

@@ -106,13 +106,16 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		AnnotatedVertex v;
 		while (it_v.hasNext()) {
 			v = (AnnotatedVertex)it_v.next();
-			sb.append("\"" + v.toString() + "\"");
+			sb.append("\"" + v.toString() + "\" [shape=");
 			if (v.getType() == AnnotatedVertex.VertexType.CLASS) {
-				sb.append(" [shape=folder]");
+				sb.append("folder");
 			} else {
-				sb.append(" [shape=tab]");
+				sb.append("tab");
 			}
-			sb.append(";\n");
+			if (v.getAddedByEvolution()) {
+				sb.append(",color=red");
+			}
+			sb.append("];\n");
 		}
 		Iterator<E> it_e = edgeSet().iterator();
 		AnnotatedEdge e;
@@ -120,8 +123,11 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 			e = (AnnotatedEdge)it_e.next();
 			sb.append("\"" + e.getSourceVertex().toString() + "\"");
 			sb.append(" -> ").append("\"" + e.getSinkVertex().toString() + "\"");
-			sb.append("[label=\"").append(e.getLabel().toString());
-			sb.append("\"];\n");
+			sb.append("[label=\"").append(e.getLabel().toString() + "\"");
+			if (e.getAddedByEvolution()) {
+				sb.append(",color=red");
+			}
+			sb.append("];\n");
 		}
 		// For each edge, create an edge
 		sb.append("}\n");

@@ -74,6 +74,7 @@ public class AbstractAccess extends GPNode {
 			if (e.getSinkVertex() == concrete_v && e.getLabel() == Label.REFERENCE) {
 				ag.removeEdge(e);
 				AnnotatedEdge e_new = new AnnotatedEdge(Label.REFERENCE);
+				e_new.setAddedByEvolution(true);
 				ag.addEdge(context_v, iface_v, e_new);
 			}
 		}

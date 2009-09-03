@@ -18,6 +18,7 @@ public class AnnotatedVertex {
 	private String name;
 	private VertexType type;
 	private Visibility visibility;
+	private Boolean addedByEvolution = false; // To track newly added elements
 
 	/**
 	 * Default constructor.
@@ -74,5 +75,22 @@ public class AnnotatedVertex {
 	 */
 	public void setVisibility(Visibility visibility) {
 		this.visibility = visibility;
+	}
+	/**
+	 * Set whether this vertex was added by evolution.  (If it
+	 * was not added by evolution, then it was part of the original
+	 * graph.)
+	 * @param addedByEvolution Was this vertex added by evolution?
+	 */
+	public void setAddedByEvolution(Boolean addedByEvolution) {
+		this.addedByEvolution = addedByEvolution;
+	}
+	/**
+	 * Return an answer to the question, "Was this vertex added by
+	 * evolution?"
+	 * @return The answer to the question.
+	 */
+	public Boolean getAddedByEvolution() {
+		return addedByEvolution;
 	}
 }

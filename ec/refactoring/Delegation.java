@@ -45,8 +45,14 @@ public class Delegation extends GPNode {
 			++name_ndx;
 		}
 		AnnotatedVertex component_v = Helpers.createEmptyClass(componentClassName, ag);
-		ag.addEdge(original_v, component_v, new AnnotatedEdge(Label.AGGREGATE));
-		ag.addEdge(original_v, component_v, new AnnotatedEdge(Label.CALL));
+		component_v.setAddedByEvolution(true);
+		
+		AnnotatedEdge e_aggregate = new AnnotatedEdge(Label.AGGREGATE);
+		AnnotatedEdge e_call = new AnnotatedEdge(Label.CALL);
+		e_aggregate.setAddedByEvolution(true);
+		e_call.setAddedByEvolution(true);
+		ag.addEdge(original_v, component_v, e_aggregate);
+		ag.addEdge(original_v, component_v, e_call);
 		
 		// Move some methods to the component class
 		ArrayList<AnnotatedEdge> ownEdges = ag.GetEdges(original_v, Label.OWN);
@@ -57,7 +63,9 @@ public class Delegation extends GPNode {
 			Random rand = SourceGraph.GetRandom();
 			for (int ndx=0; ndx<numMoveVertices; ++ndx) {
 				int methodNdx = rand.nextInt(ownEdges.size());
-				ag.addEdge(component_v, ownEdges.get(methodNdx).getSinkVertex(), new AnnotatedEdge(Label.OWN));
+				AnnotatedEdge e_own = new AnnotatedEdge(Label.OWN);
+				e_own.setAddedByEvolution(true);
+				ag.addEdge(component_v, ownEdges.get(methodNdx).getSinkVertex(), e_own);
 				ag.removeEdge(ownEdges.get(methodNdx)); // Remove old "OWN" edge
 			}
 		}

@@ -69,7 +69,9 @@ public class PartialAbstraction extends GPNode {
 		
 		// Class abstract = createEmptyClass(newName);
 		AnnotatedVertex abstract_v = Helpers.createEmptyClass(newName, ag);
+		abstract_v.setAddedByEvolution(true);
 		AnnotatedEdge e = new AnnotatedEdge(Label.INHERIT);
+		e.setAddedByEvolution(true);
 		ag.addEdge(concrete_v, abstract_v, e);
 		
 		// TODO: Move some methods into the abstract class

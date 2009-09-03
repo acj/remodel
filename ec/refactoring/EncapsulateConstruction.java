@@ -76,15 +76,18 @@ public class EncapsulateConstruction extends GPNode {
 				String create_method_name = "create" + product_v.toString();
 				AnnotatedVertex abstract_meth_v =
 					Helpers.makeAbstract(creator_v, create_method_name, ag);
-				
+				abstract_meth_v.setAddedByEvolution(true);
 				// Add an INSTANTIATE edge between the new method and the
 				// product that it creates.
 				AnnotatedEdge e_new = new AnnotatedEdge(Label.INSTANTIATE);
+				e_new.setAddedByEvolution(true);
 				ag.addEdge(abstract_meth_v, product_v, e_new);
 				
 				// The creator now calls the creator method.  Add an
 				// edge to represent this.
-				ag.addEdge(creator_v, abstract_meth_v, new AnnotatedEdge(Label.CALL));
+				AnnotatedEdge e_call = new AnnotatedEdge(Label.CALL);
+				e_call.setAddedByEvolution(true);
+				ag.addEdge(creator_v, abstract_meth_v, e_call);
 				
 				// We assume here that the fact extraction pipeline removed any
 				// duplicate edges.  Therefore, we can bail out once we've found

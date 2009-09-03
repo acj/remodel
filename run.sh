@@ -10,8 +10,8 @@ JAVA=/usr/bin/java
 mkdir -p output
 rm -f output/*
 
-JAVACP=.:lib/jgrapht-jdk1.6.jar:lib/hsqldb.jar:lib/xercesImpl.jar:lib/xml-apis.jar
-$JAVAC -g -cp $JAVACP ec/refactoring/*.java && $JAVA -cp $JAVACP -Xmx1000m -enableassertions ec.Evolve -file ec/refactoring/refactoring.params
+JAVACP=.:lib/jgrapht-jdk1.6.jar:lib/hsqldb.jar:lib/xercesImpl.jar:lib/xml-apis.jar:lib/jlogic.jar:lib/builtinsLib.jar
+$JAVAC -cp $JAVACP ec/refactoring/*.java && $JAVA -cp $JAVACP -Xmx1000m -enableassertions ec.Evolve -file ec/refactoring/refactoring.params
 
 if [ -n "$1" ]; then
     if [ -n "$2" ]; then
