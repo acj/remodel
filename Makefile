@@ -2,7 +2,7 @@ all:
 	export JAVAHOME=~/jdk1.6
 	export PATH=~/jdk1.6/bin:$PATH
 	make -f Makefile.ecj
-	javac -g -d bin -classpath .:lib/jgrapht-jdk1.6.jar:lib/hsqldb.jar:lib/xercesImpl.jar:lib/xml-apis.jar ec/refactoring/*.java
+	javac -g -d bin -classpath .:lib/jgrapht-jdk1.6.jar:lib/hsqldb.jar:lib/xercesImpl.jar:lib/xml-apis.jar:lib/jlogic.jar:lib/builtinsLib.jar ec/refactoring/*.java
 	cd bin && jar cf ../sbr.jar ec && cd ..
 
 install:
