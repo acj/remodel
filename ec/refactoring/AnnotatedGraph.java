@@ -94,6 +94,19 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		}
 		return edges;
 	}
+	public ArrayList<V> GetVertices(AnnotatedVertex.VertexType vt) {
+		ArrayList<V> vertices = new ArrayList<V>();
+		Set<V> candidates = vertexSet();
+		Iterator<V> it = candidates.iterator();
+		V v;
+		while (it.hasNext()) {
+			v = it.next();
+			if (((AnnotatedVertex)v).getType() == vt) {
+				vertices.add(v);
+			}
+		}
+		return vertices;
+	}
 	/**
 	 * Export the graph into the dot language used by graphviz.
 	 * @return String representation suitable for graphviz.

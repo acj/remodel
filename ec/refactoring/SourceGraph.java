@@ -5,6 +5,7 @@ import java.util.*;
 
 import ec.refactoring.AnnotatedEdge;
 import ec.refactoring.AnnotatedVertex;
+import ec.refactoring.AnnotatedVertex.VertexType;
 
 /*
  * 
@@ -83,7 +84,8 @@ public class SourceGraph {
 				sb_baseline.append(token);
 			}
 			sb_baseline.append("}\n");
-			sb_baseline.append("(|V|,|E|): (" + g.getSize() + "," + g.edgeSet().size() + ")");
+			sb_baseline.append("(|V|,|E|): (" + g.getSize() + "," + g.edgeSet().size() + ")\n");
+			sb_baseline.append("|Classes at start| = " + g.GetVertices(AnnotatedVertex.VertexType.CLASS).size());
 			System.out.println(sb_baseline.toString());
 			try {
 				/*

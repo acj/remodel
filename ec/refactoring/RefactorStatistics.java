@@ -116,6 +116,8 @@ public class RefactorStatistics extends SimpleStatistics {
 			} catch (IOException e) {
 				System.err.println("Could not export pattern to graphviz!");
 			}
+			System.out.println("|Classes at end| = " +
+					((RefactorIndividual)best_of_run[x]).GetGraph().GetVertices(AnnotatedVertex.VertexType.CLASS).size());
 	        System.out.println("New pattern instances in best individual: " + patternList.size());
 	        // finally describe the winner if there is a description
 	        if (state.evaluator.p_problem instanceof SimpleProblemForm)
