@@ -20,6 +20,7 @@ public class SourceGraph {
 	private static ArrayList<String> patternList;
 	private static String inputFile = "";
 	private static float treeSizePenalty = 0.0F;
+	private static float dpRewardCoefficient = 0.0F;
 	private static StatDataPoint originalGraphStat;
 	private static int originalGraphPatterns = 0;
 	
@@ -175,6 +176,12 @@ public class SourceGraph {
 	}
 	public static float getTreeSizePenalty() {
 		return treeSizePenalty;
+	}
+	public static float getDpRewardCoefficient() {
+		return dpRewardCoefficient;
+	}
+	public static void setDpRewardCoefficient(float dpRewardCoefficient) {
+		SourceGraph.dpRewardCoefficient = dpRewardCoefficient;
 	}
 	public static void addStatMapEntry(StatDataPoint s) {
 		StatMap.add(s);

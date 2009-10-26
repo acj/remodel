@@ -19,8 +19,13 @@ public class RefactorSpecies extends GPSpecies {
 			System.out.println("Seed used for refactoring: " + SourceGraph.RANDOM_SEED);
 			// Set up input file parameter
 			SourceGraph.SetInputFile(state.parameters.getString(new Parameter("ec.refactoring.inputfile"), null));
+			System.out.println("Input file: " + SourceGraph.GetInputFile());
 			// Tree size penalty
 			SourceGraph.setTreeSizePenalty(state.parameters.getFloat(new Parameter("ec.refactoring.treesizepenalty"), null, 0.0));
+			System.out.println("Tree size penalty: " + SourceGraph.getTreeSizePenalty());
+			// DP Reward Coefficient
+			SourceGraph.setDpRewardCoefficient(state.parameters.getFloat(new Parameter("ec.refactoring.dprewardcoefficient"), null, 0.0));
+			System.out.println("DP Reward Coefficient: " + SourceGraph.getDpRewardCoefficient());
 			System.out.println("Prototype individual set up");
 		}
     	RefactorIndividual ind = (RefactorIndividual)(super.newIndividual(state, thread));
