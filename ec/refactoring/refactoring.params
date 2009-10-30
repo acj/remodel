@@ -338,3 +338,4 @@ eval.problem.stack.context.data = ec.refactoring.RefactorData
 # Custom parameters for refactoring
 ec.refactoring.treesizepenalty = 0.025
 ec.refactoring.dprewardcoefficient = 2.0
+ec.refactoring.mtrewardcoefficient = 1.0

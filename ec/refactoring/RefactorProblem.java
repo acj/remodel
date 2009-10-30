@@ -57,7 +57,7 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
 			// Fitness computation
 			fitness_value = ComputeFitness(stat.qmood, patternsFound, (float)rInd.GetMTNodeCount());
 			// Look for MT sequences that should be rewarded
-			fitness_value += 1.0F*countMatchingSubsequences(rInd.getMtList());
+			fitness_value += SourceGraph.getMtRewardCoefficient()*countMatchingSubsequences(rInd.getMtList());
 		}
 		fit.setFitness(state, fitness_value, false);
 		ind.fitness = fit;

@@ -26,6 +26,9 @@ public class RefactorSpecies extends GPSpecies {
 			// DP Reward Coefficient
 			SourceGraph.setDpRewardCoefficient(state.parameters.getFloat(new Parameter("ec.refactoring.dprewardcoefficient"), null, 0.0));
 			System.out.println("DP Reward Coefficient: " + SourceGraph.getDpRewardCoefficient());
+			// MT Reward Coefficient
+			SourceGraph.setMtRewardCoefficient(state.parameters.getFloat(new Parameter("ec.refactoring.mtrewardcoefficient"), null, 0.0));
+			System.out.println("MT Reward Coefficient: " + SourceGraph.getMtRewardCoefficient());
 			System.out.println("Prototype individual set up");
 		}
     	RefactorIndividual ind = (RefactorIndividual)(super.newIndividual(state, thread));

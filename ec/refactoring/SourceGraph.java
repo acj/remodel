@@ -21,6 +21,7 @@ public class SourceGraph {
 	private static String inputFile = "";
 	private static float treeSizePenalty = 0.0F;
 	private static float dpRewardCoefficient = 0.0F;
+	private static float mtRewardCoefficient = 0.0F;
 	private static StatDataPoint originalGraphStat;
 	private static int originalGraphPatterns = 0;
 	
@@ -182,6 +183,12 @@ public class SourceGraph {
 	}
 	public static void setDpRewardCoefficient(float dpRewardCoefficient) {
 		SourceGraph.dpRewardCoefficient = dpRewardCoefficient;
+	}
+	public static float getMtRewardCoefficient() {
+		return mtRewardCoefficient;
+	}
+	public static void setMtRewardCoefficient(float mtRewardCoefficient) {
+		SourceGraph.mtRewardCoefficient = mtRewardCoefficient;
 	}
 	public static void addStatMapEntry(StatDataPoint s) {
 		StatMap.add(s);
