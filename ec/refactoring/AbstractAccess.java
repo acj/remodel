@@ -2,6 +2,7 @@ package ec.refactoring;
 
 import java.util.Iterator;
 import java.util.Random;
+import java.util.Vector;
 
 import ec.EvolutionState;
 import ec.Problem;
@@ -9,7 +10,6 @@ import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
 import ec.gp.GPNode;
-import ec.refactoring.AnnotatedEdge.Label;
 import ec.util.Parameter;
 
 /**
@@ -67,16 +67,31 @@ public class AbstractAccess extends GPNode {
 		AnnotatedVertex iface_v = ag.getVertex(rd.name);
 		rd.graphvizData += thisNodeGraphviz + " -> " + rd.graphvizName + ";\n";
 		
+		// Maintain lists of edges to add and remove (this avoids a
+		// concurrent access issue that invalidates the iterator)
+		Vector<AnnotatedEdge> add_edges = new Vector<AnnotatedEdge>();
+		Vector<AnnotatedEdge> remove_edges = new Vector<AnnotatedEdge>();
+		
 		AnnotatedEdge e;
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
 		while (edge_it.hasNext()) {
 			e = edge_it.next();
 			if (e.getSinkVertex() == concrete_v) {
-				ag.removeEdge(e);
+				remove_edges.add(e);
 				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
 				e_new.setAddedByEvolution(true);
-				ag.addEdge(context_v, iface_v, e_new);
+				add_edges.add(e_new);
 			}
+		}
+		// Add the new edges
+		edge_it = add_edges.iterator();
+		while (edge_it.hasNext()) {
+			ag.addEdge(context_v, iface_v, edge_it.next());
+		}
+		// Now remove the old edges
+		edge_it = remove_edges.iterator();
+		while (edge_it.hasNext()) {
+			ag.removeEdge(edge_it.next());
 		}
 		
 		rd.graphvizName = thisNodeGraphviz;
