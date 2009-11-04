@@ -71,9 +71,9 @@ public class AbstractAccess extends GPNode {
 		Iterator<AnnotatedEdge> edge_it = ag.outgoingEdgesOf(context_v).iterator();
 		while (edge_it.hasNext()) {
 			e = edge_it.next();
-			if (e.getSinkVertex() == concrete_v && e.getLabel() == Label.REFERENCE) {
+			if (e.getSinkVertex() == concrete_v) {
 				ag.removeEdge(e);
-				AnnotatedEdge e_new = new AnnotatedEdge(Label.REFERENCE);
+				AnnotatedEdge e_new = new AnnotatedEdge(e.getLabel());
 				e_new.setAddedByEvolution(true);
 				ag.addEdge(context_v, iface_v, e_new);
 			}
