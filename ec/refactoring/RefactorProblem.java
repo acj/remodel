@@ -95,6 +95,10 @@ public class RefactorProblem extends GPProblem implements SimpleProblemForm {
     	if (seqStr.matches("\\[.*Abstraction.*AbstractAccess.*\\]")) {
     		matchBonus += 1.0F;
     	}
+    	// Abstract Factory
+    	if (seqStr.matches("\\[.*Abstraction.*AbstractAccess.*EncapsulateConstruction.*\\]")) {
+    		matchBonus += 1.0F;
+    	}
     	// Decorator
     	if (seqStr.matches("\\[.*Abstraction.*AbstractAccess.*Wrapper.*\\]")) {
     		matchBonus += 1.0F;
