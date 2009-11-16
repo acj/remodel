@@ -34,6 +34,8 @@ public class RefactorStatistics extends SimpleStatistics {
 	        state.output.message("Subpop " + x + " graph (|V|,|E|) of best individual: (" +
 	        		((RefactorIndividual)best_of_run[x]).GetGraph().getSize() + "," +
 	        		((RefactorIndividual)best_of_run[x]).GetGraph().edgeSet().size() + ")");
+	        state.output.message("Subpop " + x + " QMOOD value of best individual: " +
+	        		QMOODEvaluator.EvaluateGraph(((RefactorIndividual)best_of_run[x]).GetGraph()).qmood);
 	        /*
 	        // Next-best individual
 	        state.output.message("Subpop " + x + " second-best fitness of run: " +
