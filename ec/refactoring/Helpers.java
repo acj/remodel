@@ -121,7 +121,7 @@ public class Helpers {
 							String wrapperName,
 							String fieldName,
 							AnnotatedGraph<AnnotatedVertex, AnnotatedEdge> ag) {
-		assert iface_v.getType() == VertexType.INTERFACE;
+		//assert iface_v.getType() == VertexType.INTERFACE;
 		
 		// Construct a new "wrapper" vertex along with a set of operation
 		// vertices to represent the wrapped methods.

@@ -77,6 +77,9 @@ public class Wrapper extends GPNode {
 			ag.removeEdge(it_e.next());
 		}
 		// Add calls/instantiates edges to complete the wrapper
+		AnnotatedEdge e_agg = new AnnotatedEdge(Label.AGGREGATE);
+		e_agg.setAddedByEvolution(true);
+		ag.addEdge(iface_wrapper, iface_v, e_agg);
 		AnnotatedEdge e_inst = new AnnotatedEdge(Label.INSTANTIATE);
 		e_inst.setAddedByEvolution(true);
 		ag.addEdge(iface_wrapper, iface_v, e_inst);
