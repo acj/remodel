@@ -81,6 +81,23 @@ public class AnnotatedGraph<V, E> extends DirectedMultigraph<V, E> {
 		vertexList.remove(v);
 		return super.removeVertex(v);
 	}
+	@Override
+	public boolean addEdge(V arg0, V arg1, E arg2) {
+		// Ensure that we are not duplicating edges
+		Set<E> edges = getAllEdges(arg0, arg1);
+		Iterator<E> edge_it = edges.iterator();
+		AnnotatedEdge new_e = (AnnotatedEdge)arg2;
+		AnnotatedEdge e;
+		while (edge_it.hasNext()) {
+			e = (AnnotatedEdge)edge_it.next();
+			if (e.getSourceVertex() == arg0 &&
+					e.getSinkVertex() == arg1 &&
+					e.getLabel() == new_e.getLabel()) {
+				return false;
+			}
+		}
+		return super.addEdge(arg0, arg1, arg2);
+	}
 	public ArrayList<E> GetEdges(V v, AnnotatedEdge.Label l) {
 		ArrayList<E> edges = new ArrayList<E>();
 		Set<E> candidates = edgesOf(v);
