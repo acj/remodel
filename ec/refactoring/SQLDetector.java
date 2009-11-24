@@ -138,7 +138,7 @@ public class SQLDetector implements PatternDetector {
 					"JOIN tOwn ON tOwn.source=tInherit.sink " +
 					"JOIN tOperation ON tOperation.name=tOwn.sink " +
 					"JOIN tInstantiate ON (tInstantiate.source=cInstClass.name AND tInstantiate.sink=protAbs.name) " +
-					"WHERE tInherit.sink = protAbs.name");
+					"WHERE tInherit.sink = protAbs.name AND protAbs.name != protCon.name AND protAbs.name != cInstClass.name AND protCon.name != cInstClass.name");
 			patternInstances.addAll(ReadPatternsFromResult(rs, "Prototype"));
 
 			// Adapter
